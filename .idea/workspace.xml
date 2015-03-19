@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6920afdd-8a17-4241-824f-ec725ec2663d" name="Default" comment="added first commit&#10;">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/models/Profiles/ProfileTransformer.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.ids" afterPath="$PROJECT_DIR$/.idea/dataSources.ids" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/database/migrations/2015_03_19_052620_create_users_table.php" afterPath="$PROJECT_DIR$/app/database/migrations/2015_03_19_052620_create_users_table.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/BaseController.php" afterPath="$PROJECT_DIR$/app/controllers/BaseController.php" />
+    <list default="true" id="6920afdd-8a17-4241-824f-ec725ec2663d" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/database/migrations/2015_03_19_102105_create_profile_table.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/models/Profiles/Profile.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/controllers/ProfilesController.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/Profiles/ProfileTransformer.php" afterPath="$PROJECT_DIR$/app/models/Profiles/ProfileTransformer.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/Users/User.php" afterPath="$PROJECT_DIR$/app/models/Users/User.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/Users/UserTransformer.php" afterPath="$PROJECT_DIR$/app/models/Users/UserTransformer.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/UsersController.php" afterPath="$PROJECT_DIR$/app/controllers/UsersController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources.xml" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/config/local/database.php" afterPath="$PROJECT_DIR$/app/config/local/database.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/filters.php" afterPath="$PROJECT_DIR$/app/filters.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/routes.php" afterPath="$PROJECT_DIR$/app/routes.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="LifeLi.iws" />
@@ -55,10 +50,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="UsersController.php" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="UsersController.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/controllers/UsersController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="123" column="42" selection-start="2628" selection-end="2628" vertical-scroll-proportion="0.46107784" vertical-offset="1691" max-vertical-offset="2025">
+            <state line="27" column="0" selection-start="580" selection-end="580" vertical-scroll-proportion="-16.875" vertical-offset="0" max-vertical-offset="2025">
               <folding>
                 <element signature="e#37#77#0" expanded="true" />
               </folding>
@@ -69,20 +64,9 @@
       <file leaf-file-name="ProfilesController.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/controllers/ProfilesController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="58" column="35" selection-start="1084" selection-end="1084" vertical-scroll-proportion="-23.125" vertical-offset="315" max-vertical-offset="1635">
+            <state line="31" column="23" selection-start="722" selection-end="722" vertical-scroll-proportion="-19.375" vertical-offset="0" max-vertical-offset="1635">
               <folding>
                 <element signature="e#36#71#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="filters.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/filters.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="94" column="43" selection-start="2331" selection-end="2343" vertical-scroll-proportion="-0.625" vertical-offset="1395" max-vertical-offset="1740">
-              <folding>
-                <element signature="e#7#412#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -100,7 +84,7 @@
       <file leaf-file-name="User.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/models/Users/User.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="38" column="6" selection-start="770" selection-end="770" vertical-scroll-proportion="-12.041667" vertical-offset="281" max-vertical-offset="750">
+            <state line="27" column="24" selection-start="625" selection-end="625" vertical-scroll-proportion="-13.125" vertical-offset="90" max-vertical-offset="750">
               <folding>
                 <element signature="e#38#68#0" expanded="true" />
               </folding>
@@ -111,8 +95,30 @@
       <file leaf-file-name="Profile.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/models/Profiles/Profile.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="1" selection-start="219" selection-end="219" vertical-scroll-proportion="-5.625" vertical-offset="0" max-vertical-offset="225">
+            <state line="9" column="1" selection-start="239" selection-end="239" vertical-scroll-proportion="-5.625" vertical-offset="0" max-vertical-offset="225">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UserTransformer.php" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/models/Users/UserTransformer.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="48" column="34" selection-start="1382" selection-end="1382" vertical-scroll-proportion="0.72924185" vertical-offset="316" max-vertical-offset="870">
+              <folding>
+                <element signature="e#38#77#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="filters.php" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/filters.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="102" column="31" selection-start="2576" selection-end="2576" vertical-scroll-proportion="-36.833332" vertical-offset="646" max-vertical-offset="1740">
+              <folding>
+                <element signature="e#7#412#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -120,19 +126,8 @@
       <file leaf-file-name="ProfileTransformer.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/models/Profiles/ProfileTransformer.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="2" selection-start="574" selection-end="574" vertical-scroll-proportion="-10.166667" vertical-offset="41" max-vertical-offset="375">
+            <state line="17" column="2" selection-start="516" selection-end="516" vertical-scroll-proportion="-10.625" vertical-offset="0" max-vertical-offset="345">
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserTransformer.php" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/models/Users/UserTransformer.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="29" selection-start="266" selection-end="275" vertical-scroll-proportion="2.9583333" vertical-offset="236" max-vertical-offset="615">
-              <folding>
-                <element signature="e#38#77#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -161,14 +156,17 @@
         <option value="$PROJECT_DIR$/app/controllers/BaseController.php" />
         <option value="$PROJECT_DIR$/app/database/migrations/2015_03_19_101756_create_profile_table.php" />
         <option value="$PROJECT_DIR$/app/database/migrations/2015_03_19_102105_create_profile_table.php" />
-        <option value="$PROJECT_DIR$/app/models/Profiles/ProfileTransformer.php" />
-        <option value="$PROJECT_DIR$/app/models/Profiles/Profile.php" />
         <option value="$PROJECT_DIR$/app/routes.php" />
-        <option value="$PROJECT_DIR$/app/filters.php" />
         <option value="$PROJECT_DIR$/app/controllers/ProfilesController.php" />
-        <option value="$PROJECT_DIR$/app/models/Users/UserTransformer.php" />
+        <option value="$PROJECT_DIR$/vendor/league/fractal/src/TransformerAbstract.php" />
+        <option value="$PROJECT_DIR$/app/models/Transform/BaseTransform.php" />
+        <option value="$PROJECT_DIR$/app/models/Users/BaseTransform.php" />
         <option value="$PROJECT_DIR$/app/models/Users/User.php" />
+        <option value="$PROJECT_DIR$/app/models/Profiles/ProfileTransformer.php" />
+        <option value="$PROJECT_DIR$/app/models/Users/UserTransformer.php" />
         <option value="$PROJECT_DIR$/app/controllers/UsersController.php" />
+        <option value="$PROJECT_DIR$/app/models/Profiles/Profile.php" />
+        <option value="$PROJECT_DIR$/app/filters.php" />
       </list>
     </option>
   </component>
@@ -453,14 +451,19 @@
       <created>1426671420883</created>
       <updated>1426671420883</updated>
     </task>
+    <task id="LOCAL-00001" summary="added basic actions in user controller&#10;">
+      <created>1426768120716</created>
+      <updated>1426768120716</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1301" height="744" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3508772" sideWeight="0.49960285" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3508772" sideWeight="0.49960285" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290938" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962668" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -468,6 +471,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3508772" sideWeight="0.50039715" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2573471" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -513,6 +517,8 @@
     <option name="myTodoPanelSettings">
       <TodoPanelSettings />
     </option>
+    <MESSAGE value="added basic actions in user controller&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="added basic actions in user controller&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -727,13 +733,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/sorskod/larasponse/src/Sorskod/Larasponse/Larasponse.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="20" selection-start="671" selection-end="671" vertical-scroll-proportion="-5.5416665" vertical-offset="287" max-vertical-offset="645">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/vendor/league/fractal/src/Manager.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="79" column="25" selection-start="2096" selection-end="2096" vertical-scroll-proportion="0.8502994" vertical-offset="766" max-vertical-offset="3780">
@@ -755,13 +754,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/Profiles/Profile.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="1" selection-start="219" selection-end="219" vertical-scroll-proportion="-5.625" vertical-offset="0" max-vertical-offset="225">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/routes.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="22" column="30" selection-start="803" selection-end="803" vertical-scroll-proportion="-8.125" vertical-offset="0" max-vertical-offset="330">
@@ -773,49 +765,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="8725" column="10" selection-start="277101" selection-end="277101" vertical-scroll-proportion="0.35785952" vertical-offset="130678" max-vertical-offset="184710">
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/filters.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="94" column="43" selection-start="2331" selection-end="2343" vertical-scroll-proportion="-0.625" vertical-offset="1395" max-vertical-offset="1740">
-          <folding>
-            <element signature="e#7#412#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/ProfilesController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="35" selection-start="1084" selection-end="1084" vertical-scroll-proportion="-23.125" vertical-offset="315" max-vertical-offset="1635">
-          <folding>
-            <element signature="e#36#71#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/Users/UserTransformer.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="29" selection-start="266" selection-end="275" vertical-scroll-proportion="2.9583333" vertical-offset="236" max-vertical-offset="615">
-          <folding>
-            <element signature="e#38#77#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/Profiles/ProfileTransformer.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="2" selection-start="574" selection-end="574" vertical-scroll-proportion="-10.166667" vertical-offset="41" max-vertical-offset="375">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/Users/User.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="6" selection-start="770" selection-end="770" vertical-scroll-proportion="-12.041667" vertical-offset="281" max-vertical-offset="750">
-          <folding>
-            <element signature="e#38#68#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -833,11 +782,75 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/league/fractal/src/TransformerAbstract.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="34" selection-start="815" selection-end="815" vertical-scroll-proportion="0.35628742" vertical-offset="121" max-vertical-offset="3495">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/Profiles/ProfileTransformer.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="2" selection-start="516" selection-end="516" vertical-scroll-proportion="-10.625" vertical-offset="0" max-vertical-offset="345">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/sorskod/larasponse/src/Sorskod/Larasponse/Larasponse.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="28" selection-start="616" selection-end="616" vertical-scroll-proportion="0.63718414" vertical-offset="22" max-vertical-offset="645">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/Users/User.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="24" selection-start="625" selection-end="625" vertical-scroll-proportion="-13.125" vertical-offset="90" max-vertical-offset="750">
+          <folding>
+            <element signature="e#38#68#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/Profiles/Profile.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="1" selection-start="239" selection-end="239" vertical-scroll-proportion="-5.625" vertical-offset="0" max-vertical-offset="225">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/UsersController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="123" column="42" selection-start="2628" selection-end="2628" vertical-scroll-proportion="0.46107784" vertical-offset="1691" max-vertical-offset="2025">
+        <state line="27" column="0" selection-start="580" selection-end="580" vertical-scroll-proportion="-16.875" vertical-offset="0" max-vertical-offset="2025">
           <folding>
             <element signature="e#37#77#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/filters.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="102" column="31" selection-start="2576" selection-end="2576" vertical-scroll-proportion="-36.833332" vertical-offset="646" max-vertical-offset="1740">
+          <folding>
+            <element signature="e#7#412#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/ProfilesController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="23" selection-start="722" selection-end="722" vertical-scroll-proportion="-19.375" vertical-offset="0" max-vertical-offset="1635">
+          <folding>
+            <element signature="e#36#71#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/Users/UserTransformer.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="48" column="34" selection-start="1382" selection-end="1382" vertical-scroll-proportion="0.72924185" vertical-offset="316" max-vertical-offset="870">
+          <folding>
+            <element signature="e#38#77#0" expanded="true" />
           </folding>
         </state>
       </provider>

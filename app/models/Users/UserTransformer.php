@@ -5,9 +5,26 @@ use LifeLi\models\Profiles\ProfileTransformer;
 
 class UserTransformer extends TransformerAbstract {
 
-//    protected $defaultIncludes = [
-//        'profile'
-//    ];
+    protected $defaultIncludes = [
+        'profile'
+    ];
+
+    protected $db_to_array = array(
+        'id'             => 'id',
+        'mobile_no'      => 'mobile',
+        'email'          =>  'email',
+        'is_active'      => 'is_active',
+        'is_confirm'     => 'is_confirm',
+        'created_at'     => 'created_at'
+    );
+    protected $array_to_db = array(
+        'id'             => 'id',
+        'mobile'         => 'mobile_no',
+        'email'          =>  'email',
+        'is_active'      => 'is_active',
+        'is_confirm'     => 'is_confirm',
+        'created_at'     => 'created_at'
+    );
 
     public function transform(User $user)
     {
@@ -21,16 +38,16 @@ class UserTransformer extends TransformerAbstract {
         ];
     }
 
-//    /**
-//     * Include Profile
-//     *
-//     * @param User $user
-//     * @return \League\Fractal\Resource\Item
-//     */
-//    public function includeProfile(User $user)
-//    {
-//        $profile = $user->profile();
-//        return $this->item($profile, new ProfileTransformer());
-//    }
+    /**
+     * Include Profile
+     *
+     * @param User $user
+     * @return \League\Fractal\Resource\Item
+     */
+    public function includeProfile(User $user)
+    {
+        $profile = $user->profile;
+        return $this->item($profile, new ProfileTransformer());
+    }
 
 } 

@@ -27,7 +27,7 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 
     public function profile()
     {
-        return $this->hasOne('Profile');
+        return $this->hasOne('LifeLi\models\Profiles\Profile', 'user_id', 'id');
     }
 
     public function generate_token() {
