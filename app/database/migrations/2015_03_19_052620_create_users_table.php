@@ -21,6 +21,8 @@ class CreateUsersTable extends Migration {
             $table->boolean('is_active')->default(false);
             $table->boolean('remember_token')->default(false);
             $table->boolean('is_confirm')->default(false);
+            $table->string('api_token', 60);
+            $table->dateTime('valid_until');
 			$table->timestamps();
 		});
 	}

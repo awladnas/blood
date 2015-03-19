@@ -16,6 +16,7 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 	 */
 	protected $table = 'users';
 
+    protected $token_expire_days = 10;
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
@@ -23,4 +24,21 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 	 */
 	protected $hidden = array('password', 'remember_token');
 
+
+    public function profile()
+    {
+        return $this->hasOne('Profile');
+    }
+
+    public function generate_token() {
+
+        return "token";
+    }
+
+    /**
+     *
+     */
+    public function get_token_expired_date() {
+        return date_add(date('y-m-d'), $this->token_expire_days());
+    }
 }

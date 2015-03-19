@@ -15,8 +15,11 @@ Route::get('/', function()
 {
     return View::make('hello');
 });
-Route::post('api/v1/users/create',array('as' => 'users.create.path', 'uses' => 'LifeLi\controllers\UsersController@store'));
 
 Route::group(array('prefix' => 'api/v1'),function(){
-    Route::resource('users', 'LifeLi\controllers\UsersController');
+    Route::post('users/create',array('as' => 'users.create.path', 'uses' => 'LifeLi\controllers\UsersController@store'));
+    Route::group(['before' => 'auth.validate_token'], function(){
+        Route::resource('users', 'LifeLi\controllers\UsersController');
+        Route::resource('profiles', 'LifeLi\controllers\ProfilesController');
+    });
 });

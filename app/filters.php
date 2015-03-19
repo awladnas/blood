@@ -10,7 +10,7 @@
 | application. Here you may also register your custom route filters.
 |
 */
-
+use LifeLi\models\Users\User;
 App::before(function($request)
 {
 	//
@@ -92,8 +92,8 @@ Route::filter('csrf', function()
 
 Route::filter('auth.validate_token', function($route, $request)
 {
-    /* todo : check if request for creating new user then skip below phase */
     $token = $request->header('X-Auth-Token');
+
     $user =  User::where('api_token', $token)->first();
     if(!$user)
     {

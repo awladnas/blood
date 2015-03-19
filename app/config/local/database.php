@@ -23,7 +23,7 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'lara',
+			'database'  => 'life_li',
 			'username'  => 'root',
 			'password'  => 'root',
 			'charset'   => 'utf8',

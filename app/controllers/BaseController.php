@@ -3,7 +3,8 @@
 class BaseController extends \Controller {
 
     protected $arr_status = array(
-        '401' => 'UnAuthorized'
+        '200' => 'success',
+        '401' => 'unauthorized',
     );
         /**
 	 * Setup the layout used by the controller.
@@ -18,17 +19,21 @@ class BaseController extends \Controller {
 		}
 	}
 
-    public function set_status($status)
+    public function set_status($status, $data = array())
     {
         $arr_response = array(
             'status' => 500 ,
             'message' => 'Some error Occur!'
         );
-        if(in_array($status, $this->arr_status)) {
+
+        if (isset($this->arr_status[$status])) {
             $arr_response['status'] = $status;
             $arr_response['message'] = $this->arr_status[$status];
+            $arr_response['error'] = false;
+            $arr_response['data'] = $data;
         }
 
+        return $arr_response;
     }
 
 
