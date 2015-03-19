@@ -1,4 +1,4 @@
-<?php
+<?php namespace LifeLi\controllers;
 
 class HomeController extends BaseController {
 

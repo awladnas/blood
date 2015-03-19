@@ -15,3 +15,8 @@ Route::get('/', function()
 {
     return View::make('hello');
 });
+Route::post('api/v1/users/create',array('as' => 'users.create.path', 'uses' => 'LifeLi\controllers\UsersController@store'));
+
+Route::group(array('prefix' => 'api/v1'),function(){
+    Route::resource('users', 'LifeLi\controllers\UsersController');
+});

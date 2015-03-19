@@ -88,3 +88,23 @@ Route::filter('csrf', function()
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
+
+
+Route::filter('auth.validate_token', function($route, $request)
+{
+    /* todo : check if request for creating new user then skip below phase */
+    $token = $request->header('X-Auth-Token');
+    $user =  User::where('api_token', $token)->first();
+    if(!$user)
+    {
+        $response = Response::json([
+                'error' => true,
+                'message' => 'Not authenticated',
+                'code' => 401],
+            401
+        );
+        $response->header('Content-Type', 'application/json');
+        return $response;
+    }
+
+});
