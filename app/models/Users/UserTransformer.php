@@ -9,23 +9,6 @@ class UserTransformer extends TransformerAbstract {
         'profile'
     ];
 
-    protected $db_to_array = array(
-        'id'             => 'id',
-        'mobile_no'      => 'mobile',
-        'email'          =>  'email',
-        'is_active'      => 'is_active',
-        'is_confirm'     => 'is_confirm',
-        'created_at'     => 'created_at'
-    );
-    protected $array_to_db = array(
-        'id'             => 'id',
-        'mobile'         => 'mobile_no',
-        'email'          =>  'email',
-        'is_active'      => 'is_active',
-        'is_confirm'     => 'is_confirm',
-        'created_at'     => 'created_at'
-    );
-
     public function transform(User $user)
     {
         return [
@@ -35,6 +18,8 @@ class UserTransformer extends TransformerAbstract {
             'is_active'      => $user->is_active,
             'is_confirm'     => $user->is_confirm,
             'created_at'     => $user->created_at,
+            'token_expires_on'  => $user->valid_until,
+            'api_token'     => $user->api_token,
         ];
     }
 
@@ -46,8 +31,10 @@ class UserTransformer extends TransformerAbstract {
      */
     public function includeProfile(User $user)
     {
-        $profile = $user->profile;
-        return $this->item($profile, new ProfileTransformer());
+        if($user->profile) {
+            $profile = $user->profile;
+            return $this->item($profile, new ProfileTransformer());
+        }
     }
 
 } 

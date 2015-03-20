@@ -4,8 +4,13 @@ class BaseController extends \Controller {
 
     protected $arr_status = array(
         '200' => 'success',
+        '201' => 'created',
         '401' => 'unauthorized',
+        '404' => 'not found'
     );
+    protected $arr_valid = [
+      '200', '201'
+    ];
         /**
 	 * Setup the layout used by the controller.
 	 *
@@ -29,8 +34,13 @@ class BaseController extends \Controller {
         if (isset($this->arr_status[$status])) {
             $arr_response['status'] = $status;
             $arr_response['message'] = $this->arr_status[$status];
-            $arr_response['error'] = false;
             $arr_response['data'] = $data;
+        }
+        if(isset($this->arr_valid[$status])) {
+            $arr_response['error'] = false;
+        }
+        else {
+            $arr_response['error'] = true;
         }
 
         return $arr_response;

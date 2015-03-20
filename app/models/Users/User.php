@@ -15,30 +15,79 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
 	 * @var string
 	 */
 	protected $table = 'users';
-
+    /**
+     * @var array
+     */
+    protected $fillable = array('mobile_no', 'email', 'valid_until', 'api_token' );
+    /**
+     * @var int
+     */
     protected $token_expire_days = 10;
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
 	 * @var array
 	 */
-	protected $hidden = array('password', 'remember_token');
+    protected $db_to_array = array(
+        'id'             => 'id',
+        'mobile_no'      => 'mobile',
+        'email'          =>  'email',
+        'is_active'      => 'is_active',
+        'is_confirm'     => 'is_confirm',
+        'created_at'     => 'created_at'
+    );
+    /**
+     * @var array
+     */
+    protected $array_to_db = array(
+        'id'             => 'id',
+        'mobile'         => 'mobile_no',
+        'password'         => 'password',
+        'email'          =>  'email',
+        'is_active'      => 'is_active',
+        'is_confirm'     => 'is_confirm',
+        'created_at'     => 'created_at'
+    );
+    /**
+     * @var array
+     */
+    protected $hidden = array('password', 'remember_token');
 
-
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function profile()
     {
         return $this->hasOne('LifeLi\models\Profiles\Profile', 'user_id', 'id');
     }
 
+    /**
+     * @return string
+     */
     public function generate_token() {
-
-        return "token";
+        $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        return substr(str_shuffle(str_repeat($pool, 5)), 0, 30);
     }
 
     /**
      *
      */
     public function get_token_expired_date() {
-        return date_add(date('y-m-d'), $this->token_expire_days());
+        return Date('d-m-Y H:i:s', strtotime("+$this->token_expire_days days"));
     }
+
+    /**
+     * @param $arrInput
+     * @return array
+     */
+    public function get_array_to_db($arrInput) {
+        $arrOutput = array();
+        foreach($arrInput as $key => $val) {
+            if(array_key_exists($key, $this->array_to_db)){
+                $arrOutput[$this->array_to_db[$key]] = $val;
+            }
+        }
+        return $arrOutput;
+    }
+
 }
