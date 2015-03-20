@@ -38,7 +38,7 @@ return array(
 			'username' => 'homestead',
 			'password' => 'secret',
 			'charset'  => 'utf8',
-			'prefix'   => 'ccc',
+			'prefix'   => '',
 			'schema'   => 'public',
 		),
 
