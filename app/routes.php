@@ -20,6 +20,8 @@ Route::group(array('prefix' => 'api/v1'),function(){
     Route::post('users/create',array('as' => 'users.create.path', 'uses' => 'LifeLi\controllers\UsersController@store'));
     Route::group(['before' => 'auth.validate_token'], function(){
         Route::resource('users', 'LifeLi\controllers\UsersController');
-        Route::resource('users.profiles', 'LifeLi\controllers\ProfilesController');
+        Route::group(['prefix' => 'users'], function(){
+            Route::resource('profiles', 'LifeLi\controllers\ProfilesController');
+        });
     });
 });

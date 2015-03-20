@@ -13,6 +13,8 @@ class ProfileTransformer extends TransformerAbstract {
             'country_name'   => $profile->country,
             'blood_group'    =>  $profile->blood_group,
             'zone'           => $profile->zone,
+            'created_date'   => $profile->created_at,
+            'updated_date'   => $profile->updated_at,
         ];
     }
 

@@ -4,6 +4,7 @@ use Illuminate\Auth\UserTrait;
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableTrait;
 use Illuminate\Auth\Reminders\RemindableInterface;
+use Illuminate\Support\Facades\Validator;
 
 class User extends \Eloquent implements UserInterface, RemindableInterface {
 
@@ -23,6 +24,13 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
      * @var int
      */
     protected $token_expire_days = 10;
+
+    protected static $rules = [
+        'mobile_no' => 'required|min:3|max:50|unique:users',
+        'email'     => 'required|between:3,64|email',
+        'password'  =>'required|min:6',
+    ];
+
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
@@ -88,6 +96,29 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
             }
         }
         return $arrOutput;
+    }
+
+    public function validate($inputs, $action = 'update') {
+
+        $rules = [
+                'mobile_no' => 'Required|Min:3|Max:50|Unique:users',
+                'email'     => 'Required|Between:3,64|Email',
+                'password'  =>'Required|Min:6'
+
+        ];
+        $arr_rules = [];
+        if ($action == 'update'){
+            foreach($inputs as $k => $v){
+                if(isset($rules[$k])){
+                    $arr_rules[$k] =  $rules[$k];
+                }
+            }
+        }
+        else {
+            $arr_rules =  $rules;
+        }
+
+        return Validator::make($inputs, $arr_rules);
     }
 
 }

@@ -5,6 +5,7 @@ class BaseController extends \Controller {
     protected $arr_status = array(
         '200' => 'success',
         '201' => 'created',
+        '204' => 'validation failed',
         '401' => 'unauthorized',
         '404' => 'not found'
     );
