@@ -9,7 +9,7 @@ class BaseController extends \Controller {
         '404' => 'not found'
     );
     protected $arr_valid = [
-      '200', '201'
+      200, 201
     ];
         /**
 	 * Setup the layout used by the controller.
@@ -36,7 +36,7 @@ class BaseController extends \Controller {
             $arr_response['message'] = $this->arr_status[$status];
             $arr_response['data'] = $data;
         }
-        if(isset($this->arr_valid[$status])) {
+        if(in_array($status, $this->arr_valid)) {
             $arr_response['error'] = false;
         }
         else {
