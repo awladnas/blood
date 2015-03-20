@@ -9,6 +9,7 @@ class ProfileTransformer extends TransformerAbstract {
         return [
             'id'             => (int) $profile->id,
             'user_id'        => (int) $profile->user_id,
+            'name'           =>  $profile->name,
             'country_name'   => $profile->country,
             'blood_group'    =>  $profile->blood_group,
             'zone'           => $profile->zone,
