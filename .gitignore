@@ -6,7 +6,7 @@ composer.lock
 .env.php
 .DS_Store
 Thumbs.db
-config/local/
+app/config/local/
 _ide_helper.php
 _ide_helper_models.php
-.idea/
+.idea/*
