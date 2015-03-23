@@ -21,6 +21,7 @@ Route::group(array('prefix' => 'api/v1'),function(){
     Route::group(['before' => 'auth.validate_token'], function(){
         Route::resource('users', 'LifeLi\controllers\UsersController');
         Route::group(['prefix' => 'users'], function(){
+            Route::get('search/{profile_id}',['uses' => 'LifeLi\controllers\ProfilesController@search_user']);
             Route::resource('profiles', 'LifeLi\controllers\ProfilesController');
         });
     });

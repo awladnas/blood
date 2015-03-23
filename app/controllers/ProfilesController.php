@@ -170,4 +170,32 @@ class ProfilesController extends BaseController {
         }
 	}
 
+    /**
+     * @param null $profile_id
+     * @internal param null $city
+     * @internal param null $lat
+     * @internal param null $lon
+     * @internal param int $distance
+     * @return array
+     */
+    public function search_user($profile_id = null ){
+
+        $profile = Profile::find($profile_id);
+        $city = \Input::get('city');
+        $blood_group = \Input::get('blood_group');
+        if($city && $response = $profile->get_location_from_city($city)) {
+            $lat = $response->latitude();
+            $lng = $response->longitude();
+//            return [$lat,$lng ];
+        }
+        else{
+            $lat =  $profile->latitude;
+            $lng =  $profile->longitude;
+        }
+        $blood_group = $blood_group? $blood_group : $profile->blood_group;
+        if($profile) {
+            $objProfiles = $profile->get_closest_profiles($profile_id, $lat, $lng, 20, $blood_group);
+        }
+        return $this->set_status(200, $this->fractal->collection($objProfiles, new ProfileTransformer()));
+    }
 }
