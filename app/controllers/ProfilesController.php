@@ -17,20 +17,14 @@ class ProfilesController extends BaseController {
      * Display a listing of the resource.
      * GET /profiles
      *
-     * @param $user_id
+     * @internal param $user_id
      * @return Response
      */
-	public function index($user_id)
+	public function index()
 	{
-        $user = User::find($user_id);
-        if (!$user)
-        {
-            $this->set_status('404');
-        }
-        if(!$user->profile){
-            return $this->set_status(200);
-        }
-        return $this->set_status(200, $this->fractal->item($user->profile, new ProfileTransformer()));
+        $profiles = Profile::all();
+        $data = $this->fractal->collection($profiles, new ProfileTransformer());
+        return $this->set_status(200, $data['data']);
 	}
 
 	/**
@@ -48,39 +42,53 @@ class ProfilesController extends BaseController {
      * Store a newly created resource in storage.
      * POST /profiles
      *
-     * @param $user_id
+     * @internal param $user_id
      * @return Response
      */
-	public function store($user_id)
+	public function store()
 	{
         $profile = new Profile();
-        $user = User::find($user_id);
+        $inputs = \Input::json();
+        $arr_profile_data = $inputs->get('profile');
+        if(!isset($arr_profile_data['user'])) {
+            return $this->set_status(404);
+        }
+        $user = User::find($arr_profile_data['user']);
         if(!$user) {
+            //user not found
             return $this->set_status(404);
         }
         if($user->profile) {
             //already exists
             return $this->set_status(404);
         }
-        $arr_profile_data = \Input::json('profile');
         $arr_profile = $profile->get_array_to_db($arr_profile_data);
-        $profile = $user->profile()->create($arr_profile);
-        if($profile) {
-            return $this->set_status(201, $this->fractal->item($profile, new ProfileTransformer()));
+
+        $v = $profile->validate($arr_profile, 'create');
+        if($v->passes()){
+            //vaid data
+            $profile = Profile::create($arr_profile);
+            if($profile) {
+                return $this->set_status(201, $this->fractal->item($profile, new ProfileTransformer()));
+            }
+
         }
-        return $this->set_status(500);
+        else {
+            //validation failed
+            return $this->set_status(204, $v->errors());
+        }
 	}
 
     /**
      * Display the specified resource.
      * GET users/{id}/profiles/{id}
      *
-     * @param $user_id
      * @param $profile_id
+     * @internal param $user_id
      * @internal param int $id
      * @return Response
      */
-	public function show($user_id, $profile_id)
+	public function show( $profile_id)
 	{
         $user = Profile::find($profile_id);
         if (!$user)
@@ -107,52 +115,87 @@ class ProfilesController extends BaseController {
      * Update the specified resource in storage.
      * PUT /profiles/{id}
      *
-     * @param $user_id
      * @param $profile_id
+     * @internal param $user_id
      * @internal param int $id
      * @return Response
      */
-	public function update($user_id, $profile_id)
+	public function update($profile_id)
 	{
         $profile = new Profile();
         $arr_inputs = \Input::json();
-        $user =  User::find($user_id);
-        if(!$user || !$user->profile) {
+        $objProfile =  Profile::find($profile_id);
+
+        if(!$objProfile) {
             return $this->set_status(404);
         }
         $arr_profile_data = $arr_inputs->get('profile');
+
         $arr_profile = $profile->get_array_to_db($arr_profile_data);
-        $bln_update =  $user->profile()->update($arr_profile);
-        $profile = Profile::find($profile_id);
-        if($bln_update) {
-            return $this->set_status(200, $this->fractal->item($profile, new ProfileTransformer()));
+
+        $v = $profile->validate($arr_profile, 'update');
+        if($v->passes()){
+            $bln_update =  $objProfile->update($arr_profile);
+            $profile = Profile::find($profile_id);
+            if($bln_update) {
+                //profile updated
+                return $this->set_status(200, $this->fractal->item($profile, new ProfileTransformer()));
+            }
         }
-        return $this->set_status(500);
+        else {
+            //validation failed
+            return $this->set_status(204, $v->errors());
+        }
 	}
 
     /**
      * Remove the specified resource from storage.
      * DELETE /profiles/{id}
      *
-     * @param $user_id
      * @param $profile_id
+     * @internal param $user_id
      * @internal param int $id
      * @return Response
      */
-	public function destroy($user_id, $profile_id)
+	public function destroy($profile_id)
 	{
-        $user =  User::find($user_id);
-        if($user)
+        $profile =  Profile::find($profile_id);
+        if($profile)
         {
-            if($user->profile){
-                $user->profile->delete();
-                return $this->set_status(200);
-            }
-            else {
-                return $this->set_status(404);
-            }
-
+            $profile->delete();
+            return $this->set_status(200);
+        }
+        else {
+            return $this->set_status(404);
         }
 	}
 
+    /**
+     * @param null $profile_id
+     * @internal param null $city
+     * @internal param null $lat
+     * @internal param null $lon
+     * @internal param int $distance
+     * @return array
+     */
+    public function search_user($profile_id = null ){
+
+        $profile = Profile::find($profile_id);
+        $city = \Input::get('city');
+        $blood_group = \Input::get('blood_group');
+        if($city && $response = $profile->get_location_from_city($city)) {
+            $lat = $response->latitude();
+            $lng = $response->longitude();
+//            return [$lat,$lng ];
+        }
+        else{
+            $lat =  $profile->latitude;
+            $lng =  $profile->longitude;
+        }
+        $blood_group = $blood_group? $blood_group : $profile->blood_group;
+        if($profile) {
+            $objProfiles = $profile->get_closest_profiles($profile_id, $lat, $lng, 20, $blood_group);
+        }
+        return $this->set_status(200, $this->fractal->collection($objProfiles, new ProfileTransformer()));
+    }
 }

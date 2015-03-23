@@ -49,11 +49,17 @@ class UsersController extends BaseController {
         $arr_user = $user->get_array_to_db($arr_user_data);
         $arr_user['valid_until'] = $user->get_token_expired_date();
         $arr_user['api_token'] = $user->generate_token();
-        $user = User::create($arr_user);
-        if($user) {
-            return $this->set_status(200, $this->fractal->item($user, new UserTransformer()));
+        $v = $user->validate($arr_user, 'create');
+        if($v->passes()){
+            $user = User::create($arr_user);
+            if($user) {
+                return $this->set_status(200, $this->fractal->item($user, new UserTransformer()));
+            }
+
         }
-        return $this->set_status(500);
+        else {
+            return $this->set_status(204, $v->errors());
+        }
 	}
 
 
@@ -101,14 +107,21 @@ class UsersController extends BaseController {
         $arr_user = $user->get_array_to_db($arr_user);
         $arr_user['valid_until'] = $user->get_token_expired_date();
         $arr_user['api_token'] = $user->generate_token();
-        $bln_update =  User::find($id)->update($arr_user);
-        $user = user::find($id);
-        if(!$user){
-            return $this->set_status(404);
+        $v = $user->validate($arr_user, 'update');
+        if($v->passes()){
+            $bln_update =  User::find($id)->update($arr_user);
+            $user = user::find($id);
+            if(!$user){
+                return $this->set_status(404);
+            }
+            if($bln_update) {
+                return $this->set_status(200, $this->fractal->item($user, new UserTransformer()));
+            }
         }
-        if($bln_update) {
-            return $this->set_status(200, $this->fractal->item($user, new UserTransformer()));
+        else {
+            return $this->set_status(204, $v->errors());
         }
+
         return $this->set_status(500);
 	}
 

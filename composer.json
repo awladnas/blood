@@ -5,8 +5,10 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.2.*",
-        "sorskod/larasponse": "~1.0"
-	},
+        "sorskod/larasponse": "~1.0",
+        "jcf/geocode": "1.0.*",
+        "davibennun/laravel-push-notification": "dev-master"
+    },
     "require-dev" : {
         "way/generators": "~2.0",
         "barryvdh/laravel-ide-helper": "~1.11",

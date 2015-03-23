@@ -125,6 +125,8 @@ return array(
         'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
         'Sorskod\Larasponse\LarasponseServiceProvider',
         'Dollar\Generators\GeneratorsServiceProvider',
+        'Jcf\Geocode\GeocodeServiceProvider',
+        'Davibennun\LaravelPushNotification\LaravelPushNotificationServiceProvider',
 
 	),
 
@@ -140,141 +142,6 @@ return array(
 	*/
 
 	'manifest' => storage_path().'/meta',
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	/*
 	|--------------------------------------------------------------------------
@@ -327,6 +194,8 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
+        'Geocode' => 'Jcf\Geocode\Facades\Geocode',
+        'PushNotification' => 'Davibennun\LaravelPushNotification\Facades\PushNotification'
 
 	),
 
