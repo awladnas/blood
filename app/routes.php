@@ -16,6 +16,23 @@ Route::get('/', function()
     return View::make('hello');
 });
 
+Route::get('admin/login',['uses'=>'LifeLi\controllers\Admin_usersController@login']);
+Route::post('admin/login',['as' => 'admin.login','uses'=> 'LifeLi\controllers\Admin_usersController@authenticate_login']);
+Route::get('admin/logout','LifeLi\controllers\Admin_usersController@logout');
+
+Route::get('admin', function()
+{
+    return View::make('admin_users.adminPage');
+});
+
+Route::resource('admin_users', 'LifeLi\controllers\Admin_usersController');
+
+Route::group(array('prefix' => 'admin'), function(){
+
+    Route::get('documents/lists',array('as' => 'admin.documents.lists', 'uses' => 'LifeLi\controllers\DocumentsController@lists'));
+    Route::resource('documents', 'LifeLi\controllers\DocumentsController');
+});
+
 Route::group(array('prefix' => 'api/v1'),function(){
     Route::post('users/create',array('as' => 'users.create.path', 'uses' => 'LifeLi\controllers\UsersController@store'));
     Route::group(['before' => 'auth.validate_token'], function(){
@@ -23,3 +40,5 @@ Route::group(array('prefix' => 'api/v1'),function(){
         Route::resource('users.profiles', 'LifeLi\controllers\ProfilesController');
     });
 });
+
+

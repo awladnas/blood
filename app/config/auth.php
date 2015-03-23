@@ -28,7 +28,8 @@ return array(
 	|
 	*/
 
-	'model' => 'User',
+//	'model' => 'User',
+	'model' => 'LifeLi\models\Admin_users\Admin_user',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -41,7 +42,8 @@ return array(
 	|
 	*/
 
-	'table' => 'users',
+//	'table' => 'users',
+	'table' => 'admin_users',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -60,9 +62,9 @@ return array(
 
 	'reminder' => array(
 
-		'email' => 'emails.auth.reminder',
-
-		'table' => 'password_reminders',
+//		'email' => 'emails.auth.reminder',
+//
+//		'table' => 'password_reminders',
 
 		'expire' => 60,
 

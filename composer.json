@@ -10,7 +10,8 @@
     "require-dev" : {
         "way/generators": "~2.0",
         "barryvdh/laravel-ide-helper": "~1.11",
-        "doctrine/dbal": "2.6.*@dev"
+        "doctrine/dbal": "2.6.*@dev",
+        "dollar/generators": "dev-master"
     },
 	"autoload": {
         "psr-4": {
