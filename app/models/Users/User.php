@@ -25,12 +25,6 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
      */
     protected $token_expire_days = 10;
 
-    protected static $rules = [
-        'mobile_no' => 'required|min:3|max:50|unique:users',
-        'email'     => 'required|between:3,64|email',
-        'password'  =>'required|min:6',
-    ];
-
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
@@ -98,6 +92,11 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
         return $arrOutput;
     }
 
+    /**
+     * @param $inputs
+     * @param string $action
+     * @return mixed
+     */
     public function validate($inputs, $action = 'update') {
 
         $rules = [

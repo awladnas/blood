@@ -1,5 +1,5 @@
 <?php namespace LifeLi\models\Profiles;
-
+use Illuminate\Support\Facades\Validator;
 class Profile extends \Eloquent {
 
     /**
@@ -45,4 +45,33 @@ class Profile extends \Eloquent {
         }
         return $arrOutput;
     }
+
+    /**
+     * @param $inputs
+     * @param string $action
+     * @return mixed
+     */
+    public function validate($inputs, $action = 'update') {
+
+        $rules = [
+            'user_id' => 'Required',
+            'name'     => 'Required|Min:3',
+            'zone'     => 'Required|Min:3',
+            'country'     => 'Required|Min:2',
+            'blood_group'     => 'Required'
+        ];
+        $arr_rules = [];
+        if ($action == 'update'){
+            foreach($inputs as $k => $v){
+                if(isset($rules[$k])){
+                    $arr_rules[$k] =  $rules[$k];
+                }
+            }
+        }
+        else {
+            $arr_rules =  $rules;
+        }
+        return Validator::make($inputs, $arr_rules);
+    }
+
 }

@@ -50,8 +50,12 @@ class ProfilesController extends BaseController {
         $profile = new Profile();
         $inputs = \Input::json();
         $arr_profile_data = $inputs->get('profile');
+        if(!isset($arr_profile_data['user'])) {
+            return $this->set_status(404);
+        }
         $user = User::find($arr_profile_data['user']);
         if(!$user) {
+            //user not found
             return $this->set_status(404);
         }
         if($user->profile) {
@@ -59,11 +63,20 @@ class ProfilesController extends BaseController {
             return $this->set_status(404);
         }
         $arr_profile = $profile->get_array_to_db($arr_profile_data);
-        $profile = Profile::create($arr_profile);
-        if($profile) {
-            return $this->set_status(201, $this->fractal->item($profile, new ProfileTransformer()));
+
+        $v = $profile->validate($arr_profile, 'create');
+        if($v->passes()){
+            //vaid data
+            $profile = Profile::create($arr_profile);
+            if($profile) {
+                return $this->set_status(201, $this->fractal->item($profile, new ProfileTransformer()));
+            }
+
         }
-        return $this->set_status(500);
+        else {
+            //validation failed
+            return $this->set_status(204, $v->errors());
+        }
 	}
 
     /**
@@ -112,25 +125,35 @@ class ProfilesController extends BaseController {
         $profile = new Profile();
         $arr_inputs = \Input::json();
         $objProfile =  Profile::find($profile_id);
+
         if(!$objProfile) {
             return $this->set_status(404);
         }
         $arr_profile_data = $arr_inputs->get('profile');
+
         $arr_profile = $profile->get_array_to_db($arr_profile_data);
-        $bln_update =  $objProfile->update($arr_profile);
-        $profile = Profile::find($profile_id);
-        if($bln_update) {
-            return $this->set_status(200, $this->fractal->item($profile, new ProfileTransformer()));
+
+        $v = $profile->validate($arr_profile, 'update');
+        if($v->passes()){
+            $bln_update =  $objProfile->update($arr_profile);
+            $profile = Profile::find($profile_id);
+            if($bln_update) {
+                //profile updated
+                return $this->set_status(200, $this->fractal->item($profile, new ProfileTransformer()));
+            }
         }
-        return $this->set_status(500);
+        else {
+            //validation failed
+            return $this->set_status(204, $v->errors());
+        }
 	}
 
     /**
      * Remove the specified resource from storage.
      * DELETE /profiles/{id}
      *
-     * @param $user_id
      * @param $profile_id
+     * @internal param $user_id
      * @internal param int $id
      * @return Response
      */
