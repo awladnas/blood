@@ -23,6 +23,7 @@ Route::group(array('prefix' => 'api/v1'),function(){
         Route::group(['prefix' => 'users'], function(){
             Route::get('search/{profile_id}',['uses' => 'LifeLi\controllers\ProfilesController@search_user']);
             Route::resource('profiles', 'LifeLi\controllers\ProfilesController');
+            Route::resource('requests', 'LifeLi\controllers\RequestsController');
         });
     });
 });

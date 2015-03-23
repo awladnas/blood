@@ -15,7 +15,7 @@ class CreateRequestsTable extends Migration {
 		Schema::create('requests', function(Blueprint $table)
 		{
 			$table->increments('id');
-            $table->integer('sender');
+            $table->integer('user_id');
             $table->string('area', 100)->nullable();
             $table->string('content', 150)->nullable();
             $table->string('blood_group', 5)->nullable();

@@ -64,6 +64,13 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function requests(){
+        return $this->hasMany('LifeLi\models\Requests\Request', 'user_id', 'id');
+    }
+
+    /**
      * @return string
      */
     public function generate_token() {
