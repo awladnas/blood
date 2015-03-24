@@ -18,19 +18,22 @@ Route::get('/', function()
 
 Route::get('admin/login',['uses'=>'LifeLi\controllers\Admin_usersController@login']);
 Route::post('admin/login',['as' => 'admin.login','uses'=> 'LifeLi\controllers\Admin_usersController@authenticate_login']);
-Route::get('admin/logout','LifeLi\controllers\Admin_usersController@logout');
+Route::get('admin/logout',array('as' => 'logout', 'uses'=> 'LifeLi\controllers\Admin_usersController@logout'));
 
 Route::get('admin', function()
 {
     return View::make('admin_users.adminPage');
 });
 
-Route::resource('admin_users', 'LifeLi\controllers\Admin_usersController');
+Route::group(['before' => 'auth'], function(){
+    Route::resource('admin_users', 'LifeLi\controllers\Admin_usersController');
+});
 
-Route::group(array('prefix' => 'admin'), function(){
-
-    Route::get('documents/lists',array('as' => 'admin.documents.lists', 'uses' => 'LifeLi\controllers\DocumentsController@lists'));
-    Route::resource('documents', 'LifeLi\controllers\DocumentsController');
+Route::group(['before' => 'auth'], function(){
+    Route::group(array('prefix' => 'admin'), function(){
+        Route::get('documents/lists',array('as' => 'admin.documents.lists', 'uses' => 'LifeLi\controllers\DocumentsController@lists'));
+        Route::resource('documents', 'LifeLi\controllers\DocumentsController');
+    });
 });
 
 Route::group(array('prefix' => 'api/v1'),function(){

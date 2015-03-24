@@ -1,9 +1,9 @@
-.pos_left {
-    position: relative;
-    left: -20px;
-}
-
 .pos_right {
     position: relative;
-    left: 20px;
+    float: right;
+}
+
+span.normal {
+    font-size: 20px;
+    font-weight: normal;
 }
