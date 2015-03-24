@@ -6,9 +6,17 @@ class BaseController extends \Controller {
         '200' => 'success',
         '201' => 'created',
         '204' => 'validation failed',
+        '400' => 'bad request',
         '401' => 'unauthorized',
-        '404' => 'not found'
+        '403' => 'forbidden',
+        '404' => 'not found',
+        '405' => 'method not allowed',
+        '500' => 'internal server error',
+        '503' => 'service unavailable'
     );
+    /**
+     * @var array
+     */
     protected $arr_valid = [
       200, 201
     ];
@@ -37,6 +45,7 @@ class BaseController extends \Controller {
             $arr_response['message'] = $this->arr_status[$status];
             $arr_response['data'] = $data;
         }
+        return $arr_response;
         if(in_array($status, $this->arr_valid)) {
             $arr_response['error'] = false;
         }

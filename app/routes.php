@@ -42,6 +42,10 @@ Route::group(array('prefix' => 'api/v1'),function(){
         Route::group(['prefix' => 'users'], function(){
             Route::get('search/{profile_id}',['uses' => 'LifeLi\controllers\ProfilesController@search_user']);
             Route::resource('profiles', 'LifeLi\controllers\ProfilesController');
+            Route::get('{id}/requests', 'LifeLi\controllers\RequestsController@user_requests');
+            Route::post('{id}/requests', 'LifeLi\controllers\RequestsController@store');
+            Route::get('requests/accept/{id}', 'LifeLi\controllers\RequestsController@accept_request');
+            Route::get('requests/reject/{id}', 'LifeLi\controllers\RequestsController@decline_request');
             Route::resource('requests', 'LifeLi\controllers\RequestsController');
         });
     });

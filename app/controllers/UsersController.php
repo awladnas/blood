@@ -177,7 +177,7 @@ class UsersController extends BaseController {
             return $this->set_status(200, $this->fractal->item(User::find($id), new UserTransformer()));
         }
         else {
-            $this->set_status(404);
+           return $this->set_status(404, array('user not found'));
         }
     }
 }

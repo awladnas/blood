@@ -31,10 +31,17 @@ class Request extends \Eloquent {
         return $this->belongsTo('LifeLi\models\Users\User');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function Request_users()
+    {
+        return $this->hasMany('LifeLi\models\Request_users\Request_user');
+    }
+
     public function validate($inputs, $action = 'update') {
 
         $rules = [
-            'user_id'       => 'Required',
             'area'          => 'Required|Min:3',
             'zone'          => 'Min:3',
             'content'       => 'Required|Min:2',
