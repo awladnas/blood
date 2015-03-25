@@ -32,6 +32,7 @@ Route::group(array('prefix' => 'api/v1'),function(){
     Route::group(['before' => 'auth.validate_token'], function(){
         Route::post('users/{id}/change_password', 'LifeLi\controllers\UsersController@change_password');
         Route::get('users/{id}/update_token', 'LifeLi\controllers\UsersController@update_token');
+        Route::get('users/{id}/out_of_request', 'LifeLi\controllers\UsersController@out_of_request');
         Route::resource('users', 'LifeLi\controllers\UsersController');
         Route::group(['prefix' => 'users'], function(){
             Route::get('search/{profile_id}',['uses' => 'LifeLi\controllers\ProfilesController@search_user']);
@@ -39,7 +40,9 @@ Route::group(array('prefix' => 'api/v1'),function(){
             Route::get('{id}/requests', 'LifeLi\controllers\RequestsController@user_requests');
             Route::post('{id}/requests', 'LifeLi\controllers\RequestsController@store');
             Route::get('requests/accept/{id}', 'LifeLi\controllers\RequestsController@accept_request');
-            Route::get('requests/reject/{id}', 'LifeLi\controllers\RequestsController@decline_request');
+            Route::get('requests/block/{id}', 'LifeLi\controllers\RequestsController@block_user');
+            Route::get('requests/ignore/{id}', 'LifeLi\controllers\RequestsController@ignore_request');
+            Route::post('requests/reject/{id}', 'LifeLi\controllers\RequestsController@decline_request');
             Route::resource('requests', 'LifeLi\controllers\RequestsController');
         });
     });

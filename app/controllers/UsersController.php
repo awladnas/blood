@@ -1,5 +1,7 @@
 <?php namespace LifeLi\controllers;
 
+use LifeLi\models\Profiles\Profile;
+use LifeLi\models\Profiles\ProfileTransformer;
 use LifeLi\models\Users\UserTransformer;
 use Sorskod\Larasponse\Larasponse;
 use LifeLi\models\Users\User;
@@ -178,6 +180,22 @@ class UsersController extends BaseController {
         }
         else {
            return $this->set_status(404, array('user not found'));
+        }
+    }
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public function out_of_request($id){
+        $profile = Profile::where('user_id', '=', $id)->first();
+        if($profile) {
+            $profile->out_of_req = false;
+            $profile->save();
+            return $this->set_status(200, $this->fractal->item($profile, new ProfileTransformer()));
+        }
+        else {
+            return $this->set_status(404, array('profile not found'));
         }
     }
 }
