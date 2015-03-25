@@ -31,7 +31,6 @@ Route::group(['before' => 'auth'], function(){
 
 Route::group(['before' => 'auth'], function(){
     Route::group(array('prefix' => 'admin'), function(){
-        Route::get('documents/lists',array('as' => 'admin.documents.lists', 'uses' => 'LifeLi\controllers\DocumentsController@lists'));
         Route::resource('documents', 'LifeLi\controllers\DocumentsController');
     });
 });

@@ -155,7 +155,7 @@ class Admin_usersController extends BaseController {
         );
         if (Auth::attempt($user)) {
 
-            return \Redirect::route('admin_users.index')
+            return \Redirect::route('admin.documents.index')
                 ->with('message', 'You are successfully logged in.');
         }
 

@@ -1,4 +1,5 @@
-@extends('layouts.scaffold')
+@extends('layouts.default')
+@section('title', 'edit Admin')
 
 @section('main')
 

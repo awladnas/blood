@@ -1,5 +1,5 @@
-
-@extends('layouts.scaffold')
+@extends('layouts.default')
+@section('title', 'Admin')
 
 @section('main')
 
@@ -13,7 +13,7 @@
 			<tr>
 				<th>Name</th>
 				<th>Email</th>
-				<th>Password</th>
+				{{--<th>Password</th>--}}
 				<th>Superuser</th>
 				<th>&nbsp;</th>
 			</tr>
@@ -24,7 +24,7 @@
 				<tr>
 					<td>{{{ $admin_user->name }}}</td>
 					<td>{{{ $admin_user->email }}}</td>
-					<td>{{{ $admin_user->password }}}</td>
+{{--					<td>{{{ $admin_user->password }}}</td>--}}
 					<td>{{{ $admin_user->is_superuser }}}</td>
 
                     @if (Auth::user()->is_superuser)
@@ -33,8 +33,7 @@
                             {{ Form::open(array('style' => 'display: inline-block;', 'method' => 'DELETE', 'route' => array('admin_users.destroy', $admin_user->id), 'onsubmit' => 'return ConfirmDelete()')) }}
                                 {{ Form::submit('Delete', array('class' => 'btn btn-danger')) }}
                             {{ Form::close() }}
-                        </td>
-                        <td>
+
                             {{ link_to_route('admin_users.edit', 'Edit', array($admin_user->id), array('class' => 'btn btn-info')) }}
                         </td>
                     @endif

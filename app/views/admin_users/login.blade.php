@@ -1,4 +1,6 @@
-@extends('layouts.scaffold')
+@extends('layouts.default')
+@section('title', 'Lifelie')
+
 @section('main')
     <div class="row">
         <div class="col-md-4 col-md-offset-4">

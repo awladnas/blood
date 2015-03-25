@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <title>@yield('title')</title>
     <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
     {{ HTML::style('css/documents.css'); }}
     {{ HTML::script('javascripts/application.js') }}
@@ -12,7 +13,7 @@
 
 <body>
 
-<div class="container">
+<div class="container" >
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
             <span class="sr-only">Toggle navigation</span>
@@ -29,7 +30,7 @@
                 <li><a href="/admin_users">Admin Users</a></li>
                 <li><a href="/admin/documents">Api Documents</a></li>
                 <li><a href="/admin/logout">Log Out</a></li>
-                <li><a href="/profile">{{ Auth::user()->first_name }}</a></li>
+                <li><a href="#">{{ Auth::user()->name }}</a></li>
             @else
                 <li><a href="/admin/login">Login</a></li>
             @endif
@@ -50,10 +51,10 @@
         </div>
     </div>
 
-    <div id="footer" class="" style="margin-top:20px; text-align: center ">
+    <div id="footer" class="" style="margin-top:20px; text-align: center;">
         <nav class="navbar navbar-default ">
             <div class="navbar-inner navbar-content-center">
-                <p class="text-muted credit">Example courtesy <a href="http://martinbean.co.uk">Martin Bean</a> and <a href="http://ryanfait.com/sticky-footer/">Ryan Fait</a>.</p>
+                <p class="text-muted credit">@copyright <a href="#">LifeLie</a>.</p>
             </div>
         </nav>
     </div>
