@@ -5,10 +5,6 @@
 
 <h1>All Documents</h1>
 
-@if (Auth::user()->is_superuser)
-    <p>{{ link_to_route('admin.documents.create', 'New Document', null, array('class' => 'btn btn-lg btn-success pos_right')) }}</p>
-@endif
-
 @if ($documents->count())
 	<table class="table table-striped">
 		<thead>
@@ -42,7 +38,9 @@
 			@endforeach
 		</tbody>
 	</table>
-
+    @if (Auth::user()->is_superuser)
+        <p>{{ link_to_route('admin.documents.create', 'New Document', null, array('class' => 'btn btn-lg btn-success pos_right')) }}</p>
+    @endif
 
 @else
 	There are no documents

@@ -3,9 +3,10 @@
 <head>
     <meta charset="utf-8">
     <title>@yield('title')</title>
-    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
-    {{ HTML::style('css/documents.css'); }}
-    {{ HTML::script('javascripts/application.js') }}
+    {{--<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">--}}
+    <link rel="stylesheet" href="{{ asset('assets/bootstrap/dist/css/bootstrap.min.css') }}">
+    {{ HTML::style('assets/css/documents.css'); }}
+    {{ HTML::script('assets/javascripts/application.js') }}
     <style>
         body { padding-top: 20px; }
     </style>
@@ -13,7 +14,7 @@
 
 <body>
 
-<div class="container" >
+<div class="container default">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
             <span class="sr-only">Toggle navigation</span>
@@ -50,15 +51,16 @@
 
         </div>
     </div>
+</div>
+<div class="container">
 
-    <div id="footer" class="" style="margin-top:20px; text-align: center;">
+    <div id="footer" style="margin-top:20px;text-align: center;">
         <nav class="navbar navbar-default ">
-            <div class="navbar-inner navbar-content-center">
+            <div class="navbar-inner navbar-content-center footer_alignment" >
                 <p class="text-muted credit">@copyright <a href="#">LifeLie</a>.</p>
             </div>
         </nav>
     </div>
 </div>
-
 </body>
 </html>

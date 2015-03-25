@@ -5,15 +5,12 @@
 
 <h1>All Admin Users</h1>
 
-{{--<p>{{ link_to_route('admin_users.create', 'Add New Admin_user', null, array('class' => 'btn btn-lg btn-success')) }}</p>--}}
-
 @if ($admin_users->count())
 	<table class="table table-striped">
 		<thead>
 			<tr>
 				<th>Name</th>
 				<th>Email</th>
-				{{--<th>Password</th>--}}
 				<th>Superuser</th>
 				<th>&nbsp;</th>
 			</tr>
@@ -24,8 +21,7 @@
 				<tr>
 					<td>{{{ $admin_user->name }}}</td>
 					<td>{{{ $admin_user->email }}}</td>
-{{--					<td>{{{ $admin_user->password }}}</td>--}}
-					<td>{{{ $admin_user->is_superuser }}}</td>
+					<td>{{{ $admin_user->map_superuser() }}}</td>
 
                     @if (Auth::user()->is_superuser)
                         <td>
