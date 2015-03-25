@@ -30,8 +30,7 @@
             @if (Auth::check())
                 <li><a href="/admin_users">Admin Users</a></li>
                 <li><a href="/admin/documents">Api Documents</a></li>
-                <li><a href="/admin/logout">Log Out</a></li>
-                <li><a href="#">{{ Auth::user()->name }}</a></li>
+                <li><a href="/admin/logout">Log Out({{ Auth::user()->name }})</a></li>
             @else
                 <li><a href="/admin/login">Login</a></li>
             @endif

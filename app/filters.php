@@ -70,6 +70,15 @@ Route::filter('guest', function()
 	if (Auth::check()) return Redirect::to('/admin');
 });
 
+//Route::filter('auth.admin', function() {
+//    // if not logged in redirect to the login page
+//    if (Auth::guest()) return Redirect::guest('admin/login');
+//});
+Route::filter('auth.logout', function() {
+    // if already logged in don't show login page again
+    if (Auth::check()) return Redirect::to('/admin/documents');
+});
+
 /*
 |--------------------------------------------------------------------------
 | CSRF Protection Filter

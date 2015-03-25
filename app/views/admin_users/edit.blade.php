@@ -30,11 +30,6 @@
         </div>
 
         <div class="form-group">
-            {{ Form::label('password', 'Password:') }}
-            {{ Form::password('password', array('placeholder'=>'Password', 'class'=>'form-control' ) ) }}
-        </div>
-
-        <div class="form-group">
             {{ Form::label('is_superuser', 'Superuser:') }}
             {{ Form::checkbox('is_superuser') }}
         </div>
