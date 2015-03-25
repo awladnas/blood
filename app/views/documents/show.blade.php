@@ -3,10 +3,7 @@
 
 @section('main')
 
-<h1>Show Document</h1>
-
-<p>{{ link_to_route('admin.documents.index', 'Return to All documents', null, array('class'=>'btn btn-lg btn-primary')) }}</p>
-
+<h1>Document Details</h1>
 
     <h3>Url:  <span class="normal"><a href="#">{{{ $document->url }}}</a></span></h3>
 
@@ -24,14 +21,15 @@
 
     <h3>Request method: <span class="normal">{{{ $document->request_method }}}</span></h3>
 
-    @if (Auth::user()->is_superuser)
-        <div class="pos_right">
-            {{ Form::open(array('style' => 'display: inline-block;', 'method' => 'DELETE', 'route' => array('admin.documents.destroy', $document->id), 'onsubmit' => 'return ConfirmDelete()')) }}
-            {{ Form::submit('Delete', array('class' => 'btn btn-danger')) }}
-            {{ Form::close() }}
+    {{ link_to_route('admin.documents.index', 'Back', $document->id, array('class' => 'btn btn-primary')) }}
+    <div class="pos_right">
+
+        {{ Form::open(array('style' => 'display: inline-block;', 'method' => 'DELETE', 'route' => array('admin.documents.destroy', $document->id), 'onsubmit' => 'return ConfirmDelete()')) }}
+        {{ Form::submit('Delete', array('class' => 'btn btn-danger')) }}
+        {{ Form::close() }}
 
         {{ link_to_route('admin.documents.edit', 'Edit', array($document->id), array('class' => 'btn btn-info')) }}
-        </div>
-    @endif
+    </div>
+
 
 @stop

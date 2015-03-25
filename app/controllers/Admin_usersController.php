@@ -110,6 +110,7 @@ class Admin_usersController extends BaseController {
         if(!isset($input['is_superuser'])) {
             $input['is_superuser'] = false;
         }
+        Admin_user::$rules['password'] = '';
 		$validation = \Validator::make($input, Admin_user::$rules);
 
         if (Auth::user()->is_superuser) {

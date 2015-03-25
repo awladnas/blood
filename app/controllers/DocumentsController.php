@@ -51,7 +51,8 @@ class DocumentsController extends BaseController {
 		{
 			$this->document->create($input);
 
-			return \Redirect::route('admin.documents.index');
+			return \Redirect::route('admin.documents.index')
+                ->with('message', 'Successfully created.');
 		}
 
 		return \Redirect::route('admin.documents.create')
@@ -107,7 +108,8 @@ class DocumentsController extends BaseController {
 			$document = $this->document->find($id);
 			$document->update($input);
 
-			return \Redirect::route('admin.documents.show', $id);
+			return \Redirect::route('admin.documents.show', $id)
+                ->with('message', 'Successfully Updated.');;
 		}
 
 		return \Redirect::route('admin.documents.edit', $id)
@@ -126,7 +128,8 @@ class DocumentsController extends BaseController {
 	{
 		$this->document->find($id)->delete();
 
-		return \Redirect::route('admin.documents.index');
+		return \Redirect::route('admin.documents.index')
+            ->with('message', 'Successfully deleted.');;
 	}
 
     public function lists()

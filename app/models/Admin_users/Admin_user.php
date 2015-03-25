@@ -18,7 +18,7 @@ use UserTrait, RemindableTrait;
     public static $rules = array(
 		'name' => 'required',
 		'email' => 'required',
-		'password' => 'required'
+		'password' => 'required|min:6'
 	);
 
     protected $hidden = array('password');

@@ -11,19 +11,11 @@
 |
 */
 
-Route::get('/', function()
-{
-    return View::make('hello');
-});
 
-Route::get('admin/login',['uses'=>'LifeLi\controllers\Admin_usersController@login']);
+Route::get('admin/login',['before' => 'auth.logout','as' => 'auth.login', 'uses'=>'LifeLi\controllers\Admin_usersController@login']);
+Route::get('admin',['before' => 'auth.logout','as' => 'auth.login', 'uses'=>'LifeLi\controllers\Admin_usersController@login']);
 Route::post('admin/login',['as' => 'admin.login','uses'=> 'LifeLi\controllers\Admin_usersController@authenticate_login']);
 Route::get('admin/logout',array('as' => 'logout', 'uses'=> 'LifeLi\controllers\Admin_usersController@logout'));
-
-Route::get('admin', function()
-{
-    return View::make('admin_users.adminPage');
-});
 
 Route::group(['before' => 'auth'], function(){
     Route::resource('admin_users', 'LifeLi\controllers\Admin_usersController');
