@@ -82,5 +82,9 @@ use UserTrait, RemindableTrait;
         return 'remember_token';
     }
 
+    public function map_superuser()
+    {
+        return ($this->is_superuser== 1)? 'Yes' : 'No';
+    }
 
 }

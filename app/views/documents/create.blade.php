@@ -1,4 +1,5 @@
-@extends('layouts.scaffold')
+@extends('layouts.default')
+@section('title', 'New Document')
 
 @section('main')
 
@@ -26,23 +27,23 @@
         </div>
 
         <div class="form-group">
-            {{ Form::label('input_format', 'Input_format:', array('class'=>'col-md-2 control-label')) }}
+            {{ Form::label('input format', 'Input format:', array('class'=>'col-md-2 control-label')) }}
             <div class="col-sm-10">
-              {{ Form::textarea('input_format', Input::old('input_format'), array('class'=>'form-control', 'placeholder'=>'Input_format')) }}
+              {{ Form::textarea('input_format', Input::old('input_format'), array('class'=>'form-control', 'placeholder'=>'Input format')) }}
             </div>
         </div>
 
         <div class="form-group">
-            {{ Form::label('output_format', 'Output_format:', array('class'=>'col-md-2 control-label')) }}
+            {{ Form::label('output_format', 'Output format:', array('class'=>'col-md-2 control-label')) }}
             <div class="col-sm-10">
-              {{ Form::textarea('output_format', Input::old('output_format'), array('class'=>'form-control', 'placeholder'=>'Output_format')) }}
+              {{ Form::textarea('output_format', Input::old('output_format'), array('class'=>'form-control', 'placeholder'=>'Output format')) }}
             </div>
         </div>
 
         <div class="form-group">
-            {{ Form::label('api_version', 'Api_version:', array('class'=>'col-md-2 control-label')) }}
+            {{ Form::label('api_version', 'Api version:', array('class'=>'col-md-2 control-label')) }}
             <div class="col-sm-10">
-              {{ Form::text('api_version', Input::old('api_version'), array('class'=>'form-control', 'placeholder'=>'Api_version')) }}
+              {{ Form::text('api_version', Input::old('api_version'), array('class'=>'form-control', 'placeholder'=>'Api version')) }}
             </div>
         </div>
 
@@ -54,7 +55,7 @@
         </div>
 
         <div class="form-group">
-            {{ Form::label('request_method', 'Request_method:', array('class'=>'col-md-2 control-label')) }}
+            {{ Form::label('request_method', 'Request method:', array('class'=>'col-md-2 control-label')) }}
             <div class="col-sm-10">
                 {{ Form::select('request_method', array('GET' => 'GET', 'POST' => 'POST'))  }}
             </div>

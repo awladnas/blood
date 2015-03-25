@@ -1,0 +1,22 @@
+.pos_right {
+    position: relative;
+    float: right;
+}
+
+span.normal {
+    font-size: 20px;
+    font-weight: normal;
+}
+
+.container.default {
+    min-height: 600px;
+    position: relative;
+}
+
+.container.default #footer {
+    bottom: 0;
+    width: 100%;
+}
+.navbar-inner.navbar-content-center.footer_alignment {
+    margin-top: 10px;
+}

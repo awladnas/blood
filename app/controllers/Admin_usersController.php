@@ -50,12 +50,16 @@ class Admin_usersController extends BaseController {
         $input['password'] = \Input::get('password');
 		$validation = \Validator::make($input, Admin_user::$rules);
 
-		if ($validation->passes())
-		{
-			$this->admin_user->create($input);
+        if (Auth::user()->is_superuser) {
+            if ($validation->passes()) {
 
-			return \Redirect::route('admin_users.index');
-		}
+                $this->admin_user->create($input);
+                return \Redirect::route('admin_users.index')
+                    ->with('message', 'Successfully created.');
+
+            }
+
+        }
 
 		return \Redirect::route('admin_users.create')
 			->withInput()
@@ -103,15 +107,20 @@ class Admin_usersController extends BaseController {
 	public function update($id)
 	{
 		$input = array_except(\Input::all(), '_method');
+        if(!isset($input['is_superuser'])) {
+            $input['is_superuser'] = false;
+        }
 		$validation = \Validator::make($input, Admin_user::$rules);
 
-		if ($validation->passes())
-		{
-			$admin_user = $this->admin_user->find($id);
-			$admin_user->update($input);
+        if (Auth::user()->is_superuser) {
+            if ($validation->passes()) {
+                $admin_user = $this->admin_user->find($id);
+                $admin_user->update($input);
 
-			return \Redirect::route('admin_users.show', $id);
-		}
+                return \Redirect::route('admin_users.show', $id)
+                    ->with('message', 'Successfully Updated.');
+            }
+        }
 
 		return \Redirect::route('admin_users.edit', $id)
 			->withInput()
@@ -129,7 +138,8 @@ class Admin_usersController extends BaseController {
 	{
 		$this->admin_user->find($id)->delete();
 
-		return \Redirect::route('admin_users.index');
+		return \Redirect::route('admin_users.index')
+            ->with('message', 'Successfully deleted.');
 	}
 
     public function login()
@@ -145,22 +155,22 @@ class Admin_usersController extends BaseController {
         );
         if (Auth::attempt($user)) {
 
-            return \Redirect::route('admin_users.index')
-                ->with('flash_notice', 'You are successfully logged in.');
+            return \Redirect::route('admin.documents.index')
+                ->with('message', 'You are successfully logged in.');
         }
 
         // authentication failure! lets go back to the login page
         return \Redirect::route('admin.login')
-            ->with('flash_error', 'Your username/password combination was incorrect.')
+            ->with('message', 'Your username/password combination was incorrect.')
             ->withInput();
     }
 
     public function logout()
-    {
-        Auth::logout();
-
-        return Redirect::route('admin_users.index')
-            ->with('flash_notice', 'You are successfully logged out.');
+    {   if(Auth::check()) {
+            Auth::logout();
+         }
+        return \Redirect::route('admin.login')
+            ->with('message', 'You are successfully logged out.');
     }
 
 }

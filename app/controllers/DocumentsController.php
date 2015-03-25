@@ -1,4 +1,5 @@
 <?php namespace LifeLi\controllers;
+use Illuminate\Support\Facades\Auth;
 use LifeLi\models\Documents\Document;
 class DocumentsController extends BaseController {
 
