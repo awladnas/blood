@@ -145,5 +145,39 @@ class UsersController extends BaseController {
         }
 	}
 
+    /**
+     * @param $id
+     * @return array
+     */
+    public function change_password($id){
+        $inputs = \Input::json();
+        $old_password = $inputs->get('old_password');
+        $new_password = $inputs->get('new_password');
+        $user = User::find($id);
+        if($user && $user->password == $old_password) {
+            $user->password = $new_password;
+            $user->api_token = $user->generate_token();
+            $user->valid_until = $user->get_token_expired_date();
+            $user->save();
+            return $this->set_status(200, $this->fractal->item(User::find($id), new UserTransformer()));
+        }
+        return $this->set_status(404);
+    }
 
+    /**
+     * @param $id
+     * @return array
+     */
+    public function update_token($id){
+        $user = User::find($id);
+        if($user){
+            $user->api_token = $user->generate_token();
+            $user->valid_until = $user->get_token_expired_date();
+            $user->save();
+            return $this->set_status(200, $this->fractal->item(User::find($id), new UserTransformer()));
+        }
+        else {
+           return $this->set_status(404, array('user not found'));
+        }
+    }
 }

@@ -1,14 +1,11 @@
 <?php namespace LifeLi\models\Users;
 
 use Illuminate\Auth\UserTrait;
-use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableTrait;
-use Illuminate\Auth\Reminders\RemindableInterface;
 use Illuminate\Support\Facades\Validator;
 
-class User extends \Eloquent implements UserInterface, RemindableInterface {
+class User extends \Eloquent {
 
-	use UserTrait, RemindableTrait;
 
 	/**
 	 * The database table used by the model.
@@ -19,7 +16,7 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
     /**
      * @var array
      */
-    protected $fillable = array('mobile_no', 'email', 'valid_until', 'api_token' );
+    protected $fillable = array('mobile_no', 'email', 'valid_until', 'api_token', 'password' );
     /**
      * @var int
      */
@@ -44,7 +41,7 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
     protected $array_to_db = array(
         'id'             => 'id',
         'mobile'         => 'mobile_no',
-        'password'         => 'password',
+        'password'       => 'password',
         'email'          =>  'email',
         'is_active'      => 'is_active',
         'is_confirm'     => 'is_confirm',
@@ -53,7 +50,7 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
     /**
      * @var array
      */
-    protected $hidden = array('password', 'remember_token');
+//    protected $hidden = array('password', 'remember_token');
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
@@ -82,7 +79,7 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
      *
      */
     public function get_token_expired_date() {
-        return Date('d-m-Y H:i:s', strtotime("+$this->token_expire_days days"));
+        return Date('Y-m-d H:i:s', strtotime("+$this->token_expire_days days"));
     }
 
     /**
