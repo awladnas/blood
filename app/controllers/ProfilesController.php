@@ -51,22 +51,23 @@ class ProfilesController extends BaseController {
         $inputs = \Input::json();
         $arr_profile_data = $inputs->get('profile');
         if(!isset($arr_profile_data['user'])) {
-            return $this->set_status(404);
+            return $this->set_status(404, 'no user id provided');
         }
         $user = User::find($arr_profile_data['user']);
+        /* TODO check if user made one request today*/
         if(!$user) {
-            //user not found
-            return $this->set_status(404);
+            //user not found'
+            return $this->set_status(404, 'user not found');
         }
         if($user->profile) {
             //already exists
-            return $this->set_status(404);
+            return $this->set_status(404, 'already exists');
         }
         $arr_profile = $profile->get_array_to_db($arr_profile_data);
 
         $v = $profile->validate($arr_profile, 'create');
         if($v->passes()){
-            //vaid data
+            //valid data
             $profile = Profile::create($arr_profile);
             if($profile) {
                 return $this->set_status(201, $this->fractal->item($profile, new ProfileTransformer()));
@@ -75,7 +76,7 @@ class ProfilesController extends BaseController {
         }
         else {
             //validation failed
-            return $this->set_status(204, $v->errors());
+            return $this->set_status(204, json_encode($v->errors()));
         }
 	}
 
@@ -163,6 +164,7 @@ class ProfilesController extends BaseController {
         if($profile)
         {
             $profile->delete();
+            /* TODO delete relevant all data of the user */
             return $this->set_status(200);
         }
         else {
@@ -180,6 +182,7 @@ class ProfilesController extends BaseController {
      */
     public function search_user($profile_id = null ){
 
+        /* todo make it as post and take distance input , user limit*/
         $profile = Profile::find($profile_id);
         $city = \Input::get('city');
         $blood_group = \Input::get('blood_group');
@@ -197,5 +200,9 @@ class ProfilesController extends BaseController {
             $objProfiles = $profile->get_closest_profiles($profile_id, $lat, $lng, 20, $blood_group);
         }
         return $this->set_status(200, $this->fractal->collection($objProfiles, new ProfileTransformer()));
+    }
+
+    public function add_more_user_requests($id){
+        /* TODO add more user for a request if other user decline */
     }
 }

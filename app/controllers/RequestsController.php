@@ -1,5 +1,6 @@
 <?php namespace LifeLi\controllers;
 
+use Illuminate\Support\Facades\Input;
 use LifeLi\models\Block_users\BlockUser;
 use LifeLi\models\Request_users\Request_user;
 use LifeLi\models\Requests\Request;
@@ -64,10 +65,14 @@ class RequestsController extends BaseController {
             $arr_request['user_id'] = $user->id;
             $request = Request::create($arr_request);
             if($request) {
+                if($request->request_type != 'blood') {
+                    /* todo notification with phone number */
+                    /* todo cron for checking after 24 hours and send expired to not response users*/
+                }
+
                 /** todo push notifications and email to all users here */
                 return $this->set_status(201, $this->fractal->item($request, new RequestTransformer()));
             }
-
         }
         else {
             //validation failed
@@ -128,6 +133,7 @@ class RequestsController extends BaseController {
      * @return array
      */
     public function user_requests($user_id){
+
         $user = User::find($user_id);
         if($user){
             $requests = $user->requests;
@@ -135,11 +141,11 @@ class RequestsController extends BaseController {
                 return $this->set_status(200, $this->fractal->collection($requests, new RequestTransformer()));
             }
             else {
-                return $this->set_status(404, array('no requests of this user'));
+                return $this->set_status(404, 'no requests of this user');
             }
         }
         else {
-           return $this->set_status(404, array('user not exists'));
+           return $this->set_status(404, 'user not exists');
         }
     }
 
@@ -148,9 +154,10 @@ class RequestsController extends BaseController {
      * @return array
      */
     public function accept_request($request_user_id){
+
         $user_request = Request_user::find($request_user_id);
         if(!$user_request){
-            return $this->set_status(404, array('request not found'));
+            return $this->set_status(404, 'request not found');
         }
         $user_request->status_id = 1;
         $user_request->save();
@@ -172,18 +179,32 @@ class RequestsController extends BaseController {
      * @return array
      */
     public function decline_request($request_user_id){
+
         $user_request = Request_user::find($request_user_id);
         if(!$user_request){
-            return $this->set_status(404, array('request not found'));
+            return $this->set_status(404, 'request not found');
         }
         $input = \Input::json();
         $content = $input->get('content');
         if($content){
             $user_request->content = $content;
         }
-        $user_request->status_id = 2;
-        $user_request->save();
-        return $this->set_status(200, array('request declined successfully'));
+        $request = Request::find($user_request->request_id);
+        if(!$request){
+            return $this->set_status(404, 'request not found');
+        }
+        if($user_request->status_id != 2){
+            $user_request->status_id = 2;
+            $user_request->save();
+
+            if($request->request_type !=  'blood'){
+                /* todo send notification to request creator and create another user_request*/
+            }
+            return $this->set_status(200,'request declined successfully');
+        }
+        else {
+            return $this->set_status(405,'request already declined');
+        }
         /** todo notify request creator */
         //$user_request->request->user_id;
 //        $user_request->request->status = 1;
@@ -203,6 +224,7 @@ class RequestsController extends BaseController {
      * @return array
      */
     public function block_user($id){
+
         $user_request = Request_user::find($id);
         if(!$user_request){
             return $this->set_status(404, array('request not found'));
@@ -224,6 +246,7 @@ class RequestsController extends BaseController {
      * @return array
      */
     public function ignore_request($id){
+
         $user_request = Request_user::find($id);
         if(!$user_request){
             return $this->set_status(404, array('request not found'));
@@ -238,4 +261,29 @@ class RequestsController extends BaseController {
 
     }
 
+    public function all_requested_users($user_id){
+        /** TODO: list of all users those requested by an user */
+    }
+
+    public function all_mixed_requests_record($user_id){
+        /** TODO:  get all user requests of an user of specific type*/
+        $type = Input::get('record_type');
+        switch($type) {
+            case 'replied' :
+                break;
+            case 'shared' :
+                break;
+            case 'declined' :
+                break;
+            case 'ignored' :
+                break;
+            case 'unread' :
+                break;
+        }
+    }
+
+    public function destroy_user_requests($user_request_id){
+        /* TODO: delete user request */
+
+    }
 }

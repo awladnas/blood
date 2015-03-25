@@ -76,7 +76,7 @@ class UsersController extends BaseController {
 		$user = User::find($id);
         if (!$user)
         {
-           return $this->set_status('404');
+           return $this->set_status('404', array('user not found'));
         }
 
         return $this->set_status(200, $this->fractal->item($user, new UserTransformer()));
@@ -163,7 +163,7 @@ class UsersController extends BaseController {
             $user->save();
             return $this->set_status(200, $this->fractal->item(User::find($id), new UserTransformer()));
         }
-        return $this->set_status(404);
+        return $this->set_status(404, 'user not found');
     }
 
     /**
@@ -179,7 +179,7 @@ class UsersController extends BaseController {
             return $this->set_status(200, $this->fractal->item(User::find($id), new UserTransformer()));
         }
         else {
-           return $this->set_status(404, array('user not found'));
+           return $this->set_status(404, 'user not found');
         }
     }
 
@@ -195,7 +195,7 @@ class UsersController extends BaseController {
             return $this->set_status(200, $this->fractal->item($profile, new ProfileTransformer()));
         }
         else {
-            return $this->set_status(404, array('profile not found'));
+            return $this->set_status(404, 'profile not found');
         }
     }
 }
