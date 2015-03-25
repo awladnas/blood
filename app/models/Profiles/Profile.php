@@ -102,6 +102,7 @@ class Profile extends \Eloquent {
             ->having( 'distance', '<', $max_distance )
             ->take( $this->max_user_in_search )
             ->where('id', '!=', $profile_id)
+            ->where('out_of_req', '=', false)
             ->where('blood_group', '=', $blood_group)
             ->orderBy( 'distance', 'ASC' )
             ->get();

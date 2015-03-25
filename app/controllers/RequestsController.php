@@ -1,5 +1,6 @@
 <?php namespace LifeLi\controllers;
 
+use LifeLi\models\Block_users\BlockUser;
 use LifeLi\models\Request_users\Request_user;
 use LifeLi\models\Requests\Request;
 use LifeLi\models\Requests\RequestTransformer;
@@ -175,9 +176,14 @@ class RequestsController extends BaseController {
         if(!$user_request){
             return $this->set_status(404, array('request not found'));
         }
+        $input = \Input::json();
+        $content = $input->get('content');
+        if($content){
+            $user_request->content = $content;
+        }
         $user_request->status_id = 2;
         $user_request->save();
-        return $this->set_status(200, array('request decline successfully'));
+        return $this->set_status(200, array('request declined successfully'));
         /** todo notify request creator */
         //$user_request->request->user_id;
 //        $user_request->request->status = 1;
@@ -189,6 +195,47 @@ class RequestsController extends BaseController {
 //        else {
 //            return $this->set_status(200, array('request user not found'));
 //        }
+    }
+
+    /**
+     * block user by user_request id
+     * @param $id
+     * @return array
+     */
+    public function block_user($id){
+        $user_request = Request_user::find($id);
+        if(!$user_request){
+            return $this->set_status(404, array('request not found'));
+        }
+        $request = Request::find($user_request->request_id);
+        $alreadyBlocked = BlockUser::where(function ($query) use ($user_request,$request) {
+            $query->where('block_by', '=', $user_request->receiver)
+                ->Where('blocked_user', '=',  $request->user_id);
+        });
+        if(!$alreadyBlocked) {
+            $blnBlock = BlockUser::create(['blocked_by' => $user_request->receiver, 'blocked_user' => $request->user_id ]);
+            return $blnBlock?  $this->set_status(200, array('user blocked successfully')) : $this->set_status(500, array('something wrong'));
+        }
+        return $this->set_status(200, array('already blocked'));
+    }
+
+    /**
+     * @param $id
+     * @return array
+     */
+    public function ignore_request($id){
+        $user_request = Request_user::find($id);
+        if(!$user_request){
+            return $this->set_status(404, array('request not found'));
+        }
+        if($user_request->status_id != 1) {
+            //ignore request
+            $user_request->status_id = 3;
+            $user_request->save();
+            return $this->set_status(200, array('request ignored successfully'));
+        }
+        return $this->set_status(403, array('request can not be ignore'));
+
     }
 
 }
