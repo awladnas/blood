@@ -1,5 +1,7 @@
 <?php namespace LifeLi\models\Requests;
 
+use Carbon\Carbon;
+
 class Request extends \Eloquent {
     /**
      * @var array
@@ -75,6 +77,11 @@ class Request extends \Eloquent {
             }
         }
         return $arrOutput;
+    }
+
+    public function eligible_for_requests($user_id){
+        $requests = $this->where('user_id', $user_id)->where('request_type', '=', 'blood')->where('created_at', '>=',  date('Y-m-d H:i:s',time()-86400))->get();
+        return count($requests) > 0 ? false : true;
     }
 
 }

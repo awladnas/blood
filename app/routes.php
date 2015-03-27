@@ -11,7 +11,6 @@
 |
 */
 
-
 Route::get('admin/login',['before' => 'auth.logout','as' => 'auth.login', 'uses'=>'LifeLi\controllers\Admin_usersController@login']);
 Route::get('admin',['before' => 'auth.logout','as' => 'auth.login', 'uses'=>'LifeLi\controllers\Admin_usersController@login']);
 Route::post('admin/login',['as' => 'admin.login','uses'=> 'LifeLi\controllers\Admin_usersController@authenticate_login']);

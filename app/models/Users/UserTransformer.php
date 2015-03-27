@@ -18,8 +18,9 @@ class UserTransformer extends TransformerAbstract {
             'is_active'      => $user->is_active,
             'is_confirm'     => $user->is_confirm,
             'created_at'     => $user->created_at,
-            'token_expires_on'  => $user->valid_until,
-            'api_token'     => $user->api_token,
+            'token_expires'  => $user->valid_until,
+            'api_token'      => $user->api_token,
+            'device_id'      => $user->device_id
         ];
     }
 

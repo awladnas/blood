@@ -11,7 +11,7 @@ class RequestTransformer extends TransformerAbstract {
             'blood_group'    =>  $request->blood_group,
             'request_type'   =>  $request->request_type,
             'content'        =>  $request->content,
-            'area'           =>  $request->zone,
+            'area'           =>  $request->area,
             'status'         =>  $request->status,
             'created_date'   =>  $request->created_at,
             'updated_date'   =>  $request->updated_at

@@ -8,6 +8,7 @@ use LifeLi\models\Requests\RequestTransformer;
 use LifeLi\models\Users\User;
 use LifeLi\models\Users\UserTransformer;
 use Sorskod\Larasponse\Larasponse;
+use LifeLi\models\Notification\NotifyUser;
 
 class RequestsController extends BaseController {
 
@@ -54,23 +55,27 @@ class RequestsController extends BaseController {
             return $this->set_status(404, 'user not exist');
         }
         $request = new Request();
+        if(!$request->eligible_for_requests($id)) {
+            return $this->set_status(405, 'user already requested today');
+        }
         $arr_inputs = \Input::json();
         $arr_request_data = $arr_inputs->get('request');
-//        $arr_user_data = $arr_inputs->get('users');
-//        return var_dump($arr_user_data);
+        $arr_user_data = $arr_inputs->get('users');
         $arr_request = $request->get_array_to_db($arr_request_data);
         $v = $request->validate($arr_request, 'create');
         if($v->passes()){
             //valid data
             $arr_request['user_id'] = $user->id;
             $request = Request::create($arr_request);
+            $users =  User::whereIn('id', $arr_user_data)->get();
             if($request) {
+                $objNotification = new NotifyUser();
                 if($request->request_type != 'blood') {
-                    /* todo notification with phone number */
-                    /* todo cron for checking after 24 hours and send expired to not response users*/
+                     //$objNotification->blood_donate_requests($users, $user,$request->content );
+                    /* todo cron for checking after 24 hours and send expired to not response users */
+                } else {
+//                     $objNotification->blood_requests($users, $user,$request->content );
                 }
-
-                /** todo push notifications and email to all users here */
                 return $this->set_status(201, $this->fractal->item($request, new RequestTransformer()));
             }
         }
@@ -161,12 +166,16 @@ class RequestsController extends BaseController {
         }
         $user_request->status_id = 1;
         $user_request->save();
-        /** todo notify request creator */
         //$user_request->request->user_id;
         $user_request->request->status = 1;
         $user_request->request->save();
         $acceptor = User::find($user_request->receiver);
         if($acceptor) {
+            /* todo notify request creator */
+            $notify = new NotifyUser();
+            $request = Request::find($user_request->request_id);
+            $requester = User::find($request->user_id);
+            $notify->ack_accept($request, $acceptor, $requester);
             return $this->set_status(200, $this->fractal->item($acceptor,new UserTransformer()));
         }
         else {

@@ -29,14 +29,14 @@
         <div class="form-group">
             {{ Form::label('input_format', 'Input format:', array('class'=>'col-md-2 control-label')) }}
             <div class="col-sm-10">
-              {{ Form::textarea('input_format', Input::old('input_format'), array('class'=>'form-control', 'placeholder'=>'Input format')) }}
+              {{ Form::textarea('input_format', Input::old('input_format'), array('class'=>'form-control', 'placeholder'=>'Input format ( should be JSON format)')) }}
             </div>
         </div>
 
         <div class="form-group">
             {{ Form::label('output_format', 'Output format:', array('class'=>'col-md-2 control-label')) }}
             <div class="col-sm-10">
-              {{ Form::textarea('output_format', Input::old('output_format'), array('class'=>'form-control', 'placeholder'=>'Output format')) }}
+              {{ Form::textarea('output_format', Input::old('output_format'), array('class'=>'form-control', 'placeholder'=>'Output format ( should be JSON format)')) }}
             </div>
         </div>
 
@@ -50,14 +50,14 @@
         <div class="form-group">
             {{ Form::label('description', 'Description:', array('class'=>'col-md-2 control-label')) }}
             <div class="col-sm-10">
-                {{ Form::text('description', Input::old('description'), array('class'=>'form-control', 'placeholder'=>'Description')) }}
+                {{ Form::textarea('description', Input::old('description'), array('class'=>'form-control', 'placeholder'=>'Description')) }}
             </div>
         </div>
 
         <div class="form-group">
             {{ Form::label('request_method', 'Request method:', array('class'=>'col-md-2 control-label')) }}
             <div class="col-sm-10">
-                {{ Form::select('request_method', array('GET' => 'GET', 'POST' => 'POST'), Input::old('request_method')) }}
+                {{ Form::select('request_method', array('GET' => 'GET', 'POST' => 'POST', 'PUT' => 'PUT', 'DELETE' => 'DELETE'), Input::old('request_method')) }}
             </div>
         </div>
 

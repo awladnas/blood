@@ -3,6 +3,7 @@
 use Illuminate\Auth\UserTrait;
 use Illuminate\Auth\Reminders\RemindableTrait;
 use Illuminate\Support\Facades\Validator;
+use LifeLi\models\Requests\Request;
 
 class User extends \Eloquent {
 
@@ -16,7 +17,7 @@ class User extends \Eloquent {
     /**
      * @var array
      */
-    protected $fillable = array('mobile_no', 'email', 'valid_until', 'api_token', 'password' );
+    protected $fillable = array('mobile_no', 'email', 'valid_until', 'api_token', 'password', 'device_id' );
     /**
      * @var int
      */
@@ -43,6 +44,7 @@ class User extends \Eloquent {
         'mobile'         => 'mobile_no',
         'password'       => 'password',
         'email'          =>  'email',
+        'device_id'      =>  'device_id',
         'is_active'      => 'is_active',
         'is_confirm'     => 'is_confirm',
         'created_at'     => 'created_at'
@@ -106,7 +108,8 @@ class User extends \Eloquent {
         $rules = [
                 'mobile_no' => 'Required|Min:3|Max:50|Unique:users',
                 'email'     => 'Required|Between:3,64|Email',
-                'password'  =>'Required|Min:6'
+                'password'  =>'Required|Min:6',
+                'device_id'  =>'Required|Min:2'
 
         ];
         $arr_rules = [];
