@@ -5,6 +5,7 @@ use LifeLi\models\Block_users\BlockUser;
 use LifeLi\models\Request_users\Request_user;
 use LifeLi\models\Requests\Request;
 use LifeLi\models\Requests\RequestTransformer;
+use LifeLi\models\UserNotification\UserNotification;
 use LifeLi\models\Users\User;
 use LifeLi\models\Users\UserTransformer;
 use Sorskod\Larasponse\Larasponse;
@@ -56,7 +57,7 @@ class RequestsController extends BaseController {
         }
         $request = new Request();
         if(!$request->eligible_for_requests($id)) {
-            return $this->set_status(405, 'user already requested today');
+            return $this->set_status(405, 'already requested today');
         }
         $arr_inputs = \Input::json();
         $arr_request_data = $arr_inputs->get('request');
@@ -71,10 +72,10 @@ class RequestsController extends BaseController {
             if($request) {
                 $objNotification = new NotifyUser();
                 if($request->request_type != 'blood') {
-                     //$objNotification->blood_donate_requests($users, $user,$request->content );
+                     $objNotification->blood_donate_requests($users, $user,$request );
                     /* todo cron for checking after 24 hours and send expired to not response users */
                 } else {
-//                     $objNotification->blood_requests($users, $user,$request->content );
+                     $objNotification->blood_requests($users, $user,$request );
                 }
                 return $this->set_status(201, $this->fractal->item($request, new RequestTransformer()));
             }
@@ -171,11 +172,12 @@ class RequestsController extends BaseController {
         $user_request->request->save();
         $acceptor = User::find($user_request->receiver);
         if($acceptor) {
-            /* todo notify request creator */
             $notify = new NotifyUser();
             $request = Request::find($user_request->request_id);
             $requester = User::find($request->user_id);
-            $notify->ack_accept($request, $acceptor, $requester);
+            $notify->ack_accept($acceptor, $requester);
+//            $request->status = 1;
+//            $request->save();
             return $this->set_status(200, $this->fractal->item($acceptor,new UserTransformer()));
         }
         else {
@@ -270,8 +272,28 @@ class RequestsController extends BaseController {
 
     }
 
+    /**
+     * @param $user_id
+     * @return array
+     */
     public function all_requested_users($user_id){
-        /** TODO: list of all users those requested by an user */
+
+        $user = User::find($user_id);
+        if(!$user){
+            return $this->set_status(404, array('user not found'));
+        }
+        $notifications = UserNotification::where('user_id', '=', $user->id)->get();
+//        $queries = \DB::getQueryLog();
+//        $last_query = end($queries);
+//        return $notifications;
+        if(!count($notifications)) {
+            return $this->set_status(404, array('no request found'));
+        }
+        $arrUsers = [];
+        foreach($notifications as $notify) {
+            $arrUsers[] = User::find($notify->request_user_id);
+        }
+        return $this->set_status(200, $arrUsers);
     }
 
     public function all_mixed_requests_record($user_id){
