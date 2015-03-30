@@ -81,6 +81,8 @@ class Profile extends \Eloquent {
 
         $gr_circle_radius = 6371; //km
 
+        $profile = $this->find($profile_id);
+
         /*
          *  Generate the select field for distance
          */
