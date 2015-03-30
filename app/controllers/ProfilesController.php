@@ -61,7 +61,7 @@ class ProfilesController extends BaseController {
         }
         if($user->profile) {
             //already exists
-            return $this->set_status(404, 'already exists');
+            return $this->set_status(409, 'Profile already exists');
         }
         $arr_profile = $profile->get_array_to_db($arr_profile_data);
 
