@@ -56,14 +56,6 @@ class Profile extends \Eloquent {
      */
     public function validate($inputs, $action = 'update') {
 
-//        $rules = [
-//            'user_id'       => 'Required',
-//            'name'          => 'Required|Min:3',
-//            'zone'          => 'Min:3',
-//            'country'       => 'Required|Min:2',
-//            'city'          => 'Required|Min:2',
-//            'blood_group'   => 'Required'
-//        ];
         $rules = [
             'user_id'       => 'Required',
             'name'          => 'Min:3',
