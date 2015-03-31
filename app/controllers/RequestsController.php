@@ -242,10 +242,10 @@ class RequestsController extends BaseController {
         }
         $request = Request::find($user_request->request_id);
         $alreadyBlocked = BlockUser::where(function ($query) use ($user_request,$request) {
-            $query->where('block_by', '=', $user_request->receiver)
+            $query->where('blocked_by', '=', $user_request->receiver)
                 ->Where('blocked_user', '=',  $request->user_id);
-        });
-        if(!$alreadyBlocked) {
+        })->get();
+        if(!count($alreadyBlocked)) {
             $blnBlock = BlockUser::create(['blocked_by' => $user_request->receiver, 'blocked_user' => $request->user_id ]);
             return $blnBlock?  $this->set_status(200, array('user blocked successfully')) : $this->set_status(500, array('something wrong'));
         }

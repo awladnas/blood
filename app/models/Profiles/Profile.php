@@ -77,7 +77,7 @@ class Profile extends \Eloquent {
         return Validator::make($inputs, $arr_rules);
     }
 
-    public function get_closest_profiles($profile_id, $lat, $lng, $max_distance = 20, $blood_group){
+    public function get_closest_profiles($profile_id, $lat, $lng, $max_distance = 20, $blood_group, $blocked_users = array()){
 
         $gr_circle_radius = 6371; //km
 
@@ -106,6 +106,7 @@ class Profile extends \Eloquent {
             ->where('id', '!=', $profile_id)
             ->where('out_of_req', '=', false)
             ->where('blood_group', '=', $blood_group)
+            ->whereNotIn('user_id', $blocked_users)
             ->orderBy( 'distance', 'ASC' )
             ->get();
     }

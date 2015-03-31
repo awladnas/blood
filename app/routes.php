@@ -41,7 +41,7 @@ Route::group(array('prefix' => 'api/v1'),function(){
             Route::get('requests/accept/{id}', 'LifeLi\controllers\RequestsController@accept_request');
             Route::get('{id}/requests/sent_list', 'LifeLi\controllers\RequestsController@all_requested_users');
             Route::get('requests/ignore/{id}', 'LifeLi\controllers\RequestsController@ignore_request');
-            Route::post('requests/reject/{id}', 'LifeLi\controllers\RequestsController@decline_request');
+            Route::post('requests/{id}/block', 'LifeLi\controllers\RequestsController@block_user');
             Route::post('requests/reject/{id}', 'LifeLi\controllers\RequestsController@decline_request');
             Route::resource('requests', 'LifeLi\controllers\RequestsController');
         });

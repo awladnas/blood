@@ -1,4 +1,5 @@
 <?php namespace LifeLi\controllers;
+use LifeLi\models\Block_users\BlockUser;
 use LifeLi\models\Profiles\Profile;
 use LifeLi\models\Profiles\ProfileTransformer;
 use LifeLi\models\Users\User;
@@ -183,6 +184,7 @@ class ProfilesController extends BaseController {
     public function search_user($profile_id = null ){
 
         /* todo make it as post and take distance input , user limit*/
+
         $profile = Profile::find($profile_id);
         $city = \Input::get('city');
         $blood_group = \Input::get('blood_group');
@@ -197,7 +199,11 @@ class ProfilesController extends BaseController {
         }
         $blood_group = $blood_group? $blood_group : $profile->blood_group;
         if($profile) {
-            $objProfiles = $profile->get_closest_profiles($profile_id, $lat, $lng, 20, $blood_group);
+            $block_users = BlockUser::where('blocked_by','=', $profile->user_id)->lists('blocked_by');
+            $unavailable_users = Profile::where('out_of_req', '=', true)->lists('user_id');
+            $blocked_users = array_merge($block_users, $unavailable_users);
+
+            $objProfiles = $profile->get_closest_profiles($profile_id, $lat, $lng, 20, $blood_group, $blocked_users);
         }
         return $this->set_status(200, $this->fractal->collection($objProfiles, new ProfileTransformer()));
     }
