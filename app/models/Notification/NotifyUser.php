@@ -31,9 +31,9 @@ class NotifyUser {
            //create user requests
            Request_user::create([
                'request_id' => $request->id,
-               'receiver' => $user->id,
-               'status_id' => 1,
-               'content'   => $msg
+               'receiver'   => $user->id,
+               'status_id'  => Request_user::$request_status['unread'],
+               'content'    => $msg
            ]);
            //add notification to the table
            $this->add_notification( $donor->id, $user->id, 'blood_donate', $msg);
@@ -58,7 +58,7 @@ class NotifyUser {
             Request_user::create([
                 'request_id'    => $request->id,
                 'receiver'      => $user->id,
-                'status_id'     => 1,
+                'status_id'     => Request_user::$request_status['unread'],
                 'content'       => $msg
             ]);
             //add notification to the table

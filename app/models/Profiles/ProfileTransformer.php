@@ -13,6 +13,8 @@ class ProfileTransformer extends TransformerAbstract {
             'blood_group'    => $profile->blood_group,
             'out_of_req'     => (boolean)$profile->out_of_req,
             'zone'           => $profile->zone,
+            'lat'            => $profile->latitude,
+            'lng'            => $profile->longitude,
             'steps'          => $profile->steps,
             'is_complete'    => (boolean)$profile->is_complete,
             'created_date'   => $profile->created_at,

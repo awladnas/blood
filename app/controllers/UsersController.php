@@ -184,10 +184,12 @@ class UsersController extends BaseController {
     }
 
     /**
+     * user's can’t give blood set them to out of request
      * @param $id
      * @return array
      */
     public function out_of_request($id){
+
         $profile = Profile::where('user_id', '=', $id)->first();
         if($profile) {
             $profile->out_of_req = false;
