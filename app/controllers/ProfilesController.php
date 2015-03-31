@@ -55,7 +55,6 @@ class ProfilesController extends BaseController {
             return $this->set_status(404, 'no user id provided');
         }
         $user = User::find($arr_profile_data['user']);
-        /* TODO check if user made one request today*/
         if(!$user) {
             //user not found'
             return $this->set_status(404, 'user not found');
@@ -69,6 +68,10 @@ class ProfilesController extends BaseController {
         $v = $profile->validate($arr_profile, 'create');
         if($v->passes()){
             //valid data
+            if ($arr_profile['steps'] < Profile::TOTAL_STEPS) $arr_profile['steps']++;
+            if ($arr_profile['steps'] == Profile::TOTAL_STEPS){
+                $arr_profile['is_complete'] = true;
+            }
             $profile = Profile::create($arr_profile);
             if($profile) {
                 return $this->set_status(201, $this->fractal->item($profile, new ProfileTransformer()));
@@ -137,9 +140,14 @@ class ProfilesController extends BaseController {
 
         $v = $profile->validate($arr_profile, 'update');
         if($v->passes()){
+
+            if ($arr_profile['steps'] < Profile::TOTAL_STEPS) $arr_profile['steps']++;
+            if ($arr_profile['steps'] == Profile::TOTAL_STEPS){
+                $arr_profile['is_complete'] = true;
+            }
             $bln_update =  $objProfile->update($arr_profile);
             $profile = Profile::find($profile_id);
-            if($bln_update) {
+            if($profile) {
                 //profile updated
                 return $this->set_status(200, $this->fractal->item($profile, new ProfileTransformer()));
             }

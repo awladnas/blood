@@ -1,7 +1,7 @@
 <?php namespace LifeLi\models\Profiles;
 use Illuminate\Support\Facades\Validator;
 class Profile extends \Eloquent {
-
+    const TOTAL_STEPS = 3;
     /**
      * @var array
      */
@@ -13,6 +13,7 @@ class Profile extends \Eloquent {
         'country'        => 'country',
         'city'           => 'city',
         'blood_group'    => 'blood_group',
+        'steps'          => 'steps',
         'created_date'   => 'created_at',
         'updated_date'   => 'updated_at'
     );
@@ -20,7 +21,7 @@ class Profile extends \Eloquent {
     /**
      * @var array
      */
-    protected $fillable = ['id', 'user_id', 'name', 'zone', 'country', 'blood_group', 'created_at', 'updated_at', 'city'];
+    protected $fillable = ['id', 'user_id', 'name', 'zone', 'country', 'blood_group', 'created_at', 'updated_at', 'city', 'steps', 'is_complete'];
     /**
      * @var string
      */
@@ -55,14 +56,22 @@ class Profile extends \Eloquent {
      */
     public function validate($inputs, $action = 'update') {
 
+//        $rules = [
+//            'user_id'       => 'Required',
+//            'name'          => 'Required|Min:3',
+//            'zone'          => 'Min:3',
+//            'country'       => 'Required|Min:2',
+//            'city'          => 'Required|Min:2',
+//            'blood_group'   => 'Required'
+//        ];
         $rules = [
             'user_id'       => 'Required',
-            'name'          => 'Required|Min:3',
+            'name'          => 'Min:3',
             'zone'          => 'Min:3',
-            'country'       => 'Required|Min:2',
-            'city'          => 'Required|Min:2',
-            'blood_group'   => 'Required'
+            'country'       => 'Min:2',
+            'city'          => 'Min:2'
         ];
+
         $arr_rules = [];
         if ($action == 'update'){
             foreach($inputs as $k => $v){
@@ -106,7 +115,7 @@ class Profile extends \Eloquent {
             ->where('id', '!=', $profile_id)
             ->where('out_of_req', '=', false)
             ->where('blood_group', '=', $blood_group)
-            ->whereNotIn('user_id', $blocked_users)
+            ->whereIn('user_id', $blocked_users)
             ->orderBy( 'distance', 'ASC' )
             ->get();
     }
