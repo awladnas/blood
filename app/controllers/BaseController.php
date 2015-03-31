@@ -12,7 +12,8 @@ class BaseController extends \Controller {
         '404' => 'not found',
         '405' => 'method not allowed',
         '500' => 'internal server error',
-        '503' => 'service unavailable'
+        '503' => 'service unavailable',
+        '409' => 'already exists'
     );
     /**
      * @var array
