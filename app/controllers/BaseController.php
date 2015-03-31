@@ -44,7 +44,7 @@ class BaseController extends \Controller {
         if (isset($this->arr_status[$status])) {
             $arr_response['status'] = $status;
             $arr_response['message'] = $this->arr_status[$status];
-            $arr_response['data'] = $data;
+            $arr_response['data'] = isset($data['data']) ? $data['data'] : $data ;
         }
         if(in_array($status, $this->arr_valid)) {
             $arr_response['error'] = false;

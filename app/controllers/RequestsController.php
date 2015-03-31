@@ -82,7 +82,7 @@ class RequestsController extends BaseController {
                 } else {
                      $objNotification->blood_requests($users, $user,$request );
                 }
-                return $this->set_status(201, $this->fractal->item($request, new RequestTransformer()));
+                return $this->set_status(201, $this->fractal->item(Request::find($request->id), new RequestTransformer()));
             }
         }
         else {
@@ -327,8 +327,16 @@ class RequestsController extends BaseController {
         }
     }
 
+    /**
+     * @desc delete user request by id
+     * @since 2015-03-31
+     * @version 2015-03-31
+     * @author awlad < awlad@nascenia.com >
+     * @param int $user_request_id
+     * @return array
+     */
     public function destroy_user_requests($user_request_id){
-        /* TODO: delete user request */
-
+        $blnIsDeleted = Request_user::find($user_request_id)->delete();
+        return $this->set_status(200, $blnIsDeleted);
     }
 }

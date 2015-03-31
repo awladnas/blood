@@ -39,12 +39,7 @@ class RequestTransformer extends TransformerAbstract {
         if($request->Request_users()) {
             $type = Input::get('type');
             if(isset($type, Request_user::$request_status[$type]) ) {
-//                var_dump('ok');
-//                exit;
                 $users_requests = $request->Request_users()->where('status_id', '=',Request_user::$request_status[$type] )->get();
-//                $queries = \DB::getQueryLog();
-//                var_dump(end($queries));
-//                exit;
             }
             else {
                 $users_requests = $request->Request_users()->get();

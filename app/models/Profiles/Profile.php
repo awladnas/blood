@@ -112,10 +112,10 @@ class Profile extends \Eloquent {
             ->select( \DB::raw($disctance_select) )
             ->having( 'distance', '<', $max_distance )
             ->take( $this->max_user_in_search )
-            ->where('id', '!=', $profile_id)
+//            ->where('id', '!=', $profile_id)
             ->where('out_of_req', '=', false)
             ->where('blood_group', '=', $blood_group)
-            ->whereIn('user_id', $blocked_users)
+            ->whereNotIn('user_id', $blocked_users)
             ->orderBy( 'distance', 'ASC' )
             ->get();
     }

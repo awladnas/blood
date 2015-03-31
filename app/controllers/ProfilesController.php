@@ -189,31 +189,36 @@ class ProfilesController extends BaseController {
      * @internal param int $distance
      * @return array
      */
-    public function search_user($profile_id = null ){
+    public function search_user($profile_id ){
 
-        /* todo make it as post and take distance input , user limit*/
+        /*TODO: generic message */
 
         $profile = Profile::find($profile_id);
+        if(!$profile) {
+           return $this->set_status(404, 'profile not found');
+        }
         $city = \Input::get('city');
         $blood_group = \Input::get('blood_group');
-        if($city && $response = $profile->get_location_from_city($city)) {
+
+        $distance = \Input::get('distance');
+        if(isset($city) && $response = $profile->get_location_from_city($city)) {
             $lat = $response->latitude();
             $lng = $response->longitude();
-//            return [$lat,$lng ];
         }
         else{
             $lat =  $profile->latitude;
             $lng =  $profile->longitude;
         }
-        $blood_group = $blood_group? $blood_group : $profile->blood_group;
-        if($profile) {
-            $block_users = BlockUser::where('blocked_by','=', $profile->user_id)->lists('blocked_by');
-            $unavailable_users = Profile::where('out_of_req', '=', true)->lists('user_id');
-            $blocked_users = array_merge($block_users, $unavailable_users);
-
-            $objProfiles = $profile->get_closest_profiles($profile_id, $lat, $lng, 20, $blood_group, $blocked_users);
-        }
-        return $this->set_status(200, $this->fractal->collection($objProfiles, new ProfileTransformer()));
+        $blood_group = isset($blood_group)? $blood_group : $profile->blood_group;
+        $distance = isset($distance)? $distance : 10;
+        $block_users = BlockUser::where('blocked_by','=', $profile->user_id)->lists('blocked_by');
+        $unavailable_users = Profile::where('out_of_req', '=', true)->lists('user_id');
+        $blocked_users = array_merge($block_users, $unavailable_users);
+        $objProfiles = $profile->get_closest_profiles($profile_id, $lat, $lng, $distance, $blood_group, $blocked_users);
+        $arrSearchedUsers = $this->fractal->collection($objProfiles, new ProfileTransformer());
+        $arr_data['users'] = $arrSearchedUsers['data'];
+        $arr_data['location'] = array('lat' => $lat, 'lng' => $lng);
+        return $this->set_status(200, $arr_data);
     }
 
     public function add_more_user_requests($id){
