@@ -52,13 +52,17 @@ class RequestsController extends BaseController {
 	public function store($id = null)
 	{
         $user = User::find($id);
+        //user not found
         if(!$user) {
             return $this->set_status(404, 'user not exist');
         }
+
         $request = new Request();
+        //check if user already request today
         if(!$request->eligible_for_requests($id)) {
             return $this->set_status(405, 'already requested today');
         }
+        //get all input
         $arr_inputs = \Input::json();
         $arr_request_data = $arr_inputs->get('request');
         $arr_user_data = $arr_inputs->get('users');
@@ -68,6 +72,7 @@ class RequestsController extends BaseController {
             //valid data
             $arr_request['user_id'] = $user->id;
             $request = Request::create($arr_request);
+            //get all requested users
             $users =  User::whereIn('id', $arr_user_data)->get();
             if($request) {
                 $objNotification = new NotifyUser();
@@ -95,7 +100,14 @@ class RequestsController extends BaseController {
 	 */
 	public function show($id)
 	{
-		//
+        /** @var Request $request */
+        $request = Request::find($id);
+        //request not found
+        if(!$request) {
+            return $this->set_status(404, 'request not found');
+        }
+        $this->fractal->parseIncludes('Response');
+        return $this->set_status(200, $this->fractal->item($request, new RequestTransformer()));
 	}
 
 	/**
@@ -162,12 +174,14 @@ class RequestsController extends BaseController {
     public function accept_request($request_user_id){
 
         $user_request = Request_user::find($request_user_id);
+        //request not found
         if(!$user_request){
             return $this->set_status(404, 'request not found');
         }
-        $user_request->status_id = 1;
+        //update user request to set it replied
+        $user_request->status_id = Request_user::$request_status['replied'];
         $user_request->save();
-        //$user_request->request->user_id;
+        //update request a
         $user_request->request->status = 1;
         $user_request->request->save();
         $acceptor = User::find($user_request->receiver);
@@ -175,9 +189,8 @@ class RequestsController extends BaseController {
             $notify = new NotifyUser();
             $request = Request::find($user_request->request_id);
             $requester = User::find($request->user_id);
+            //send accept request notification
             $notify->ack_accept($acceptor, $requester);
-//            $request->status = 1;
-//            $request->save();
             return $this->set_status(200, $this->fractal->item($acceptor,new UserTransformer()));
         }
         else {
@@ -192,20 +205,29 @@ class RequestsController extends BaseController {
     public function decline_request($request_user_id){
 
         $user_request = Request_user::find($request_user_id);
+        //user request not found
         if(!$user_request){
             return $this->set_status(404, 'request not found');
         }
+        //get all input
         $input = \Input::json();
         $content = $input->get('content');
         if($content){
             $user_request->content = $content;
         }
         $request = Request::find($user_request->request_id);
+        //check request exists or not
         if(!$request){
             return $this->set_status(404, 'request not found');
         }
-        if($user_request->status_id != 2){
-            $user_request->status_id = 2;
+        //check request is finished or not
+        if($request->status){
+            return $this->set_status(405, 'request finished');
+        }
+
+        //check all ready declined or not
+        if($user_request->status_id != Request_user::$request_status['declined']){
+            $user_request->status_id = Request_user::$request_status['declined'];
             $user_request->save();
 
             if($request->request_type !=  'blood'){
@@ -216,17 +238,6 @@ class RequestsController extends BaseController {
         else {
             return $this->set_status(405,'request already declined');
         }
-        /** todo notify request creator */
-        //$user_request->request->user_id;
-//        $user_request->request->status = 1;
-//        $user_request->request->save();
-//        $acceptor = User::find($user_request->receiver);
-//        if($acceptor) {
-//            return $this->set_status(200, $this->fractal->item($acceptor,new UserTransformer()));
-//        }
-//        else {
-//            return $this->set_status(200, array('request user not found'));
-//        }
     }
 
     /**
@@ -237,10 +248,14 @@ class RequestsController extends BaseController {
     public function block_user($id){
 
         $user_request = Request_user::find($id);
+        //user request not found
         if(!$user_request){
             return $this->set_status(404, array('request not found'));
         }
+        $user_request->status_id = Request_user::$request_status['blocked'];
+        $user_request->save();
         $request = Request::find($user_request->request_id);
+        //check already block
         $alreadyBlocked = BlockUser::where(function ($query) use ($user_request,$request) {
             $query->where('block_by', '=', $user_request->receiver)
                 ->Where('blocked_user', '=',  $request->user_id);
@@ -253,6 +268,7 @@ class RequestsController extends BaseController {
     }
 
     /**
+     * ignore a user request
      * @param $id
      * @return array
      */
@@ -262,9 +278,9 @@ class RequestsController extends BaseController {
         if(!$user_request){
             return $this->set_status(404, array('request not found'));
         }
-        if($user_request->status_id != 1) {
+        if($user_request->status_id != Request_user::$request_status['ignored']) {
             //ignore request
-            $user_request->status_id = 3;
+            $user_request->status_id = Request_user::$request_status['ignored'];
             $user_request->save();
             return $this->set_status(200, array('request ignored successfully'));
         }
@@ -273,6 +289,7 @@ class RequestsController extends BaseController {
     }
 
     /**
+     * get list of all user requests made by an user
      * @param $user_id
      * @return array
      */
@@ -282,17 +299,14 @@ class RequestsController extends BaseController {
         if(!$user){
             return $this->set_status(404, array('user not found'));
         }
-        $notifications = UserNotification::where('user_id', '=', $user->id)->get();
-//        $queries = \DB::getQueryLog();
-//        $last_query = end($queries);
-//        return $notifications;
-        if(!count($notifications)) {
-            return $this->set_status(404, array('no request found'));
-        }
-        $arrUsers = [];
-        foreach($notifications as $notify) {
-            $arrUsers[] = User::find($notify->request_user_id);
-        }
+        $arrUsers = \DB::table('users')
+            ->join('requested_users', 'users.id', '=', 'requested_users.receiver')
+            ->join('requests', 'requested_users.request_id', '=', 'requests.id')
+            ->join('request_status', 'requested_users.status_id', '=', 'request_status.id')
+            ->where('requests.user_id', '=',$user_id )
+            ->select('users.email','users.mobile_no AS mobile', 'request_status.status', 'requests.request_type', 'requests.created_at' )
+            ->orderBy('requested_users.status_id')
+            ->get();
         return $this->set_status(200, $arrUsers);
     }
 

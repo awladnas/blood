@@ -54,7 +54,6 @@ class ProfilesController extends BaseController {
             return $this->set_status(404, 'no user id provided');
         }
         $user = User::find($arr_profile_data['user']);
-        /* TODO check if user made one request today*/
         if(!$user) {
             //user not found'
             return $this->set_status(404, 'user not found');
