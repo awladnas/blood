@@ -60,7 +60,7 @@ class UsersController extends BaseController {
 
         }
         else {
-            return $this->set_status(204, $v->errors());
+            return $this->set_status(204, json_encode($v->errors()));
         }
 	}
 
@@ -121,7 +121,7 @@ class UsersController extends BaseController {
             }
         }
         else {
-            return $this->set_status(204, $v->errors());
+            return $this->set_status(204, json_encode($v->errors()));
         }
 
         return $this->set_status(500);
