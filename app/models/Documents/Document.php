@@ -5,10 +5,8 @@ class Document extends \Eloquent {
 
 	public static $rules = array(
 		'url' => 'required',
-		'input_format' => 'required',
 		'output_format' => 'required',
 		'api_version' => 'required',
-        'request_method' => 'required',
-        'description' => 'required'
+        'request_method' => 'required'
 	);
 }

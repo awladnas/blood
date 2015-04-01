@@ -20,7 +20,6 @@ class NotifyUser {
      * @param $users
      * @param $donor
      * @param $request
-     * @internal param null $msg
      * @return mixed
      */
     public function blood_donate_requests($users, $donor, $request ){
@@ -47,7 +46,6 @@ class NotifyUser {
      * @param $users
      * @param $requester
      * @param $request
-     * @internal param null $msg
      * @return mixed
      */
     public function blood_requests($users, $requester, $request ){
@@ -73,7 +71,6 @@ class NotifyUser {
     /**
      * @param $acceptor
      * @param $requester
-     * @internal param $request
      * @return mixed
      */
     public function ack_accept($acceptor, $requester){
@@ -109,7 +106,7 @@ class NotifyUser {
      * @param $request_user_id
      * @param $type
      * @param null|string $desc
-     * @return static
+     * @return
      */
     public function add_notification($user_id, $request_user_id, $type, $desc = 'no contents'){
 
