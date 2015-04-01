@@ -25,7 +25,7 @@ class NotifyUser {
      */
     public function blood_donate_requests($users, $donor, $request ){
 
-       $arr_push = [];
+        $arr_push = [];
         $msg = $request->content ? $request->content : $this->_blood_donor_message;
         $msg .= 'Communication : ' . $donor->mobile_no;
        foreach($users as $user) {

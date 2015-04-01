@@ -127,6 +127,7 @@ return array(
         'Dollar\Generators\GeneratorsServiceProvider',
         'Jcf\Geocode\GeocodeServiceProvider',
         'Davibennun\LaravelPushNotification\LaravelPushNotificationServiceProvider',
+        'Frozennode\Administrator\AdministratorServiceProvider',
 
 	),
 

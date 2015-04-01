@@ -13,7 +13,8 @@
         "way/generators": "~2.0",
         "barryvdh/laravel-ide-helper": "~1.11",
         "doctrine/dbal": "2.6.*@dev",
-        "dollar/generators": "dev-master"
+        "dollar/generators": "dev-master",
+        "frozennode/administrator": "4.*"
     },
 	"autoload": {
         "psr-4": {
@@ -31,12 +32,14 @@
 	},
 	"scripts": {
 		"post-install-cmd": [
-			"php artisan optimize"
+			"php artisan optimize",
+            "php artisan asset:publish frozennode/administrator"
 		],
 		"post-update-cmd": [
 			"php artisan clear-compiled",
             "php artisan ide-helper:generate",
-			"php artisan optimize"
+			"php artisan optimize",
+            "php artisan asset:publish frozennode/administrator"
 		],
 		"post-create-project-cmd": [
 			"php artisan key:generate"

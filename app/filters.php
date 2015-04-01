@@ -76,7 +76,7 @@ Route::filter('guest', function()
 //});
 Route::filter('auth.logout', function() {
     // if already logged in don't show login page again
-    if (Auth::check()) return Redirect::to('/admin/documents');
+    if (Auth::check()) return Redirect::to('/dashboard');
 });
 
 /*

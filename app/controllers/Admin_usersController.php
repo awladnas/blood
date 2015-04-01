@@ -156,8 +156,7 @@ class Admin_usersController extends BaseController {
         );
         if (Auth::attempt($user)) {
 
-            return \Redirect::route('admin.documents.index')
-                ->with('message', 'You are successfully logged in.');
+            return \Redirect::intended('/dashboard')->with('message', 'You are successfully logged in.');
         }
 
         // authentication failure! lets go back to the login page
