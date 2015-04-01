@@ -8,7 +8,7 @@
     <h3>Url:  <span class="normal"><a href="#">{{{ $document->url }}}</a></span></h3>
 
 
-    <h3>Description: <span class = "normal">{{{ $document->description }}}</span></h3>
+    <h3>Description: <span class = "normal"><pre>{{{ $document->description }}}</pre></span></h3>
 
 
     <h3>Input format: </h3>
