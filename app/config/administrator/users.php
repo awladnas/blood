@@ -122,9 +122,9 @@
                   'success' => 'CSV created! Downloading now...',
                   'error' => 'There was an error while creating the CSV',
               ),
-              'action' => function($model)
+              'action' => function($query)
                   {
-                      return \LifeLi\models\Users\User::get_csv();
+                     return \LifeLi\models\Users\User::get_csv();
                   }
           ),
       ),

@@ -129,7 +129,8 @@ class User extends \Eloquent {
 
     public static function get_csv(){
         $table = User::all();
-        $filename = "users.csv";
+        $path = public_path("downloads/");
+        $filename = $path . "users.csv";
         $handle = fopen($filename, 'w+');
         fputcsv($handle, array('id', 'email', 'mobile'));
 
@@ -143,7 +144,7 @@ class User extends \Eloquent {
             'Content-Type' => 'text/csv',
         );
 
-        return Response::download($filename, 'user2.csv', $headers);
+        return \Response::download($filename, 'user2.csv', $headers);
     }
 
 }
