@@ -14,8 +14,10 @@ return array(
         'blood_group' => array(
             'title' => 'Blood Group',
         ),
-        'user_id' => array(
+        'user' => array(
+            'relationship' => 'user',
             'title' => 'User',
+            'select' => '(:table).email'
         ),
 
     ),

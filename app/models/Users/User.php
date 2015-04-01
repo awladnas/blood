@@ -127,4 +127,23 @@ class User extends \Eloquent {
         return Validator::make($inputs, $arr_rules);
     }
 
+    public static function get_csv(){
+        $table = User::all();
+        $filename = "users.csv";
+        $handle = fopen($filename, 'w+');
+        fputcsv($handle, array('id', 'email', 'mobile'));
+
+        foreach($table as $row) {
+            fputcsv($handle, array($row['id'], $row['email'], $row['mobile_no']));
+        }
+
+        fclose($handle);
+
+        $headers = array(
+            'Content-Type' => 'text/csv',
+        );
+
+        return Response::download($filename, 'user2.csv', $headers);
+    }
+
 }
