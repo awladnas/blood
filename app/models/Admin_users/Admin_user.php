@@ -18,7 +18,7 @@ use UserTrait, RemindableTrait;
     public static $rules = array(
 		'name' => 'required',
 		'email' => 'required',
-		'password' => 'required|min:6'
+		'password' => 'required|min:6|confirmed',
 	);
 
     protected $hidden = array('password');
@@ -70,10 +70,10 @@ use UserTrait, RemindableTrait;
         $this->remember_token = $value;
     }
 
-    public function setPasswordAttribute($password)
-    {
-        $this->attributes['password'] = \Hash::make($password);
-    }
+//    public function setPasswordAttribute($password)
+//    {
+//        $this->attributes['password'] = \Hash::make($password);
+//    }
 
     /**
      * @return string
@@ -84,7 +84,31 @@ use UserTrait, RemindableTrait;
 
     public function map_superuser()
     {
-        return ($this->is_superuser== 1)? 'Yes' : 'No';
+        return ($this->role == 'super_admin')? 'Yes' : 'No';
     }
+
+
+    /**
+     * @param array $options
+     * @return bool|void
+     */
+    public function save(array $options = array())
+    {
+        if (\Hash::needsRehash($this->attributes['password'])) {
+            $this->attributes['password'] = \Hash::make($this->attributes['password']);
+        }
+        unset($this->attributes['password_confirmation']);
+//        $this->attributes['password'] = \Hash::make($this->attributes['password']);
+        return parent::save($options);
+    }
+
+//    public function getPasswordConfirmationAttribute($val){
+//        return $val;
+//    }
+//
+//    public function setPasswordConfirmationAttribute($val)
+//    {
+//        $this->attributes['password_confirmation'] = $val;
+//    }
 
 }

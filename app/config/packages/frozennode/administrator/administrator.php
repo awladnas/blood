@@ -1,5 +1,14 @@
 <?php
 
+//View::composer(array('partials.admin.header'), function($view)
+//{
+//    $view->menu = App::make('admin_menu')->getMenu();
+//    $view->settingsPrefix = App::make('admin_config_factory')->getSettingsPrefix();
+//    $view->pagePrefix = App::make('admin_config_factory')->getPagePrefix();
+//    $view->configType = App::bound('itemconfig') ? App::make('itemconfig')->getType() : false;
+//});
+//View::alias('partials.admin.header', 'administrator::partials.header');
+
 return array(
 
 	/**
@@ -14,7 +23,7 @@ return array(
 	 *
 	 * @type string
 	 */
-	'title' => 'Admin',
+	'title' => 'Admin Panel',
 
 	/**
 	 * The path to your model config directory
@@ -51,7 +60,7 @@ return array(
 	 * 		'Analytics' => array('E-Commerce' => 'page.ecommerce.analytics'),
 	 *	)
 	 */
-	'menu' => array('users', 'users_profiles', 'requests', 'notifications'),
+	'menu' => array('admin_users', 'users', 'users_profiles', 'requests', 'notifications', 'api_documents'),
 
 	/**
 	 * The permission option is the highest-level authentication check that lets you define a closure that should return true if the current user
@@ -61,7 +70,12 @@ return array(
 	 */
 	'permission'=> function()
 	{
-		return Auth::check();
+        //return true;
+        $user = Auth::user();
+        if(!$user) {
+            return false;
+        }
+        return ($user->role == 'super_admin' || $user->role == 'admin' || 1);
 	},
 
 	/**

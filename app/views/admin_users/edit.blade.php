@@ -18,7 +18,7 @@
 </div>
 <div class="row">
     <div class="col-md-3 col-md-offset-3">
-{{ Form::model($admin_user, array('class' => 'form-horizontal', 'method' => 'PATCH', 'route' => array('admin_users.update', $admin_user->id))) }}
+{{ Form::model($admin_user, array('class' => 'form-horizontal', 'method' => 'PATCH', 'route' => array('admin.admin_users.update', $admin_user->id))) }}
 
         <div class="form-group">
             {{ Form::label('name', 'Name:') }}
@@ -37,7 +37,7 @@
 
 
       {{ Form::submit('Update', array('class' => 'btn btn-lg btn-primary')) }}
-      {{ link_to_route('admin_users.show', 'Cancel', $admin_user->id, array('class' => 'btn btn-lg btn-default')) }}
+      {{ link_to_route('admin.admin_users.show', 'Cancel', $admin_user->id, array('class' => 'btn btn-lg btn-default')) }}
       {{ Form::close() }}
     </div>
 </div>

@@ -1,4 +1,5 @@
 <?php namespace LifeLi\controllers;
+use Illuminate\Support\Facades\Input;
 use LifeLi\models\Admin_users\Admin_user;
 use Auth;
 
@@ -46,22 +47,21 @@ class Admin_usersController extends BaseController {
 	 */
 	public function store()
 	{
-		$input = \Input::all();
+		$input = \Input::except(array('password_confirmation'));
         $input['password'] = \Input::get('password');
-		$validation = \Validator::make($input, Admin_user::$rules);
+		$validation = \Validator::make(\Input::all(), Admin_user::$rules);
 
-        if (Auth::user()->is_superuser) {
+        if (Auth::user()->role == 'super_admin') {
             if ($validation->passes()) {
-
                 $this->admin_user->create($input);
-                return \Redirect::route('admin_users.index')
+                return \Redirect::route('admin.admin_users.index')
                     ->with('message', 'Successfully created.');
 
             }
 
         }
 
-		return \Redirect::route('admin_users.create')
+		return \Redirect::route('admin.admin_users.create')
 			->withInput()
 			->withErrors($validation)
 			->with('message', 'There were validation errors.');
@@ -139,7 +139,7 @@ class Admin_usersController extends BaseController {
 	{
 		$this->admin_user->find($id)->delete();
 
-		return \Redirect::route('admin_users.index')
+		return \Redirect::route('admin.admin_users.index')
             ->with('message', 'Successfully deleted.');
 	}
 

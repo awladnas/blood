@@ -18,7 +18,7 @@
 </div>
 <div class="row">
     <div class="col-md-3 col-md-offset-3">
-        {{ Form::open(array('route' => 'admin_users.store', 'class' => 'form-horizontal')) }}
+        {{ Form::open(array('route' => 'admin.admin_users.store', 'class' => 'form-horizontal')) }}
         <div class="form-group">
             {{ Form::label('name', 'Name:') }}
             {{ Form::text('name', Input::old('name'), array('class'=>'form-control', 'placeholder'=>'Name')) }}
@@ -33,6 +33,10 @@
             {{ Form::password('password', array('placeholder'=>'Password', 'class'=>'form-control' ) ) }}
         </div>
 
+        <div class="form-group">
+            {{ Form::label('password_confirmation', 'Password Confirmation:') }}
+            {{ Form::password('password_confirmation', array('placeholder'=>'password_confirmation', 'class'=>'form-control' ) ) }}
+        </div>
         <div class="form-group">
             {{ Form::label('is_superuser', 'Superuser:') }}
             {{ Form::checkbox('is_superuser') }}

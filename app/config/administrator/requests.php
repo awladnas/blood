@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Users model config
+ * request model config
  */
 
 return array(
@@ -53,23 +53,27 @@ return array(
             'title' => 'Blood Group',
         ),
         'created_at' => array(
-            'type' => 'datetime',
+            'type' => 'date',
             'title' => 'Date',
         ),
-        'user_id' => array(
-            'relationship' => 'user',
+        'user' => array(
+            'type' => 'relationship',
             'title' => 'User',
-            'select' => '(:table).email',
-            'type' => 'text'
+            'relationship' => 'user',
+            'name_field' => 'email'
+        ),
+        'status' => array(
+            'title' => 'Status',
+            'type' => 'bool'
         ),
     ),
     'action_permissions'=> array(
         'delete' => function($model){
-                return Auth::user()->is_superuser;
+                return Auth::user()->role == 'super_admin';
             }
     ,
         'block' => function($model){
-                return Auth::user()->is_superuser;
+                return Auth::user()->role == 'super_admin';
             }
     ),
 );

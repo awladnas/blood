@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Users model config
+ * Notification model config
  */
 
 return array(
@@ -49,21 +49,33 @@ return array(
             'title' => 'Blood Group',
         ),
         'created_at' => array(
-            'type' => 'datetime',
+            'type' => 'date',
             'title' => 'Date',
         ),
         'notify_type' => array(
             'title' => 'Type',
             'type' => 'text'
         ),
+        'user' => array(
+            'type' => 'relationship',
+            'relationship' => 'user',
+            'title' => 'Sender',
+            'name_field' => 'email'
+        ),
+        'receiver_user' => array(
+            'type' => 'relationship',
+            'relationship' => 'receiver_user',
+            'title' => 'Receiver',
+            'name_field' => 'email'
+        ),
     ),
     'action_permissions'=> array(
         'delete' => function($model){
-                return Auth::user()->is_superuser;
+                return Auth::user()->role == 'super_admin';
             }
     ,
         'block' => function($model){
-                return Auth::user()->is_superuser;
+                return Auth::user()->role == 'super_admin';
             }
     ),
 );

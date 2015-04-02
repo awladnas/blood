@@ -15,7 +15,7 @@ Route::get('admin/login',['before' => 'auth.logout','as' => 'auth.login', 'uses'
 Route::post('admin/login',['as' => 'admin.login','uses'=> 'LifeLi\controllers\Admin_usersController@authenticate_login']);
 Route::get('admin/logout',array('as' => 'logout', 'uses'=> 'LifeLi\controllers\Admin_usersController@logout'));
 
-Route::group(['before' => 'auth', 'prefix' => 'ad'], function(){
+Route::group(['before' => 'auth', 'prefix' => 'admin'], function(){
     Route::resource('admin_users', 'LifeLi\controllers\Admin_usersController');
 });
 

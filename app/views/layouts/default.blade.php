@@ -28,7 +28,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav navbar-right">
             @if (Auth::check())
-                <li><a href="/admin_users">Admin Users</a></li>
+                <li><a href="/admin/admin_users">Admin Users</a></li>
                 <li><a href="/admin/documents">Api Documents</a></li>
                 <li><a href="/admin/logout">Log Out({{ Auth::user()->name }})</a></li>
             @else

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Profile model config
+ */
 return array(
 
     'title' => 'Profiles',
@@ -44,6 +47,11 @@ return array(
         ),
         'blood_group' => array(
             'title' => 'Blood Group',
+        ),
+        'user' => array(
+            'type' => 'relationship',
+            'title' => 'User',
+            'name_field' => 'email'
         ),
     )
 );
