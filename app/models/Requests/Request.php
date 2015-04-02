@@ -6,7 +6,7 @@ class Request extends \Eloquent {
     /**
      * @var array
      */
-    protected $fillable = ['id', 'user_id', 'blood_group', 'created_at', 'updated_at', 'area', 'content'];
+    protected $fillable = ['id', 'user_id', 'blood_group', 'created_at', 'updated_at', 'area', 'content', 'request_type'];
     /**
      * @var string
      */

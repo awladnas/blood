@@ -77,9 +77,11 @@ class RequestsController extends BaseController {
             if($request) {
                 $objNotification = new NotifyUser();
                 if($request->request_type != 'blood') {
+                     $objNotification->blood_donor_mail_request($users, $user, $request);
                      $objNotification->blood_donate_requests($users, $user,$request );
                     /* todo cron for checking after 24 hours and send expired to not response users */
                 } else {
+                     $objNotification->blood_recipient_mail_request($users, $user, $request);
                      $objNotification->blood_requests($users, $user,$request );
                 }
                 return $this->set_status(201, $this->fractal->item(Request::find($request->id), new RequestTransformer()));
