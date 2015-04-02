@@ -17,6 +17,54 @@ class NotifyUser {
     }
 
     /**
+     * @param $receivers
+     * @param $sender
+     * @param $message
+     */
+
+    public function blood_donor_mail_request($receivers, $sender, $message){
+        $data = [
+            'sender' => $sender->email,
+            'subject' => 'Blood Donate Request'
+        ];
+
+        foreach ($receivers as $receiver) {
+            \Mail::queue('email_body', $data, function ($message) use ($receiver, $data) {
+                $message
+                    ->from($data['sender'], 'Lifeli')
+                    ->to($receiver->email,
+                        $receiver->name)
+                    ->subject($data['subject']);
+            });
+        }
+    }
+
+    /**
+     * @param $receivers
+     * @param $sender
+     * @param $message
+     */
+
+    public function blood_recipient_mail_request($receivers, $sender, $message){
+        $data = [
+            'sender' => $sender->email,
+            'subject' => 'Blood Request'
+        ];
+
+        foreach ($receivers as $receiver) {
+
+            \Mail::queue('email_body', $data, function($message) use ($receiver, $data) {
+                $message
+                    ->from($data['sender'], 'Lifeli')
+                    ->to($receiver->email,
+                        $receiver->name)
+                    ->subject($data['subject']);
+            });
+        }
+
+    }
+
+    /**
      * @param $users
      * @param $donor
      * @param $request
