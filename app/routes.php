@@ -28,10 +28,6 @@ Route::group(['before' => 'auth'], function(){
 Route::group(array('prefix' => 'api/v1'),function(){
     Route::post('users/create',array('as' => 'users.create.path', 'uses' => 'LifeLi\controllers\UsersController@store'));
     Route::group(['before' => 'auth.validate_token'], function(){
-        Route::post('users/{id}/change_password', 'LifeLi\controllers\UsersController@change_password');
-        Route::get('users/{id}/update_token', 'LifeLi\controllers\UsersController@update_token');
-        Route::get('users/{id}/out_of_request', 'LifeLi\controllers\UsersController@out_of_request');
-        Route::resource('users', 'LifeLi\controllers\UsersController');
         Route::group(['prefix' => 'users'], function(){
             Route::get('search/{profile_id}',['uses' => 'LifeLi\controllers\ProfilesController@search_user']);
             Route::resource('profiles', 'LifeLi\controllers\ProfilesController');
@@ -44,6 +40,11 @@ Route::group(array('prefix' => 'api/v1'),function(){
             Route::post('requests/reject/{id}', 'LifeLi\controllers\RequestsController@decline_request');
             Route::resource('requests', 'LifeLi\controllers\RequestsController');
         });
+
+        Route::post('users/{id}/change_password', 'LifeLi\controllers\UsersController@change_password');
+        Route::get('users/{id}/update_token', 'LifeLi\controllers\UsersController@update_token');
+        Route::get('users/{id}/out_of_request', 'LifeLi\controllers\UsersController@out_of_request');
+        Route::resource('users', 'LifeLi\controllers\UsersController');
     });
 });
 
