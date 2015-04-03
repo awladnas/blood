@@ -75,7 +75,7 @@ return array(
         if(!$user) {
             return false;
         }
-        return ($user->role == 'super_admin' || $user->role == 'admin' || 1);
+        return $user->has_dashboard_access();
 	},
 
 	/**

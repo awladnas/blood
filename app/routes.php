@@ -19,11 +19,11 @@ Route::group(['before' => 'auth', 'prefix' => 'admin'], function(){
     Route::resource('admin_users', 'LifeLi\controllers\Admin_usersController');
 });
 
-Route::group(['before' => 'auth'], function(){
-    Route::group(array('prefix' => 'admin'), function(){
-        Route::resource('documents', 'LifeLi\controllers\DocumentsController');
-    });
+
+Route::group(array('prefix' => 'admin', 'before' => 'auth'), function(){
+    Route::resource('documents', 'LifeLi\controllers\DocumentsController');
 });
+
 
 Route::group(array('prefix' => 'api/v1'),function(){
     Route::post('users/create',array('as' => 'users.create.path', 'uses' => 'LifeLi\controllers\UsersController@store'));

@@ -30,10 +30,9 @@ return array(
     ),
     'rules' => array(
         'name' => 'required',
-        'email' => 'required',
+        'email' => 'required|email',
         'role' => 'required',
         'password' => 'required|min:6|confirmed',
-//        'password_confirmation' => 'required|min:6'
     ),
     'edit_fields' => array(
         'name' => array(
@@ -84,19 +83,19 @@ return array(
     ),
     'action_permissions'=> array(
         'delete' => function($model){
-                return Auth::user()->role == 'super_admin';
+                return Auth::user()->is_super_admin();
         },
         'edit' => function($model){
-                return Auth::user()->role == 'super_admin';
+                return Auth::user()->is_super_admin();
         },
         'update' => function($model){
-                return Auth::user()->role == 'super_admin';
+                return Auth::user()->is_super_admin();
         },
         'create' => function($model){
-                return Auth::user()->role == 'super_admin';
+                return Auth::user()->is_super_admin();
         }
     ),
     'permission' => function() {
-            return Auth::user()->role == 'super_admin';
+            return Auth::user()->is_super_admin();
      }
 );

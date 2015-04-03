@@ -70,10 +70,6 @@ use UserTrait, RemindableTrait;
         $this->remember_token = $value;
     }
 
-//    public function setPasswordAttribute($password)
-//    {
-//        $this->attributes['password'] = \Hash::make($password);
-//    }
 
     /**
      * @return string
@@ -94,21 +90,37 @@ use UserTrait, RemindableTrait;
      */
     public function save(array $options = array())
     {
-        if (\Hash::needsRehash($this->attributes['password'])) {
-            $this->attributes['password'] = \Hash::make($this->attributes['password']);
+        if(isset($this->attributes['password'])) {
+            if (\Hash::needsRehash($this->attributes['password'])) {
+                $this->attributes['password'] = \Hash::make($this->attributes['password']);
+            }
+            unset($this->attributes['password_confirmation']);
         }
-        unset($this->attributes['password_confirmation']);
-//        $this->attributes['password'] = \Hash::make($this->attributes['password']);
         return parent::save($options);
     }
 
-//    public function getPasswordConfirmationAttribute($val){
-//        return $val;
-//    }
-//
-//    public function setPasswordConfirmationAttribute($val)
-//    {
-//        $this->attributes['password_confirmation'] = $val;
-//    }
+
+    /**
+     * @return bool
+     */
+    public function is_admin(){
+        return ($this->role == 'admin')? true : false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function is_super_admin(){
+        return ($this->role == 'super_admin')? true : false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function has_dashboard_access(){
+        return ($this->role == 'admin' || $this->role == 'super_admin' )? true : false;
+    }
+
+
 
 }
