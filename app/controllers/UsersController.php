@@ -52,15 +52,27 @@ class UsersController extends BaseController {
         $arr_user = $user->get_array_to_db($arr_user_data);
         $arr_user['valid_until'] = $user->get_token_expired_date();
         $arr_user['api_token'] = $user->generate_token();
+
         $v = $user->validate($arr_user, 'create');
+
         if($v->passes()) {
             $length = $mobile ?  5 : 30;
             $arr_user['confirmation_code'] = $user->generate_token($length);
             if($mobile) {
                // send confirm code via services
             }
-            else {
+            elseif(isset($arr_user['email'])) {
+
                 //send confirm code via email $arr_user['email']
+                $data = array(
+                    'email'     => $arr_user['email'],
+                    'ConfirmationCode'  => $arr_user['confirmation_code']
+                );
+
+                \Mail::send('emails.signup', $data, function($message, $arr_user)
+                {
+                    $message->to( $arr_user['email'] )->subject('Lifeli Account Confirmation');
+                });
             }
             $user = User::create($arr_user);
             if($user) {
