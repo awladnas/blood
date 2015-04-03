@@ -28,8 +28,8 @@ return array(
 	|
 	*/
 
-//	'host' => 'smtp.mailgun.org',
-    'host' => 'smtp.gmail.com',
+	'host' => 'smtp.mailgun.org',
+//    'host' => 'smtp.gmail.com',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -81,7 +81,7 @@ return array(
 	|
 	*/
 
-	'username' => 'al.maruf@nascenia.com',
+	'username' => null,
 
 	/*
 	|--------------------------------------------------------------------------
@@ -94,7 +94,7 @@ return array(
 	|
 	*/
 
-	'password' => 'am094432iut09',
+	'password' => null,
 
 	/*
 	|--------------------------------------------------------------------------

@@ -67,15 +67,18 @@ class UsersController extends BaseController {
             }
             elseif(isset($arr_user['email'])) {
 
-                //send confirm code via email $arr_user['email']
                 $data = array(
                     'email'     => $arr_user['email'],
                     'ConfirmationCode'  => $arr_user['confirmation_code']
                 );
 
-                \Mail::send('emails.signup', $data, function($message, $arr_user)
+                \Mail::send('emails.signup', $data, function($message) use ($data)
                 {
-                    $message->to( $arr_user['email'] )->subject('Lifeli Account Confirmation');
+                    $message
+                        ->from('lifeli@yahoo.com', 'Lifeli')
+                        ->to($data['email'])
+                        ->subject('Lifeli Account Confirmation');
+
                 });
             }
             $user = User::create($arr_user);
