@@ -173,12 +173,16 @@ class RequestsController extends BaseController {
      * @param $request_user_id
      * @return array
      */
-    public function accept_request($request_user_id){
+    public function accept_request($request_user_id) {
 
         $user_request = Request_user::find($request_user_id);
         //request not found
         if(!$user_request){
             return $this->set_status(404, 'request not found');
+        }
+        //check already accepted by someone
+        if($user_request->request->status == 1) {
+            return $this->set_status(404, 'Request already accepted');
         }
         //update user request to set it replied
         $user_request->status_id = Request_user::$request_status['replied'];
@@ -213,7 +217,7 @@ class RequestsController extends BaseController {
         }
         //get all input
         $input = \Input::json();
-        $content = $input->get('content');
+        $content = $input->get('message');
         if($content){
             $user_request->content = $content;
         }

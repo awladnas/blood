@@ -48,11 +48,20 @@ class UsersController extends BaseController {
 	{
         $user = new User();
         $arr_user_data = \Input::json('user');
+        $mobile = $arr_user_data->is_mobile;
         $arr_user = $user->get_array_to_db($arr_user_data);
         $arr_user['valid_until'] = $user->get_token_expired_date();
         $arr_user['api_token'] = $user->generate_token();
         $v = $user->validate($arr_user, 'create');
-        if($v->passes()){
+        if($v->passes()) {
+            $length = $mobile ?  5 : 30;
+            $arr_user['confirmation_code'] = $user->generate_token($length);
+            if($mobile) {
+               // send confirm code via services
+            }
+            else {
+                //send confirm code via email $arr_user['email']
+            }
             $user = User::create($arr_user);
             if($user) {
                 return $this->set_status(200, $this->fractal->item($user, new UserTransformer()));
@@ -199,5 +208,51 @@ class UsersController extends BaseController {
         else {
             return $this->set_status(404, 'profile not found');
         }
+    }
+
+    /**
+     * confirm user account by
+     * @param $user_id
+     * @param $confirmation_code
+     * @return array
+     */
+    public function confirm($user_id, $confirmation_code){
+
+        $user = User::find($user_id);
+        if(!$user) {
+            return $this->set_status(404, 'user not found');
+        }
+        if($user->is_confirm) {
+            return $this->set_status(501, 'user already confirmed');
+        }
+        if( $confirmation_code == $user->confirmation_code ) {
+            $user->is_confirm = 1;
+            $user->confirmation_code = null;
+            $user->save();
+            return $this->set_status(200, 'account confirmed successfully');
+        }
+        return $this->set_status(501, 'invalid confirmation code');
+    }
+
+
+    /**
+     * @return array
+     */
+    public function user_login(){
+
+        $inputs = \Input::json();
+        $user = User::where('mobile_no', $inputs->get('mobile_no'))->first();
+        if($user) {
+            if($user->is_confirm) {
+                if($user->password == $inputs->get('password')) {
+                    return $this->set_status(200, $this->fractal->item($user, new UserTransformer()));
+                }
+                return $this->set_status(404, 'invalid password');
+            }
+            else {
+                return $this->set_status(404, 'unconfirmed account');
+            }
+        }
+        return $this->set_status(404, 'invalid mobile number');
     }
 }

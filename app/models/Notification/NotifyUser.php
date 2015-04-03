@@ -123,12 +123,13 @@ class NotifyUser {
      */
     public function ack_accept($acceptor, $requester){
 
-        $push = \PushNotification::app('appNameAndroid')
-            ->to($requester->device_token)
-            ->send($this->_blood_accept_message. ' Contact: '. $acceptor->mobile_no);
+//        $push = \PushNotification::app('appNameAndroid')
+//            ->to($requester->device_token)
+//            ->send($this->_blood_accept_message. ' Contact: '. $acceptor->mobile_no);
+//
         $this->add_notification($requester->id, $acceptor->id, 'accept_request');
-        $response = $push->getAdapter()->getResponse();
-        return $response;
+//        $response = $push->getAdapter()->getResponse();
+//        return $response;
     }
 
     /**

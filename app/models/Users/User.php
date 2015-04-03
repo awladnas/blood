@@ -70,11 +70,12 @@ class User extends \Eloquent {
     }
 
     /**
+     * @param int $length
      * @return string
      */
-    public function generate_token() {
+    public function generate_token( $length = 30) {
         $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        return substr(str_shuffle(str_repeat($pool, 5)), 0, 30);
+        return substr(str_shuffle(str_repeat($pool, 5)), 0, $length);
     }
 
     /**
@@ -127,7 +128,11 @@ class User extends \Eloquent {
         return Validator::make($inputs, $arr_rules);
     }
 
-    public static function get_csv(){
+    /**
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public static function get_csv() {
+
         $table = User::all();
         $path = public_path("downloads/");
         $filename = $path . "users.csv";
