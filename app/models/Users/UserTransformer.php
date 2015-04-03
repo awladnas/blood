@@ -5,9 +5,9 @@ use LifeLi\models\Profiles\ProfileTransformer;
 
 class UserTransformer extends TransformerAbstract {
 
-    protected $defaultIncludes = [
-        'profile'
-    ];
+//    protected $defaultIncludes = [
+//        'profile'
+//    ];
 
     public function transform(User $user)
     {
@@ -20,7 +20,14 @@ class UserTransformer extends TransformerAbstract {
             'created_at'     => $user->created_at,
             'token_expires'  => $user->valid_until,
             'api_token'      => $user->api_token,
-            'device_id'      => $user->device_id
+            'device_id'      => $user->device_id,
+            'name'           => $user->name,
+            'zone'           => $user->zone,
+            'country'        => $user->country,
+            'city'           => $user->city,
+            'blood_group'    => $user->blood_group,
+            'steps'          => $user->steps,
+            'is_complete'    => $user->is_complete
         ];
     }
 

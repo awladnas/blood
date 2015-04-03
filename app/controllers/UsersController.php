@@ -48,7 +48,7 @@ class UsersController extends BaseController {
 	{
         $user = new User();
         $arr_user_data = \Input::json('user');
-        $mobile = $arr_user_data->is_mobile;
+        $mobile = isset($arr_user_data->is_mobile) ? true : false;
         $arr_user = $user->get_array_to_db($arr_user_data);
         $arr_user['valid_until'] = $user->get_token_expired_date();
         $arr_user['api_token'] = $user->generate_token();
@@ -56,6 +56,10 @@ class UsersController extends BaseController {
         $v = $user->validate($arr_user, 'create');
 
         if($v->passes()) {
+            if ($arr_user['steps'] < User::TOTAL_STEPS) $arr_user['steps']++;
+            if ($arr_user['steps'] == User::TOTAL_STEPS){
+                $arr_user['is_complete'] = true;
+            }
             $length = $mobile ?  5 : 30;
             $arr_user['confirmation_code'] = $user->generate_token($length);
             if($mobile) {
@@ -128,10 +132,19 @@ class UsersController extends BaseController {
         $user = new User();
         $arr_user = $arr_inputs->get('user');
         $arr_user = $user->get_array_to_db($arr_user);
+        if(!isset($arr_user['steps'])){
+            return $this->set_status(204, 'steps is required');
+        }
         $arr_user['valid_until'] = $user->get_token_expired_date();
         $arr_user['api_token'] = $user->generate_token();
         $v = $user->validate($arr_user, 'update');
         if($v->passes()){
+
+
+            if ($arr_user['steps'] < User::TOTAL_STEPS) $arr_user['steps']++;
+            if ($arr_user['steps'] == User::TOTAL_STEPS){
+                $arr_user['is_complete'] = true;
+            }
             $bln_update =  User::find($id)->update($arr_user);
             $user = user::find($id);
             if(!$user){
@@ -173,6 +186,7 @@ class UsersController extends BaseController {
      * @return array
      */
     public function change_password($id){
+
         $inputs = \Input::json();
         $old_password = $inputs->get('old_password');
         $new_password = $inputs->get('new_password');
@@ -192,6 +206,7 @@ class UsersController extends BaseController {
      * @return array
      */
     public function update_token($id){
+
         $user = User::find($id);
         if($user){
             $user->api_token = $user->generate_token();
@@ -256,7 +271,7 @@ class UsersController extends BaseController {
         $user = User::where('mobile_no', $inputs->get('mobile_no'))->first();
         if($user) {
             if($user->is_confirm) {
-                if($user->password == $inputs->get('password')) {
+                if(\Hash::check($inputs->get('password'),$user->password)) {
                     return $this->set_status(200, $this->fractal->item($user, new UserTransformer()));
                 }
                 return $this->set_status(404, 'invalid password');
@@ -266,5 +281,63 @@ class UsersController extends BaseController {
             }
         }
         return $this->set_status(404, 'invalid mobile number');
+    }
+
+    /**
+     * @param $user_id
+     * @return array
+     */
+    public function profile_complete($user_id){
+
+        $user = User::find($user_id);
+        if(!$user) {
+            return $this->set_status(404, 'user not found');
+        }
+        if($user->is_complete) {
+            return $this->set_status(200, ['is_complete' => true]);
+        }
+        else {
+            return $this->set_status(200, ['steps' => $user->steps]);
+        }
+    }
+
+    /**
+     * @param null $profile_id
+     * @internal param null $city
+     * @internal param null $lat
+     * @internal param null $lon
+     * @internal param int $distance
+     * @return array
+     */
+    public function search_user($user_id ){
+
+        /*TODO: generic message */
+
+        $user = User::find($user_id);
+        if(!$user) {
+            return $this->set_status(404, 'user not found');
+        }
+        $city = \Input::get('city');
+        $blood_group = \Input::get('blood_group');
+
+        $distance = \Input::get('distance');
+        if(isset($city) && $response = $user->get_location_from_city($city)) {
+            $lat = $response->latitude();
+            $lng = $response->longitude();
+        }
+        else{
+            $lat =  $user->latitude;
+            $lng =  $user->longitude;
+        }
+        $blood_group = isset($blood_group)? $blood_group : $user->blood_group;
+        $distance = isset($distance)? $distance : 10;
+        $block_users = BlockUser::where('blocked_by','=', $user->id)->lists('blocked_by');
+        $unavailable_users = User::where('out_of_req', '=', true)->lists('id');
+        $blocked_users = array_merge($block_users, $unavailable_users);
+        $objUsers = $user->get_closest_profiles($user->id, $lat, $lng, $distance, $blood_group, $blocked_users);
+        $arrSearchedUsers = $this->fractal->collection($objUsers, new UserTransformer());
+        $arr_data['users'] = $arrSearchedUsers['data'];
+        $arr_data['location'] = array('lat' => $lat, 'lng' => $lng);
+        return $this->set_status(200, $arr_data);
     }
 }

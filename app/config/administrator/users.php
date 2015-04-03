@@ -27,14 +27,9 @@
               'type' => 'datetime',
               'title' => 'Date',
           ),
-
-          'device_id' => array(
-              'title' => 'Device Number',
-          ),
           'out_of_req' => array(
-              'relationship' => 'profile',
-              'title' => 'Available',
-              'select' => '(:table).out_of_req'
+              'type' => 'bool',
+              'title' => 'Ot',
           ),
           'requests' => array(
               'title' => '#requests',
@@ -42,10 +37,19 @@
               'select' => 'COUNT((:table).id)',
           ),
           'blood_group' => array(
-              'relationship' => 'profile',
               'title' => 'Blood Group',
-              'select' => '(:table).blood_group'
+          ),
+          'name' => array(
+              'title' => 'Name',
+          ),
+          'city' => array(
+              'title' => 'City'
+          ),
+          'is_complete' => array(
+              'title' => 'Complete',
+              'type' => 'bool'
           )
+
       ),
       'rules' => array(
           'mobile_no' => 'required|between:5,64|unique:users',
@@ -64,9 +68,15 @@
               'title' => 'Mobile No',
               'type' => 'text',
           ),
-          'created_at' => array(
-              'type' => 'datetime',
-              'title' => 'Date',
+          'is_complete' => array(
+              'title' => 'Complete',
+              'type' => 'bool'
+          ),
+          'name' => array(
+              'title' => 'Name',
+          ),
+          'city' => array(
+              'title' => 'City'
           ),
 
       ),
@@ -82,6 +92,16 @@
           'out_of_req' => array(
               'title' => 'Out of Request',
               'type'  => 'bool'
+          ),
+          'is_complete' => array(
+              'title' => 'Complete',
+              'type' => 'bool'
+          ),
+          'name' => array(
+              'title' => 'Name',
+          ),
+          'city' => array(
+              'title' => 'City'
           ),
           'created_at' => array(
               'type' => 'datetime',
@@ -135,6 +155,8 @@
           ,
           'block' => function($model){
                   return Auth::user()->role == 'super_admin';
-              }
+          },
+          'create' => false,
+          'new' => false
       ),
   );

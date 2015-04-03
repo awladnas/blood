@@ -17,11 +17,20 @@ class User extends \Eloquent {
     /**
      * @var array
      */
-    protected $fillable = array('mobile_no', 'email', 'valid_until', 'api_token', 'password', 'device_id' );
+    protected $fillable = array('mobile_no', 'email', 'valid_until', 'api_token', 'password', 'device_id','name', 'zone', 'country', 'blood_group', 'created_at', 'updated_at', 'city', 'steps', 'is_complete' );
     /**
      * @var int
      */
     protected $token_expire_days = 10;
+    /**
+     * @var int
+     */
+    protected $max_user_in_search = 20;
+
+    /**
+     * total profile steps
+     */
+    const TOTAL_STEPS = 3;
 
 	/**
 	 * The attributes excluded from the model's JSON form.
@@ -45,6 +54,12 @@ class User extends \Eloquent {
         'password'       => 'password',
         'email'          =>  'email',
         'device_id'      =>  'device_id',
+        'name'           => 'name',
+        'zone'           =>  'zone',
+        'country'        => 'country',
+        'city'           => 'city',
+        'blood_group'    => 'blood_group',
+        'steps'          => 'steps',
         'is_active'      => 'is_active',
         'is_confirm'     => 'is_confirm',
         'created_at'     => 'created_at'
@@ -107,10 +122,15 @@ class User extends \Eloquent {
     public function validate($inputs, $action = 'update') {
 
         $rules = [
-                'mobile_no' => 'Required|Min:3|Max:50|Unique:users',
-                'email'     => 'Required|Between:3,64|Email',
-                'password'  =>'Required|Min:6',
-                'device_id'  =>'Required|Min:2'
+                'mobile_no' =>  'Required|Min:3|Max:50|Unique:users',
+                'email'     =>  'Required|Between:3,64|Email',
+                'password'  => 'Required|Min:6',
+                'device_id' => 'Required|Min:2',
+                'name'      => 'Min:3',
+                'zone'      => 'Min:3',
+                'country'   => 'Min:2',
+                'city'      => 'Min:2',
+                'steps'     => 'Required'
 
         ];
         $arr_rules = [];
@@ -124,7 +144,6 @@ class User extends \Eloquent {
         else {
             $arr_rules =  $rules;
         }
-
         return Validator::make($inputs, $arr_rules);
     }
 
@@ -137,10 +156,10 @@ class User extends \Eloquent {
         $path = public_path("downloads/");
         $filename = $path . "users.csv";
         $handle = fopen($filename, 'w+');
-        fputcsv($handle, array('id', 'email', 'mobile'));
+        fputcsv($handle, array('id', 'email', 'mobile','name', 'city', 'block', 'date','complete', 'latitude', 'longitude'));
 
         foreach($table as $row) {
-            fputcsv($handle, array($row['id'], $row['email'], $row['mobile_no']));
+            fputcsv($handle, array($row['id'], $row['email'], $row['mobile_no'], $row['name'], $row['city'],$row['block'], $row['date'], $row['complete'], $row['latitude'],$row['longitude'] ));
         }
 
         fclose($handle);
@@ -151,5 +170,80 @@ class User extends \Eloquent {
 
         return \Response::download($filename, 'user2.csv', $headers);
     }
+
+    /**
+     * @param $user_id
+     * @param $lat
+     * @param $lng
+     * @param int $max_distance
+     * @param $blood_group
+     * @param array $blocked_users
+     * @internal param $profile_id
+     * @return array|static[]
+     */
+    public function get_closest_profiles($user_id, $lat, $lng, $max_distance = 20, $blood_group, $blocked_users = array()){
+
+        $gr_circle_radius = 6371; //km
+
+
+        /*
+         *  Generate the select field for distance
+         */
+        $disctance_select = sprintf(
+            "*, ( %d * acos( cos( radians(%s) ) " .
+            " * cos( radians( latitude ) ) " .
+            " * cos( radians( longitude ) - radians(%s) ) " .
+            " + sin( radians(%s) ) * sin( radians( latitude ) ) " .
+            ") " .
+            ") " .
+            "AS distance",
+            $gr_circle_radius,
+            $lat,
+            $lng,
+            $lat
+        );
+        return $this
+            ->select( \DB::raw($disctance_select) )
+            ->having( 'distance', '<', $max_distance )
+            ->take( $this->max_user_in_search )
+            ->where('id', '!=', $user_id)
+            ->where('out_of_req', '=', false)
+            ->where('blood_group', '=', $blood_group)
+            ->whereNotIn('user_id', $blocked_users)
+            ->orderBy( 'distance', 'ASC' )
+            ->get();
+    }
+
+    /**
+     * @param $city
+     * @return array
+     */
+    public function get_location_from_city($city) {
+        return \Geocode::make()->address($city);
+    }
+
+    /**
+     * @param array $options
+     * @return bool|void
+     */
+    public function save(array $options = array())
+    {
+        if(isset($this->attributes['password'])) {
+            if (\Hash::needsRehash($this->attributes['password'])) {
+                $this->attributes['password'] = \Hash::make($this->attributes['password']);
+            }
+            unset($this->attributes['password_confirmation']);
+        }
+
+        if($this->city && !$this->latitude) {
+            $response = $this->get_location_from_city($this->city);
+            if($response) {
+                $this->latitude = $response->latitude();
+                $this->longitude = $response->longitude();
+            }
+        }
+        return parent::save($options);
+    }
+
 
 }
