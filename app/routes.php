@@ -30,7 +30,7 @@ Route::group(array('prefix' => 'api/v1'),function(){
     Route::group(['before' => 'auth.validate_token'], function(){
         Route::group(['prefix' => 'users'], function(){
             Route::get('search/{profile_id}',['uses' => 'LifeLi\controllers\ProfilesController@search_user']);
-            Route::resource('profiles', 'LifeLi\controllers\ProfilesController');
+//            Route::resource('profiles', 'LifeLi\controllers\ProfilesController');
             Route::get('{id}/requests', 'LifeLi\controllers\RequestsController@user_requests');
             Route::post('{id}/requests', 'LifeLi\controllers\RequestsController@store');
             Route::get('requests/accept/{id}', 'LifeLi\controllers\RequestsController@accept_request');
@@ -43,6 +43,7 @@ Route::group(array('prefix' => 'api/v1'),function(){
 
         Route::post('users/{id}/change_password', 'LifeLi\controllers\UsersController@change_password');
         Route::get('users/{id}/update_token', 'LifeLi\controllers\UsersController@update_token');
+        Route::get('users/{id}/check_profile', 'LifeLi\controllers\UsersController@profile_complete');
         Route::get('users/{id}/out_of_request', 'LifeLi\controllers\UsersController@out_of_request');
         Route::get('users/{id}/confirm/{confirmation_code}', 'LifeLi\controllers\UsersController@confirm');
         Route::post('users/login', 'LifeLi\controllers\UsersController@user_login');
