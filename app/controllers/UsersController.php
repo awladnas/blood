@@ -312,7 +312,7 @@ class UsersController extends BaseController {
      * @internal param int $distance
      * @return array
      */
-    public function search_user($user_id ){
+    public function search_user($user_id){
 
         /*TODO: generic message */
 
@@ -322,9 +322,11 @@ class UsersController extends BaseController {
         }
         $city = \Input::get('city');
         $blood_group = \Input::get('blood_group');
+        $lat = \Input::get('lat');
+        $lng = \Input::get('lng');
 
         $distance = \Input::get('distance');
-        if(isset($city) && $response = $user->get_location_from_city($city)) {
+        if(!isset($lat, $lng) && isset($city) && $response = $user->get_location_from_city($city)) {
             $lat = $response->latitude();
             $lng = $response->longitude();
         }

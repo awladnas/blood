@@ -70,10 +70,10 @@ return array(
     'action_permissions'=> array(
         'delete' => function($model){
                 return Auth::user()->role == 'super_admin';
-            }
-    ,
+            },
         'block' => function($model){
                 return Auth::user()->role == 'super_admin';
-            }
+            },
+        'create' => false
     ),
 );

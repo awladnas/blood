@@ -133,6 +133,20 @@ class NotifyUser {
     }
 
     /**
+     * @param $user
+     * @param $requester
+     */
+    public function decline_request($user, $requester){
+        //        $push = \PushNotification::app('appNameAndroid')
+//            ->to($requester->device_token)
+//            ->send($this->_blood_accept_message. ' Contact: '. $acceptor->mobile_no);
+//
+        $this->add_notification($requester->id, $user->id, 'decline_request');
+//        $response = $push->getAdapter()->getResponse();
+//        return $response;
+    }
+
+    /**
      * @param $arr_push
      * @param $msg
      * @param string $app_name

@@ -159,6 +159,7 @@ class RequestsController extends BaseController {
 	}
 
     /**
+     * list of requests created by an user
      * @param $user_id
      * @return array
      */
@@ -180,6 +181,7 @@ class RequestsController extends BaseController {
     }
 
     /**
+     * accept a request by request_user id
      * @param $request_user_id
      * @return array
      */
@@ -228,6 +230,7 @@ class RequestsController extends BaseController {
     }
 
     /**
+     * decline a request by request_user id
      * @param $request_user_id
      * @return array
      */
@@ -259,9 +262,10 @@ class RequestsController extends BaseController {
             $user_request->status_id = Request_user::$request_status['declined'];
             $user_request->save();
 
-            if($request->request_type !=  'blood'){
-                /* todo send notification to request creator and create another user_request*/
-            }
+            $notify = new NotifyUser();
+            $decliner = User::find($user_request->receiver);
+            $requester = User::find($request->user_id);
+            $notify->decline_request($decliner, $requester);
             return $this->set_status(200,'request declined successfully');
         }
         else {
@@ -301,7 +305,7 @@ class RequestsController extends BaseController {
      * @param $id
      * @return array
      */
-    public function ignore_request($id){
+    public function ignore_request($id) {
 
         $user_request = Request_user::find($id);
         if(!$user_request){
