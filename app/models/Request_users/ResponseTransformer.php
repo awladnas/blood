@@ -14,12 +14,17 @@ class ResponseTransformer extends TransformerAbstract {
 
     public function transform(Request_user $request)
     {
-        return [
+        $arr_response = [
             'id'             => (int) $request->id,
             'receiver'       =>  $request->receiver,
             'created_date'   =>  $request->created_at,
             'updated_date'   =>  $request->updated_at,
         ];
+
+       if($request->status()->first()->status == 'replied'){
+            $arr_response['contacts'] = $request->contacts()->lists('contact');
+        }
+        return $arr_response;
     }
 
     /**

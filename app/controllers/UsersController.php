@@ -235,7 +235,7 @@ class UsersController extends BaseController {
         if($user) {
             $user->out_of_req = true;
             $user->save();
-            return $this->set_status(200, $this->fractal->item($user, new ProfileTransformer()));
+            return $this->set_status(200, $this->fractal->item($user, new UserTransformer()));
         }
         else {
             return $this->set_status(404, 'user not found');

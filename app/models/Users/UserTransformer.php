@@ -27,7 +27,8 @@ class UserTransformer extends TransformerAbstract {
             'city'           => $user->city,
             'blood_group'    => $user->blood_group,
             'steps'          => $user->steps,
-            'is_complete'    => $user->is_complete
+            'is_complete'    => $user->is_complete,
+            'out_of_req'     => $user->out_of_req
         ];
     }
 

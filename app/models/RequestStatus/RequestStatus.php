@@ -9,4 +9,11 @@ class RequestStatus extends \Eloquent {
 
 	public static $rules = array();
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function request_user(){
+        return $this->hasOne('LifeLi\models\Request_users\Request_user');
+    }
+
 }
