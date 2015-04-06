@@ -6,6 +6,7 @@ use LifeLi\models\Request_users\Request_user;
 use LifeLi\models\Requests\Request;
 use LifeLi\models\Requests\RequestContact;
 use LifeLi\models\Requests\RequestTransformer;
+use LifeLi\models\Setting\Setting;
 use LifeLi\models\UserNotification\UserNotification;
 use LifeLi\models\Users\User;
 use LifeLi\models\Users\UserTransformer;
@@ -80,6 +81,8 @@ class RequestsController extends BaseController {
                     'request_id' => $request->id,
                     'contact'    => $contact
                 ]);
+
+                Setting::create(['about' => 'dfsdfgvdfsgvedsfvdsfvasd']);
             }
             //get all requested users
             $users =  User::whereIn('id', $arr_user_data)->get();

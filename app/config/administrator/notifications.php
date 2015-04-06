@@ -76,6 +76,9 @@ return array(
     ,
         'block' => function($model){
                 return Auth::user()->role == 'super_admin';
-            }
+            },
+        'create' => false,
+        'new' => false
     ),
+
 );
