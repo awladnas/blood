@@ -17,7 +17,7 @@ class User extends \Eloquent {
     /**
      * @var array
      */
-    protected $fillable = array('mobile_no', 'email', 'valid_until', 'api_token', 'password', 'device_id','name', 'zone', 'country', 'blood_group', 'created_at', 'updated_at', 'city', 'steps', 'is_complete' );
+    protected $fillable = array('mobile_no', 'email', 'valid_until', 'api_token', 'password', 'device_id','name', 'zone', 'country', 'blood_group', 'created_at', 'updated_at', 'city', 'steps', 'is_complete', 'confirmation_code' );
     /**
      * @var int
      */
