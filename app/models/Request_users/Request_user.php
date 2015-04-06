@@ -28,6 +28,13 @@ class Request_user extends \Eloquent {
         return $this->belongsTo('LifeLi\models\RequestStatus\RequestStatus');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function contacts(){
+        return $this->morphMany('LifeLi\models\Requests\RequestContact', 'contactable');
+    }
+
     /*
      * @var array
      */

@@ -5,9 +5,10 @@ class RequestContact extends \Eloquent {
 
 	public static $rules = array();
 
-    protected $table = 'users';
+    protected $table = 'requests_contacts';
 
-    public function request(){
-        $this->belongsTo('LifeLi\models\Requests\Request');
+
+    public function contactable(){
+        return $this->morphTo();
     }
 }

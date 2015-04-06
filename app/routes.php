@@ -33,7 +33,7 @@ Route::group(array('prefix' => 'api/v1'),function(){
 //            Route::resource('profiles', 'LifeLi\controllers\ProfilesController');
             Route::get('{id}/requests', 'LifeLi\controllers\RequestsController@user_requests');
             Route::post('{id}/requests', 'LifeLi\controllers\RequestsController@store');
-            Route::get('requests/accept/{id}', 'LifeLi\controllers\RequestsController@accept_request');
+            Route::post('requests/accept/{id}', 'LifeLi\controllers\RequestsController@accept_request');
             Route::get('{id}/requests/sent_list', 'LifeLi\controllers\RequestsController@all_requested_users');
             Route::get('requests/ignore/{id}', 'LifeLi\controllers\RequestsController@ignore_request');
             Route::post('requests/{id}/block', 'LifeLi\controllers\RequestsController@block_user');

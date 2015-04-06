@@ -69,20 +69,18 @@ class RequestsController extends BaseController {
         $arr_request_data = $arr_inputs->get('request');
         $arr_user_data = $arr_inputs->get('users');
         $arr_request = $request->get_array_to_db($arr_request_data);
+        $contacts = $arr_request['contacts'];
+        unset($arr_request['contacts']);
         $v = $request->validate($arr_request, 'create');
         if($v->passes()){
             //valid data
             $arr_request['user_id'] = $user->id;
             $request = Request::create($arr_request);
-            $contacts = $arr_request['contacts'];
             //save contact for request
             foreach($contacts as $contact) {
-                RequestContact::create([
-                    'request_id' => $request->id,
-                    'contact'    => $contact
+                 $request->contacts()->create([
+                    'contact' => $contact
                 ]);
-
-                Setting::create(['about' => 'dfsdfgvdfsgvedsfvdsfvasd']);
             }
             //get all requested users
             $users =  User::whereIn('id', $arr_user_data)->get();
@@ -199,6 +197,16 @@ class RequestsController extends BaseController {
         //update user request to set it replied
         $user_request->status_id = Request_user::$request_status['replied'];
         $user_request->save();
+
+        //add contract
+        $arr_inputs = \Input::json();
+        $contacts = $arr_inputs->get('contacts');
+        //save contact for request
+        foreach($contacts as $contact) {
+            $user_request->contacts()->create([
+                'contact' => $contact
+            ]);
+        }
         //update request a
         $user_request->request->status = 1;
         $user_request->request->save();
@@ -209,7 +217,10 @@ class RequestsController extends BaseController {
             $requester = User::find($request->user_id);
             //send accept request notification
             $notify->ack_accept($acceptor, $requester);
-            return $this->set_status(200, $this->fractal->item($acceptor,new UserTransformer()));
+            $arrUser = $this->fractal->item($acceptor,new UserTransformer());
+            //add contacts for this response
+            $arrUser['contacts'] = $contacts;
+            return $this->set_status(200, $arrUser);
         }
         else {
             return $this->set_status(200, array('request user not found'));

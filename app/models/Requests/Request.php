@@ -22,6 +22,7 @@ class Request extends \Eloquent {
         'content'        => 'content',
         'request_type'   => 'request_type',
         'blood_group'    => 'blood_group',
+        'contacts'       => 'contacts',
         'created_date'   => 'created_at',
         'updated_date'   => 'updated_at'
     );
@@ -45,7 +46,7 @@ class Request extends \Eloquent {
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function contacts(){
-        $this->hasMany('LifeLi\models\Requests\RequestContact');
+        return $this->morphMany('LifeLi\models\Requests\RequestContact', 'contactable');
     }
 
 

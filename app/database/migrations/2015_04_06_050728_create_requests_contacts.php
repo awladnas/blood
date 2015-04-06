@@ -14,8 +14,9 @@ class CreateRequestsContacts extends Migration {
 	{
 		Schema::create('requests_contacts', function(Blueprint $table) {
 			$table->increments('id');
-			$table->integer('request_id');
             $table->string('contact');
+            $table->integer('contactable_id')->unsigned();
+            $table->string('contactable_type');
 			$table->timestamps();
 		});
 	}
