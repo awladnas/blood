@@ -9,6 +9,10 @@ class RequestTransformer extends TransformerAbstract {
 
 
 
+    protected $defaultIncludes = [
+        'Contacts'
+    ];
+
     protected $availableIncludes = [
         'Response'
     ];
@@ -47,6 +51,14 @@ class RequestTransformer extends TransformerAbstract {
 
             return $this->collection($users_requests, new ResponseTransformer());
         }
+    }
+
+    /**
+     * @param Request $request
+     * @return \League\Fractal\Resource\Collection
+     */
+    public function includeContacts(Request $request){
+        return $this->collection($request->contacts()->get(), new ContactTransformer());
     }
 
 } 

@@ -41,6 +41,14 @@ class Request extends \Eloquent {
         return $this->hasMany('LifeLi\models\Request_users\Request_user');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function contacts(){
+        $this->hasMany('LifeLi\models\Requests\RequestContact');
+    }
+
+
     public function validate($inputs, $action = 'update') {
 
         $rules = [

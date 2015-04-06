@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Input;
 use LifeLi\models\Block_users\BlockUser;
 use LifeLi\models\Request_users\Request_user;
 use LifeLi\models\Requests\Request;
+use LifeLi\models\Requests\RequestContact;
 use LifeLi\models\Requests\RequestTransformer;
 use LifeLi\models\UserNotification\UserNotification;
 use LifeLi\models\Users\User;
@@ -72,11 +73,19 @@ class RequestsController extends BaseController {
             //valid data
             $arr_request['user_id'] = $user->id;
             $request = Request::create($arr_request);
+            $contacts = $arr_request['contacts'];
+            //save contact for request
+            foreach($contacts as $contact) {
+                RequestContact::create([
+                    'request_id' => $request->id,
+                    'contact'    => $contact
+                ]);
+            }
             //get all requested users
             $users =  User::whereIn('id', $arr_user_data)->get();
             if($request) {
                 $objNotification = new NotifyUser();
-                if($request->request_type != 'blood') {
+                if($request->request_type == 'offer') {
                      $objNotification->blood_donor_mail_request($users, $user, $request);
                      $objNotification->blood_donate_requests($users, $user,$request );
                     /* todo cron for checking after 24 hours and send expired to not response users */
