@@ -3,9 +3,11 @@
 use Illuminate\Support\Facades\Input;
 use LifeLi\models\Block_users\BlockUser;
 use LifeLi\models\Request_users\Request_user;
+use LifeLi\models\Request_users\ResponseTransformer;
 use LifeLi\models\Requests\Request;
 use LifeLi\models\Requests\RequestContact;
 use LifeLi\models\Requests\RequestTransformer;
+use LifeLi\models\RequestStatus\RequestStatus;
 use LifeLi\models\Setting\Setting;
 use LifeLi\models\UserNotification\UserNotification;
 use LifeLi\models\Users\User;
@@ -343,21 +345,20 @@ class RequestsController extends BaseController {
         return $this->set_status(200, $arrUsers);
     }
 
-    public function all_mixed_requests_record($user_id){
-        /** TODO:  get all user requests of an user of specific type*/
-        $type = Input::get('record_type');
-        switch($type) {
-            case 'replied' :
-                break;
-            case 'shared' :
-                break;
-            case 'declined' :
-                break;
-            case 'ignored' :
-                break;
-            case 'unread' :
-                break;
+    /**
+     * @param $request_id
+     * @return array
+     */
+    public function filter_request($request_id){
+        $request = Request::find($request_id);
+        if(!$request){
+            return $this->set_status(404, 'request not found');
         }
+        $type = Input::get('record_type');
+        $status = RequestStatus::where('status', '=', $type)->first();
+
+        $response = $request->Request_users()->where('status_id', '=', $status->id)->get();
+        return $this->set_status(200, $this->fractal->collection($response, new ResponseTransformer()));
     }
 
     /**

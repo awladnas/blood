@@ -10,7 +10,7 @@ class RequestTransformer extends TransformerAbstract {
 
 
     protected $defaultIncludes = [
-        'Contacts'
+        'contacts'
     ];
 
     protected $availableIncludes = [
