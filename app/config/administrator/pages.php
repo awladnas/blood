@@ -36,7 +36,7 @@ return array(
     ),
     'action_permissions'=> array(
         'delete' => false,
-        'new' => false,
-        'create' => false,
+//        'new' => false,
+//        'create' => false,
     ),
 );
