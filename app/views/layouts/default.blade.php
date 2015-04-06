@@ -55,7 +55,7 @@
     <div id="footer" style="margin-top:20px;text-align: center;">
         <nav class="navbar navbar-default ">
             <div class="navbar-inner navbar-content-center footer_alignment" >
-                <p class="text-muted credit">@copyright <a href="#">LifeLie</a>.</p>
+                <p class="text-muted credit">@copyright <a href="#">LifeLi</a>.</p>
             </div>
         </nav>
     </div>
