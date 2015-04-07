@@ -350,6 +350,7 @@ class RequestsController extends BaseController {
      * @return array
      */
     public function filter_request($request_id){
+
         $request = Request::find($request_id);
         if(!$request){
             return $this->set_status(404, 'request not found');

@@ -142,6 +142,12 @@ class User extends \Eloquent {
             }
         }
         else {
+//            $rules = [
+//                'mobile_no' =>  'Required|Min:3|Max:50|Unique:users',
+//                'email'     =>  'Required|Between:3,64|Email',
+//                'password'  =>  'Required|Min:6',
+//                'device_id' =>  'Required|Min:2'
+//                ];
             $arr_rules =  $rules;
         }
         return Validator::make($inputs, $arr_rules);
@@ -152,14 +158,14 @@ class User extends \Eloquent {
      */
     public static function get_csv() {
 
-        $table = User::all();
+        $users = User::all();
         $path = public_path("downloads/");
         $filename = $path . "users.csv";
         $handle = fopen($filename, 'w+');
-        fputcsv($handle, array('id', 'email', 'mobile','name', 'city', 'block', 'date','complete', 'latitude', 'longitude'));
+        fputcsv($handle, array('id', 'email', 'mobile', 'name', '#requests', 'city', 'block', 'date','complete', 'latitude', 'longitude'));
 
-        foreach($table as $row) {
-            fputcsv($handle, array($row['id'], $row['email'], $row['mobile_no'], $row['name'], $row['city'],$row['block'], $row['date'], $row['complete'], $row['latitude'],$row['longitude'] ));
+        foreach($users as $row) {
+            fputcsv($handle, array($row['id'], $row['email'], $row['mobile_no'], $row['name'], $row->requests()->count(), $row['city'],$row['block'], $row['date'], $row['complete'], $row['latitude'],$row['longitude'] ));
         }
 
         fclose($handle);
@@ -168,7 +174,7 @@ class User extends \Eloquent {
             'Content-Type' => 'text/csv',
         );
 
-        return \Response::download($filename, 'user2.csv', $headers);
+        return \Response::download($filename, 'user_data.csv', $headers);
     }
 
     /**

@@ -15,8 +15,6 @@ class ContactTransformer extends TransformerAbstract{
 
     public function transform(RequestContact $contact)
     {
-        return [
-            'contact'    =>  $contact->contact,
-        ];
+        return  $contact->contact;
     }
 } 
