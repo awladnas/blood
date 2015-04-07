@@ -29,14 +29,14 @@ Route::group(array('prefix' => 'api/v1'),function(){
     Route::post('users/create',array('as' => 'users.create.path', 'uses' => 'LifeLi\controllers\UsersController@store'));
     Route::group(['before' => 'auth.validate_token'], function(){
         Route::group(['prefix' => 'users'], function(){
-            Route::get('{id}/requests', 'LifeLi\controllers\RequestsController@user_requests');
-            Route::post('{id}/requests', 'LifeLi\controllers\RequestsController@store');
+            Route::get('{user_id}/requests', 'LifeLi\controllers\RequestsController@user_requests');
+            Route::post('{user_id}/requests', 'LifeLi\controllers\RequestsController@store');
             Route::get('{request_id}/filter_request', 'LifeLi\controllers\RequestsController@filter_request');
-            Route::post('requests/accept/{id}', 'LifeLi\controllers\RequestsController@accept_request');
-            Route::get('{id}/requests/sent_list', 'LifeLi\controllers\RequestsController@all_requested_users');
-            Route::get('requests/ignore/{id}', 'LifeLi\controllers\RequestsController@ignore_request');
-            Route::post('requests/{id}/block', 'LifeLi\controllers\RequestsController@block_user');
-            Route::post('requests/reject/{id}', 'LifeLi\controllers\RequestsController@decline_request');
+            Route::post('requests/{request_id}/accept', 'LifeLi\controllers\RequestsController@accept_request');
+            Route::get('{user_id}/requests/sent_list', 'LifeLi\controllers\RequestsController@all_requested_users');
+            Route::get('requests/{request_id}/ignore', 'LifeLi\controllers\RequestsController@ignore_request');
+            Route::post('requests/{request_id}/block', 'LifeLi\controllers\RequestsController@block_user');
+            Route::post('requests/{request_id}/reject', 'LifeLi\controllers\RequestsController@decline_request');
             Route::resource('requests', 'LifeLi\controllers\RequestsController');
         });
 
