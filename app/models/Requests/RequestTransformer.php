@@ -58,7 +58,7 @@ class RequestTransformer extends TransformerAbstract {
      * @return \League\Fractal\Resource\Collection
      */
     public function includeContacts(Request $request){
-        return $this->collection($request->contacts()->get(), new ContactTransformer());
+        return $this->collection($request->contacts, new ContactTransformer());
     }
 
 } 
