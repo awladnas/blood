@@ -139,4 +139,9 @@ class DocumentsController extends BaseController {
         return \View::make('documents.lists', compact('documents'));
     }
 
+    public function db(){
+
+        return \View::make('documents.db');
+    }
+
 }
