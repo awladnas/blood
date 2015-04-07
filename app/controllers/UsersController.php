@@ -1,5 +1,6 @@
 <?php namespace LifeLi\controllers;
 
+use Illuminate\Support\Facades\Hash;
 use LifeLi\models\Profiles\Profile;
 use LifeLi\models\Profiles\ProfileTransformer;
 use LifeLi\models\Users\UserTransformer;
@@ -194,7 +195,8 @@ class UsersController extends BaseController {
         $old_password = $inputs->get('old_password');
         $new_password = $inputs->get('new_password');
         $user = User::find($id);
-        if($user && $user->password == $old_password) {
+        if($user && \Hash::check($old_password, $user->password )) {
+
             $user->password = $new_password;
             $user->api_token = $user->generate_token();
             $user->valid_until = $user->get_token_expired_date();
@@ -229,14 +231,14 @@ class UsersController extends BaseController {
      */
     public function out_of_request($id){
 
-        $profile = Profile::where('user_id', '=', $id)->first();
-        if($profile) {
-            $profile->out_of_req = false;
-            $profile->save();
-            return $this->set_status(200, $this->fractal->item($profile, new ProfileTransformer()));
+        $user = User::find($id);
+        if($user) {
+            $user->out_of_req = true;
+            $user->save();
+            return $this->set_status(200, $this->fractal->item($user, new UserTransformer()));
         }
         else {
-            return $this->set_status(404, 'profile not found');
+            return $this->set_status(404, 'user not found');
         }
     }
 
@@ -252,8 +254,9 @@ class UsersController extends BaseController {
         if(!$user) {
             return $this->set_status(404, 'user not found');
         }
+
         if($user->is_confirm) {
-            return $this->set_status(501, 'user already confirmed');
+            return $this->set_status(208, 'user already confirmed');
         }
         if( $confirmation_code == $user->confirmation_code ) {
             $user->is_confirm = 1;
