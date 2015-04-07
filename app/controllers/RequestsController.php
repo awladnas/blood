@@ -53,7 +53,7 @@ class RequestsController extends BaseController {
      * @param null $id
      * @return Response
      */
-	public function store($id = null)
+	public function store($id)
 	{
         $user = User::find($id);
         //user not found

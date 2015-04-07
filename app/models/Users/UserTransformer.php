@@ -5,9 +5,6 @@ use LifeLi\models\Profiles\ProfileTransformer;
 
 class UserTransformer extends TransformerAbstract {
 
-//    protected $defaultIncludes = [
-//        'profile'
-//    ];
 
     public function transform(User $user)
     {
@@ -31,19 +28,4 @@ class UserTransformer extends TransformerAbstract {
             'out_of_req'     => $user->out_of_req
         ];
     }
-
-    /**
-     * Include Profile
-     *
-     * @param User $user
-     * @return \League\Fractal\Resource\Item
-     */
-    public function includeProfile(User $user)
-    {
-        if($user->profile) {
-            $profile = $user->profile;
-            return $this->item($profile, new ProfileTransformer());
-        }
-    }
-
 } 
