@@ -66,6 +66,14 @@ return array(
             'title' => 'Status',
             'type' => 'bool'
         ),
+        'request_type' =>array(
+            'title' => 'Req Type',
+            'type' => 'enum',
+            'options' => array(
+                'blood' => 'REQUEST',
+                'donate' => 'OFFER'
+            ),
+        )
     ),
     'action_permissions'=> array(
         'delete' => function($model){

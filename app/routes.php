@@ -38,6 +38,7 @@ Route::group(array('prefix' => 'api/v1'),function(){
             Route::get('requests/{request_id}/ignore', 'LifeLi\controllers\RequestsController@ignore_request');
             Route::post('requests/{request_id}/block', 'LifeLi\controllers\RequestsController@block_user');
             Route::post('requests/{request_id}/reject', 'LifeLi\controllers\RequestsController@decline_request');
+            Route::post('requests/{request_id}/update_status', 'LifeLi\controllers\RequestsController@update_status');
             Route::resource('requests', 'LifeLi\controllers\RequestsController');
         });
 

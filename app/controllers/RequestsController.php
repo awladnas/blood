@@ -323,6 +323,24 @@ class RequestsController extends BaseController {
 
     }
 
+    public function update_status($id) {
+        $user_request = Request_user::find($id);
+        $req_status = \Input::get('action');
+        if(!$user_request){
+            return $this->set_status(404, array('request not found'));
+        }
+
+        $status = RequestStatus::where('status', '=', $req_status)->first();
+        $user_request->status_id = $status->id;
+        $blnUpdate = $user_request->save();
+
+        if($blnUpdate){
+            return $this->set_status(200, array('request status is updated successfully'));
+        }
+        return $this->set_status(403, array('request is read already'));
+    }
+
+
     /**
      * get list of all user requests made by an user
      * @param $user_id
