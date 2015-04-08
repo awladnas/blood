@@ -355,7 +355,8 @@ class RequestsController extends BaseController {
         if(!$request){
             return $this->set_status(404, 'request not found');
         }
-        $type = Input::get('record_type');
+        $type = \Input::get('status');
+
         $status = RequestStatus::where('status', '=', $type)->first();
 
         $response = $request->Request_users()->where('status_id', '=', $status->id)->get();
