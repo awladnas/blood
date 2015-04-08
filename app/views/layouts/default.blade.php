@@ -29,6 +29,7 @@
         <ul class="nav navbar-nav navbar-right">
             @if (Auth::check())
                 <li><a href="/admin/documents">Api Documents</a></li>
+                <li><a href="/admin/db-doc">DB Structure</a></li>
                 <li><a href="/admin/logout">Log Out({{ Auth::user()->name }})</a></li>
             @else
                 <li><a href="/admin/login">Login</a></li>
