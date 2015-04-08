@@ -5,7 +5,9 @@
 @section('main')
 
 <h1>Tables</h1>
-<p> <a href="#admin_user" >admin user</a>, <a href="#user" >users</a>, <a href="#block_user" >block user</a>, <a href="#documents" >documents</a>, <a href="#request" >request</a>  </p>
+<p> <a href="#admin_user" >admin user</a>, <a href="#user" >users</a>, <a href="#block_user" >block user</a>, <a href="#documents" >documents</a>,
+    <a href="#request" >request</a>, <a href="#request_status" >request status</a>, <a href="#requested_users" >requested users</a>,
+    <a href="#requests_contacts" >requests contacts</a>, <a href="#users_notifications" >users notifications</a>, <a href="#settings" >settings</a>  </p>
 
 <h1 id="admin_user"> Admin User</h1>
 <table class="table">
@@ -258,4 +260,112 @@
     </tr>
     </tbody>
 </table>
+
+
+<h1 id="request_status">Request status</h1>
+<table class="table">
+    <thead>
+    <th>field name</th>
+    <th>type</th>
+    <th>function</th>
+    </thead>
+    <tbody>
+    <tr>
+        <td>status</td>
+        <td>string</td>
+        <td colspan="3">Name of the status (replied(1) | shared(2) | replied(1) | declined(3) | read(4) | unread(5) | ignored(6) | blocked(7))</td>
+    </tr>
+    </tbody>
+</table>
+
+<h1 id="requested_users">Requested users</h1>
+<table class="table">
+    <thead>
+    <th>field name</th>
+    <th>type</th>
+    <th>function</th>
+    </thead>
+    <tbody>
+    <tr>
+        <td>request_id</td>
+        <td>integer</td>
+        <td colspan="3"> User Request ID</td>
+    </tr>
+    <tr>
+        <td>receiver</td>
+        <td>integer</td>
+        <td colspan="3">Requested user ID</td>
+    </tr>
+    <tr>
+        <td>status_id</td>
+        <td>integer</td>
+        <td colspan="3">Current status of the request</td>
+    </tr>
+    <tr>
+        <td>content</td>
+        <td>string</td>
+        <td colspan="3">User explanation for rejecting a request</td>
+    </tr>
+    </tbody>
+</table>
+
+<h1 id="requests_contacts">Request Contacts</h1>
+<table class="table">
+    <thead>
+    <th>field name</th>
+    <th>type</th>
+    <th>function</th>
+    </thead>
+    <tbody>
+    <tr>
+        <td>contact</td>
+        <td>string</td>
+        <td colspan="3"> Users additional/current contact numbers against accepting a request  </td>
+    </tr>
+    <tr>
+        <td>contactable_id</td>
+        <td>integer</td>
+        <td colspan="3">Id of the request that was made to a requested user</td>
+    </tr>
+    <tr>
+        <td>contactable_type</td>
+        <td>string</td>
+        <td colspan="3">Associated Model Name of the request </td>
+    </tr>
+    </tbody>
+</table>
+
+
+<h1 id="users_notifications">Users Notifications</h1>
+<table class="table">
+    <thead>
+    <th>field name</th>
+    <th>type</th>
+    <th>function</th>
+    </thead>
+    <tbody>
+    <tr>
+        <td>user_id</td>
+        <td>integer</td>
+        <td colspan="3"> User Id who created the request  </td>
+    </tr>
+    <tr>
+        <td>request_user_id</td>
+        <td>integer</td>
+        <td colspan="3">User Id to whom a request was sent</td>
+    </tr>
+    <tr>
+        <td>notify_type</td>
+        <td>string</td>
+        <td colspan="3">Requested user response against the request </td>
+    </tr>
+    <tr>
+        <td>desc</td>
+        <td>string</td>
+        <td colspan="3">Description of the request in notification </td>
+    </tr>
+    </tbody>
+</table>
+
+
 @stop

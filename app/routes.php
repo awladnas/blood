@@ -42,6 +42,7 @@ Route::group(array('prefix' => 'api/v1'),function(){
         });
 
         Route::post('users/{id}/change_password', 'LifeLi\controllers\UsersController@change_password');
+        Route::get('users/{id}/search_user', 'LifeLi\controllers\UsersController@search_user');
         Route::get('users/{id}/update_token', 'LifeLi\controllers\UsersController@update_token');
         Route::get('users/{id}/check_profile', 'LifeLi\controllers\UsersController@profile_complete');
         Route::get('users/{id}/out_of_request', 'LifeLi\controllers\UsersController@out_of_request');
