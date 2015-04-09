@@ -1,8 +1,7 @@
 <?php namespace LifeLi\controllers;
 
 use Illuminate\Support\Facades\Hash;
-use LifeLi\models\Profiles\Profile;
-use LifeLi\models\Profiles\ProfileTransformer;
+use LifeLi\models\Block_users\BlockUser;
 use LifeLi\models\Users\UserTransformer;
 use Sorskod\Larasponse\Larasponse;
 use LifeLi\models\Users\User;

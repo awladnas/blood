@@ -215,7 +215,7 @@ class User extends \Eloquent {
             ->where('id', '!=', $user_id)
             ->where('out_of_req', '=', false)
             ->where('blood_group', '=', $blood_group)
-            ->whereNotIn('user_id', $blocked_users)
+            ->whereNotIn('id', $blocked_users)
             ->orderBy( 'distance', 'ASC' )
             ->get();
     }
