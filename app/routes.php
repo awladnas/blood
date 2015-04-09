@@ -52,5 +52,17 @@ Route::group(array('prefix' => 'api/v1'),function(){
         Route::resource('users', 'LifeLi\controllers\UsersController');
     });
 });
+App::missing(function($exception)
+{
+
+    $response = Response::json([
+            'error' => true,
+            'message' => 'invalid url',
+            'code' => 404],
+        404
+    );
+    $response->header('Content-Type', 'application/json');
+    return $response;
+});
 
 
