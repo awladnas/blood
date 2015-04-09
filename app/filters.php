@@ -104,6 +104,19 @@ Route::filter('auth.validate_token', function($route, $request)
     $token = $request->header('X-Auth-Token');
 
     $user =  User::where('api_token', $token)->first();
+    //check if token expired
+    if($user->valid_untill < date('Y-m-d H:i:s') ) {
+        $response = Response::json([
+                'error' => true,
+                'message' => 'token expired',
+                'code' => 401],
+            401
+        );
+        $response->header('Content-Type', 'application/json');
+        return $response;
+    }
+
+    //token is invalid
     if(!$user)
     {
         $response = Response::json([
