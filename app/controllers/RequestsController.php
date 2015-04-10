@@ -46,15 +46,124 @@ class RequestsController extends BaseController {
 		//
 	}
 
+//    /**
+//     * Store a newly created resource in storage.
+//     * POST /requests
+//     *
+//     * @param null $id
+//     * @return Response
+//     */
+//	public function store($id)
+//	{
+//        $user = User::find($id);
+//        //user not found
+//        if(!$user) {
+//            return $this->set_status(404, 'user not exist');
+//        }
+//
+//        $request = new Request();
+//        //check if user already request today
+//        if(!$request->eligible_for_requests($id)) {
+//            return $this->set_status(405, 'already requested today');
+//        }
+//        //get all input
+//        $arr_inputs = \Input::json();
+//        $arr_request_data = $arr_inputs->get('request');
+//        $arr_user_data = $arr_inputs->get('users');
+//        $arr_request = $request->get_array_to_db($arr_request_data);
+//        $contacts = $arr_request['contacts'];
+//        unset($arr_request['contacts']);
+//        $v = $request->validate($arr_request, 'create');
+//        if($v->passes()){
+//            //valid data
+//            $arr_request['user_id'] = $user->id;
+//            $request = Request::create($arr_request);
+//            //save contact for request
+//            foreach($contacts as $contact) {
+//                 $request->contacts()->create([
+//                    'contact' => $contact
+//                ]);
+//            }
+//            //get all requested users
+//            $users =  User::whereIn('id', $arr_user_data)->get();
+//            if($request) {
+//                $objNotification = new NotifyUser();
+//                if($request->request_type == 'offer') {
+//                     $objNotification->blood_donor_mail_request($users, $user, $request);
+//                     $objNotification->blood_donate_requests($users, $user,$request );
+//                    /* todo cron for checking after 24 hours and send expired to not response users */
+//                } else {
+//                     $objNotification->blood_recipient_mail_request($users, $user, $request);
+//                     $objNotification->blood_requests($users, $user,$request );
+//                }
+//                return $this->set_status(201, $this->fractal->item(Request::find($request->id), new RequestTransformer()));
+//            }
+//        }
+//        else {
+//            //validation failed
+//            return $this->set_status(204, $v->errors());
+//        }
+//	}
+
     /**
-     * Store a newly created resource in storage.
-     * POST /requests
-     *
-     * @param null $id
-     * @return Response
+     * @param $id
+     * @return array
      */
-	public function store($id)
-	{
+    public function offer_blood($id)
+    {
+        $user = User::find($id);
+        //user not found
+        if(!$user) {
+            return $this->set_status(404, 'user not exist');
+        }
+
+        $request = new Request();
+
+        //get all input
+        $arr_inputs = \Input::json();
+        $arr_request_data = $arr_inputs->get('request');
+        $arr_user_data = $arr_inputs->get('users');
+        $arr_request = $request->get_array_to_db($arr_request_data);
+        $contacts = $arr_request['contacts'];
+        unset($arr_request['contacts']);
+        $v = $request->validate($arr_request, 'create');
+        if($v->passes()){
+            //valid data
+            $arr_request['user_id'] = $user->id;
+            $arr_request['request_type'] = 'offer';
+
+            $request = Request::create($arr_request);
+            //save contact for request
+            foreach($contacts as $contact) {
+                $request->contacts()->create([
+                    'contact' => $contact
+                ]);
+            }
+            //get all requested users
+            $users =  User::whereIn('id', $arr_user_data)->get();
+            if($request) {
+                $objNotification = new NotifyUser();
+                if($request->request_type == 'offer') {
+                    $objNotification->blood_donor_mail_request($users, $user, $request);
+                    $objNotification->blood_donate_requests($users, $user,$request );
+                    /* todo cron for checking after 24 hours and send expired to not response users */
+                }
+                return $this->set_status(201, $this->fractal->item(Request::find($request->id), new RequestTransformer()));
+            }
+        }
+        else {
+            //validation failed
+            return $this->set_status(204, $v->errors());
+        }
+    }
+
+    /**
+     * @param $id
+     * @return array
+     */
+
+    public function request_blood($id)
+    {
         $user = User::find($id);
         //user not found
         if(!$user) {
@@ -77,10 +186,12 @@ class RequestsController extends BaseController {
         if($v->passes()){
             //valid data
             $arr_request['user_id'] = $user->id;
+            $arr_request['request_type'] = 'blood';
+
             $request = Request::create($arr_request);
             //save contact for request
             foreach($contacts as $contact) {
-                 $request->contacts()->create([
+                $request->contacts()->create([
                     'contact' => $contact
                 ]);
             }
@@ -88,13 +199,9 @@ class RequestsController extends BaseController {
             $users =  User::whereIn('id', $arr_user_data)->get();
             if($request) {
                 $objNotification = new NotifyUser();
-                if($request->request_type == 'offer') {
-                     $objNotification->blood_donor_mail_request($users, $user, $request);
-                     $objNotification->blood_donate_requests($users, $user,$request );
-                    /* todo cron for checking after 24 hours and send expired to not response users */
-                } else {
-                     $objNotification->blood_recipient_mail_request($users, $user, $request);
-                     $objNotification->blood_requests($users, $user,$request );
+                if($request->request_type == 'blood') {
+                    $objNotification->blood_recipient_mail_request($users, $user, $request);
+                    $objNotification->blood_requests($users, $user,$request );
                 }
                 return $this->set_status(201, $this->fractal->item(Request::find($request->id), new RequestTransformer()));
             }
@@ -103,7 +210,7 @@ class RequestsController extends BaseController {
             //validation failed
             return $this->set_status(204, $v->errors());
         }
-	}
+    }
 
 	/**
 	 * Display the specified resource.

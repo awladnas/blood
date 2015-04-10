@@ -32,6 +32,8 @@ Route::group(array('prefix' => 'api/v1'),function(){
         Route::group(['prefix' => 'users'], function(){
             Route::get('{user_id}/requests', 'LifeLi\controllers\RequestsController@user_requests');
             Route::post('{user_id}/requests', 'LifeLi\controllers\RequestsController@store');
+            Route::post('{user_id}/request/blood_req', 'LifeLi\controllers\RequestsController@request_blood');
+            Route::post('{user_id}/request/blood_offer', 'LifeLi\controllers\RequestsController@offer_blood');
             Route::get('{request_id}/filter_request', 'LifeLi\controllers\RequestsController@filter_request');
             Route::post('requests/{request_id}/accept', 'LifeLi\controllers\RequestsController@accept_request');
             Route::get('{user_id}/requests/sent_list', 'LifeLi\controllers\RequestsController@all_requested_users');
@@ -40,6 +42,8 @@ Route::group(array('prefix' => 'api/v1'),function(){
             Route::post('requests/{request_id}/reject', 'LifeLi\controllers\RequestsController@decline_request');
             Route::post('requests/{request_id}/update_status', 'LifeLi\controllers\RequestsController@update_status');
             Route::resource('requests', 'LifeLi\controllers\RequestsController');
+//            Route::resource('notifications', 'LifeLi\controllers\NotificationsController');
+            Route::get('{user_id}/notifications', 'LifeLi\controllers\NotificationController@show');
         });
 
         Route::post('users/{id}/change_password', 'LifeLi\controllers\UsersController@change_password');

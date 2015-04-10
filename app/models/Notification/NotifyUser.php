@@ -165,17 +165,17 @@ class NotifyUser {
     }
 
     /**
-     * @param $user_id
-     * @param $request_user_id
+     * @param $sender_id
+     * @param $receiver_id
      * @param $type
      * @param null|string $desc
      * @return
      */
-    public function add_notification($user_id, $request_user_id, $type, $desc = 'no contents'){
+    public function add_notification($sender_id, $receiver_id, $type, $desc = 'no contents'){
 
         $arrData = [
-            'user_id'               =>  $user_id,
-            'request_user_id'       =>  $request_user_id,
+            'sender_id'             =>  $sender_id,
+            'receiver_id'           =>  $receiver_id,
             'notify_type'           =>  $type,
             'desc'                  =>  $desc
         ];

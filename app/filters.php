@@ -105,7 +105,7 @@ Route::filter('auth.validate_token', function($route, $request)
 
     $user =  User::where('api_token', $token)->first();
     //check if token expired
-    if($user->valid_untill < date('Y-m-d H:i:s') ) {
+    if($user->valid_until < date('Y-m-d H:i:s') ) {
         $response = Response::json([
                 'error' => true,
                 'message' => 'token expired',

@@ -13,13 +13,13 @@ class UserNotification extends \Eloquent {
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user(){
-        return $this->belongsTo('LifeLi\models\Users\User');
+        return $this->belongsTo('LifeLi\models\Users\User', 'sender_id', 'id');
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function receiver_user(){
-        return $this->belongsTo('LifeLi\models\Users\User','request_user_id', 'id');
+        return $this->belongsTo('LifeLi\models\Users\User','receiver_id', 'id');
     }
 }

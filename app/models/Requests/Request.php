@@ -20,7 +20,7 @@ class Request extends \Eloquent {
         'user'           => 'user_id',
         'area'           => 'area',
         'content'        => 'content',
-        'request_type'   => 'request_type',
+//        'request_type'   => 'request_type',
         'blood_group'    => 'blood_group',
         'contacts'       => 'contacts',
         'created_date'   => 'created_at',
@@ -56,7 +56,7 @@ class Request extends \Eloquent {
             'area'          => 'Required|Min:3',
             'zone'          => 'Min:3',
             'content'       => 'Required|Min:2',
-            'request_type'  => 'Required|Min:2',
+//            'request_type'  => 'Required|Min:2',
             'blood_group'   => 'Required'
         ];
         $arr_rules = [];

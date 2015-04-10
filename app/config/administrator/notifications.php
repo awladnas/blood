@@ -14,12 +14,12 @@ return array(
         'id' => array(
             'title' => 'Id',
         ),
-        'user' => array(
+        'sender_id' => array(
             'relationship' => 'user',
             'title' => 'sender',
             'select' => '(:table).email'
         ),
-        'request_user_id' => array(
+        'receiver_id' => array(
             'title' => 'Receiver',
             'relationship' => 'receiver_user',
             'select' => '(:table).email'
