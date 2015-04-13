@@ -14,7 +14,7 @@ class RenameUserFieldsOfNotifications extends Migration {
 	{
         DB::statement('ALTER TABLE users_notifications CHANGE user_id sender_id INTEGER');
         DB::statement('ALTER TABLE users_notifications CHANGE request_user_id receiver_id INTEGER');
-        DB::statement('ALTER TABLE users_notifications CHANGE desc content');
+        DB::statement('ALTER TABLE users_notifications CHANGE `description` `content` TEXT');
 	}
 
 
@@ -27,7 +27,7 @@ class RenameUserFieldsOfNotifications extends Migration {
 	{
         DB::statement('ALTER TABLE users_notifications CHANGE sender_id user_id  INTEGER');
         DB::statement('ALTER TABLE users_notifications CHANGE receiver_id request_user_id  INTEGER');
-        DB::statement('ALTER TABLE users_notifications CHANGE content desc');
+        DB::statement('ALTER TABLE users_notifications CHANGE `content` `description` VARCHAR(255)');
 	}
 
 }

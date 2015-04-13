@@ -13,7 +13,7 @@ class AddDescToUsersNotifications extends Migration {
 	public function up()
 	{
 		Schema::table('users_notifications', function(Blueprint $table) {
-			$table->string('desc')->nullable();
+			$table->string('description')->nullable();
 		});
 	}
 
@@ -25,7 +25,7 @@ class AddDescToUsersNotifications extends Migration {
 	public function down()
 	{
 		Schema::table('users_notifications', function(Blueprint $table) {
-            $table->removeColumn('desc');
+            $table->removeColumn('description');
 		});
 	}
 

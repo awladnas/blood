@@ -292,6 +292,42 @@ class RequestsController extends BaseController {
         }
     }
 
+    public function users_sent_requests($user_id){
+
+        $user = User::find($user_id);
+        if($user){
+            $request = $user->requests()->where('request_type', 'REQUEST')->order_by('id', 'desc')->first();
+            $offer = $user->requests()->where('request_type', 'OFFER')->order_by('id', 'desc')->first();
+            if($request) {
+                $this->fractal->parseIncludes('Response');
+                return $this->set_status(200, $this->fractal->collection($request->merge($offer), new RequestTransformer()));
+            }
+            else {
+                return $this->set_status(404, 'no requests of this user');
+            }
+        }
+        else {
+            return $this->set_status(404, 'user not exists');
+        }
+    }
+
+    public function users_receive_requests($user_id){
+
+        $user = User::find($user_id);
+        if($user){
+            $requests = $user->request_user()->whereIn('status_id',[1,2,3]);
+            if($requests->count()) {
+                return $this->set_status(200, $this->fractal->collection($requests, new RequestTransformer()));
+            }
+            else {
+                return $this->set_status(404, 'no requests of this user');
+            }
+        }
+        else {
+            return $this->set_status(404, 'user not exists');
+        }
+    }
+
     /**
      * accept a request by request_user id
      * @param $request_user_id
