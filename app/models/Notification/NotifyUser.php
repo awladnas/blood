@@ -84,7 +84,7 @@ class NotifyUser {
                'content'    => $msg
            ]);
            //add notification to the table
-           $this->add_notification( $donor->id, $user->id, 'blood_donate', $msg);
+           $this->add_notification( $donor->id, $user->id, 'OFFER', $msg);
            $arr_push[] =  \PushNotification::Device($user->device_id);
        }
         return $this->send_notification($arr_push, $msg);
@@ -110,7 +110,7 @@ class NotifyUser {
                 'content'       => $msg
             ]);
             //add notification to the table
-            $this->add_notification($requester->id, $user->id, 'blood_request', $msg);
+            $this->add_notification($requester->id, $user->id, 'REQUEST', $msg);
             $arr_push[] =  \PushNotification::Device($user->device_id);
         }
         return $this->send_notification($arr_push, $msg);

@@ -118,6 +118,10 @@ class RequestsController extends BaseController {
 
         $request = new Request();
 
+        //check if user already request today
+        if(!$request->eligible_for_requests($id, 'OFFER')) {
+            return $this->set_status(405, 'already offer today');
+        }
         //get all input
         $arr_inputs = \Input::json();
         $arr_request_data = $arr_inputs->get('request');
@@ -129,7 +133,7 @@ class RequestsController extends BaseController {
         if($v->passes()){
             //valid data
             $arr_request['user_id'] = $user->id;
-            $arr_request['request_type'] = 'offer';
+            $arr_request['request_type'] = 'OFFER';
 
             $request = Request::create($arr_request);
             //save contact for request
@@ -142,7 +146,7 @@ class RequestsController extends BaseController {
             $users =  User::whereIn('id', $arr_user_data)->get();
             if($request) {
                 $objNotification = new NotifyUser();
-                if($request->request_type == 'offer') {
+                if($request->request_type == 'OFFER') {
                     $objNotification->blood_donor_mail_request($users, $user, $request);
                     $objNotification->blood_donate_requests($users, $user,$request );
                     /* todo cron for checking after 24 hours and send expired to not response users */
@@ -185,7 +189,7 @@ class RequestsController extends BaseController {
         if($v->passes()){
             //valid data
             $arr_request['user_id'] = $user->id;
-            $arr_request['request_type'] = 'blood';
+            $arr_request['request_type'] = 'REQUEST';
 
             $request = Request::create($arr_request);
             //save contact for request
@@ -198,7 +202,7 @@ class RequestsController extends BaseController {
             $users =  User::whereIn('id', $arr_user_data)->get();
             if($request) {
                 $objNotification = new NotifyUser();
-                if($request->request_type == 'blood') {
+                if($request->request_type == 'REQUEST') {
                     $objNotification->blood_recipient_mail_request($users, $user, $request);
                     $objNotification->blood_requests($users, $user,$request );
                 }
