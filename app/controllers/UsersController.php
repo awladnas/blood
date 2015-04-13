@@ -176,9 +176,6 @@ class UsersController extends BaseController {
         $user =  User::find($id);
         if($user)
         {
-            if($user->profile){
-                $user->profile->delete();
-            }
             $user->delete();
             return $this->set_status(200);
         }

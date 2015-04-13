@@ -8,7 +8,6 @@ use LifeLi\models\Requests\Request;
 use LifeLi\models\Requests\RequestContact;
 use LifeLi\models\Requests\RequestTransformer;
 use LifeLi\models\RequestStatus\RequestStatus;
-use LifeLi\models\Setting\Setting;
 use LifeLi\models\UserNotification\UserNotification;
 use LifeLi\models\Users\User;
 use LifeLi\models\Users\UserTransformer;
