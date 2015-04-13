@@ -41,6 +41,9 @@ Route::group(array('prefix' => 'api/v1'),function(){
             Route::post('requests/{request_id}/block', 'LifeLi\controllers\RequestsController@block_user');
             Route::post('requests/{request_id}/reject', 'LifeLi\controllers\RequestsController@decline_request');
             Route::post('requests/{request_id}/update_status', 'LifeLi\controllers\RequestsController@update_status');
+            Route::post('requests/{request_id}/update_status', 'LifeLi\controllers\RequestsController@update_status');
+            Route::get('{user_id}/notifications/sent', 'LifeLi\controllers\RequestsController@users_sent_requests');
+            Route::get('{user_id}/notifications/receive', 'LifeLi\controllers\RequestsController@users_receive_requests');
             Route::resource('requests', 'LifeLi\controllers\RequestsController');
             Route::get('{user_id}/notifications', 'LifeLi\controllers\NotificationController@show');
         });

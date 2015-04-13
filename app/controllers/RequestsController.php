@@ -292,32 +292,45 @@ class RequestsController extends BaseController {
         }
     }
 
+    /**
+     * @param $user_id
+     * @return array
+     */
     public function users_sent_requests($user_id){
 
         $user = User::find($user_id);
         if($user){
-            $request = $user->requests()->where('request_type', 'REQUEST')->order_by('id', 'desc')->first();
-            $offer = $user->requests()->where('request_type', 'OFFER')->order_by('id', 'desc')->first();
+            $this->fractal->parseIncludes('Response');
+            $request = $user->requests()->where('request_type', 'REQUEST')->orderBy('id', 'desc')->first();
+            $output['request'] = '';
             if($request) {
-                $this->fractal->parseIncludes('Response');
-                return $this->set_status(200, $this->fractal->collection($request->merge($offer), new RequestTransformer()));
+                $output['request'] = $this->fractal->item($request, new RequestTransformer());
             }
-            else {
-                return $this->set_status(404, 'no requests of this user');
+            $output['offer'] = '';
+            $offer = $user->requests()->where('request_type', 'OFFER')->orderBy('id', 'desc')->first();
+            if($offer) {
+                $output['offer'] =  $this->fractal->item($offer, new RequestTransformer(), 'offer');
             }
+
+            return $this->set_status(200, $output);
+
         }
         else {
             return $this->set_status(404, 'user not exists');
         }
     }
 
-    public function users_receive_requests($user_id){
+    /**
+     * @param $user_id
+     * @return array
+     */
+    public function users_receive_requests($user_id) {
 
         $user = User::find($user_id);
         if($user){
-            $requests = $user->request_user()->whereIn('status_id',[1,2,3]);
+            $requests = $user->request_user()->whereIn('status_id',[1,2,3])->orderBy('status_id')->get();
             if($requests->count()) {
-                return $this->set_status(200, $this->fractal->collection($requests, new RequestTransformer()));
+                return $this->set_status(200, $this->fractal->collection($requests, new ResponseTransformer()));
             }
             else {
                 return $this->set_status(404, 'no requests of this user');
