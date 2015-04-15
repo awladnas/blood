@@ -87,6 +87,13 @@ class User extends \Eloquent {
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
+    public function offers(){
+        return $this->hasMany('LifeLi\models\Offers\Offer', 'user_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function notifications(){
         return $this->hasMany('LifeLi\models\UserNotification\UserNotification', 'receiver_id', 'id');
     }
