@@ -23,7 +23,6 @@ class RequestTransformer extends TransformerAbstract {
             'id'             => (int) $request->id,
             'user_id'        => (int) $request->user_id,
             'blood_group'    =>  $request->blood_group,
-            'request_type'   =>  $request->request_type,
             'content'        =>  $request->content,
             'area'           =>  $request->area,
             'status'         =>  $request->status,
