@@ -45,64 +45,6 @@ class RequestsController extends BaseController {
 		//
 	}
 
-//    /**
-//     * Store a newly created resource in storage.
-//     * POST /requests
-//     *
-//     * @param null $id
-//     * @return Response
-//     */
-//	public function store($id)
-//	{
-//        $user = User::find($id);
-//        //user not found
-//        if(!$user) {
-//            return $this->set_status(404, 'user not exist');
-//        }
-//
-//        $request = new Request();
-//        //check if user already request today
-//        if(!$request->eligible_for_requests($id)) {
-//            return $this->set_status(405, 'already requested today');
-//        }
-//        //get all input
-//        $arr_inputs = \Input::json();
-//        $arr_request_data = $arr_inputs->get('request');
-//        $arr_user_data = $arr_inputs->get('users');
-//        $arr_request = $request->get_array_to_db($arr_request_data);
-//        $contacts = $arr_request['contacts'];
-//        unset($arr_request['contacts']);
-//        $v = $request->validate($arr_request, 'create');
-//        if($v->passes()){
-//            //valid data
-//            $arr_request['user_id'] = $user->id;
-//            $request = Request::create($arr_request);
-//            //save contact for request
-//            foreach($contacts as $contact) {
-//                 $request->contacts()->create([
-//                    'contact' => $contact
-//                ]);
-//            }
-//            //get all requested users
-//            $users =  User::whereIn('id', $arr_user_data)->get();
-//            if($request) {
-//                $objNotification = new NotifyUser();
-//                if($request->request_type == 'offer') {
-//                     $objNotification->blood_donor_mail_request($users, $user, $request);
-//                     $objNotification->blood_donate_requests($users, $user,$request );
-//                    /* todo cron for checking after 24 hours and send expired to not response users */
-//                } else {
-//                     $objNotification->blood_recipient_mail_request($users, $user, $request);
-//                     $objNotification->blood_requests($users, $user,$request );
-//                }
-//                return $this->set_status(201, $this->fractal->item(Request::find($request->id), new RequestTransformer()));
-//            }
-//        }
-//        else {
-//            //validation failed
-//            return $this->set_status(204, $v->errors());
-//        }
-//	}
 
     /**
      * @param $id
@@ -292,32 +234,45 @@ class RequestsController extends BaseController {
         }
     }
 
+    /**
+     * @param $user_id
+     * @return array
+     */
     public function users_sent_requests($user_id){
 
         $user = User::find($user_id);
         if($user){
-            $request = $user->requests()->where('request_type', 'REQUEST')->order_by('id', 'desc')->first();
-            $offer = $user->requests()->where('request_type', 'OFFER')->order_by('id', 'desc')->first();
+            $this->fractal->parseIncludes('Response');
+            $request = $user->requests()->where('request_type', 'REQUEST')->orderBy('id', 'desc')->first();
+            $output['request'] = '';
             if($request) {
-                $this->fractal->parseIncludes('Response');
-                return $this->set_status(200, $this->fractal->collection($request->merge($offer), new RequestTransformer()));
+                $output['request'] = $this->fractal->item($request, new RequestTransformer());
             }
-            else {
-                return $this->set_status(404, 'no requests of this user');
+            $output['offer'] = '';
+            $offer = $user->requests()->where('request_type', 'OFFER')->orderBy('id', 'desc')->first();
+            if($offer) {
+                $output['offer'] =  $this->fractal->item($offer, new RequestTransformer(), 'offer');
             }
+
+            return $this->set_status(200, $output);
+
         }
         else {
             return $this->set_status(404, 'user not exists');
         }
     }
 
-    public function users_receive_requests($user_id){
+    /**
+     * @param $user_id
+     * @return array
+     */
+    public function users_receive_requests($user_id) {
 
         $user = User::find($user_id);
         if($user){
-            $requests = $user->request_user()->whereIn('status_id',[1,2,3]);
+            $requests = $user->request_user()->whereIn('status_id',[1,2,3])->orderBy('status_id')->get();
             if($requests->count()) {
-                return $this->set_status(200, $this->fractal->collection($requests, new RequestTransformer()));
+                return $this->set_status(200, $this->fractal->collection($requests, new ResponseTransformer()));
             }
             else {
                 return $this->set_status(404, 'no requests of this user');

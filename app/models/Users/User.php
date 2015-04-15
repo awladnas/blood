@@ -64,6 +64,35 @@ class User extends \Eloquent {
         'is_confirm'     => 'is_confirm',
         'created_at'     => 'created_at'
     );
+
+    /**
+     * @var array
+     */
+    protected $get_blood_donate_type = [
+        'A+'    => ['A+', 'AB+'],
+        'O+'    => ['O+', 'A+', 'B+', 'AB+'],
+        'B+'    => ['B+', 'AB+'],
+        'AB+'   => ['AB+'],
+        'A-'    => ['A+', 'A-', 'AB+', 'AB-'],
+        'O-'    => ['A+', 'O+', 'B+', 'AB+', 'A-', 'O-', 'B-', 'AB-'],
+        'B-'    => ['B+', 'B-', 'AB+', 'AB-'],
+        'AB-'   => ['AB+', 'AB- ']
+    ];
+    /**
+     * @var array
+     */
+
+    protected $get_blood_receive_type = [
+        'A+'    => ['A+', 'A-', 'O+', 'O-'],
+        'O+'    => ['O+', 'O-'],
+        'B+'    => ['B+', 'B-', 'O+', 'O-'],
+        'AB+'   => ['A+', 'O+', 'B+', 'AB+', 'A-', 'O-', 'B-', 'AB-'],
+        'A-'    => ['A-', 'O-'],
+        'O-'    => ['O-'],
+        'B-'    => ['B-', 'O-'],
+        'AB-'   => ['AB-', 'A-', 'B-', 'O-']
+    ];
+
     /**
      * @var array
      */
@@ -207,11 +236,11 @@ class User extends \Eloquent {
      * @internal param $profile_id
      * @return array|static[]
      */
-    public function get_closest_profiles($user_id, $lat, $lng, $max_distance = 20, $blood_group, $blocked_users = array()){
+    public function get_closest_profiles($user_id, $type, $lat, $lng, $max_distance = 20, $blood_group, $blocked_users = array()){
 
         $gr_circle_radius = 6371; //km
 
-
+        $arrBloodGroups  = $type == "OFFER" ? $this->get_blood_donate_type[$blood_group] : $this->get_blood_receive_type[$blood_group] ;
         /*
          *  Generate the select field for distance
          */
@@ -234,7 +263,7 @@ class User extends \Eloquent {
             ->take( $this->max_user_in_search )
             ->where('id', '!=', $user_id)
             ->where('out_of_req', '=', false)
-            ->where('blood_group', '=', $blood_group)
+            ->whereIn('blood_group', $arrBloodGroups)
             ->whereNotIn('id', $blocked_users)
             ->orderBy( 'distance', 'ASC' )
             ->get();

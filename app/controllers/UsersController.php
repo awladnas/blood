@@ -321,6 +321,7 @@ class UsersController extends BaseController {
         }
         $city = \Input::get('city');
         $blood_group = \Input::get('blood_group');
+        $request_type = \Input::get('request_type');
         $lat = \Input::get('lat');
         $lng = \Input::get('lng');
 
@@ -334,11 +335,12 @@ class UsersController extends BaseController {
             $lng =  $user->longitude;
         }
         $blood_group = isset($blood_group)? $blood_group : $user->blood_group;
+
         $distance = isset($distance)? $distance : 10;
         $block_users = BlockUser::where('blocked_by','=', $user->id)->lists('blocked_by');
         $unavailable_users = User::where('out_of_req', '=', true)->lists('id');
         $blocked_users = array_merge($block_users, $unavailable_users);
-        $objUsers = $user->get_closest_profiles($user->id, $lat, $lng, $distance, $blood_group, $blocked_users);
+        $objUsers = $user->get_closest_profiles($user->id, $request_type, $lat, $lng, $distance, $blood_group, $blocked_users);
         $arrSearchedUsers = $this->fractal->collection($objUsers, new UserTransformer());
         $arr_data['users'] = $arrSearchedUsers['data'];
         $arr_data['location'] = array('lat' => $lat, 'lng' => $lng);
