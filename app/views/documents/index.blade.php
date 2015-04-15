@@ -11,7 +11,7 @@
 			<tr>
 				<th>Url</th>
 				<th>Description</th>
-				<th>Request_method</th>
+				<th>Request method</th>
 				<th>&nbsp;</th>
 			</tr>
 		</thead>
