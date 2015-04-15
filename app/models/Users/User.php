@@ -133,6 +133,13 @@ class User extends \Eloquent {
     public function request_user(){
         return $this->hasMany('LifeLi\models\Request_users\Request_user', 'receiver', 'id');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function offer_users(){
+        return $this->hasMany('LifeLi\models\Offers\OfferUser', 'receiver', 'id');
+    }
     /**
      * @param int $length
      * @return string

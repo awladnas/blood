@@ -3,6 +3,7 @@
 namespace LifeLi\models\Notification;
 
 
+use LifeLi\models\Offers\OfferUser;
 use LifeLi\models\Request_users\Request_user;
 use LifeLi\models\UserNotification\UserNotification;
 
@@ -77,10 +78,10 @@ class NotifyUser {
         $msg .= 'Communication : ' . $donor->mobile_no;
        foreach($users as $user) {
            //create user requests
-           Request_user::create([
-               'request_id' => $request->id,
+           OfferUser::create([
+               'offer_id' => $request->id,
                'receiver'   => $user->id,
-               'status_id'  => Request_user::$request_status['unread'],
+               'status_id'  => OfferUser::$request_status['unread'],
                'content'    => $msg
            ]);
            //add notification to the table
@@ -177,7 +178,7 @@ class NotifyUser {
             'sender_id'             =>  $sender_id,
             'receiver_id'           =>  $receiver_id,
             'notify_type'           =>  $type,
-            'desc'                  =>  $desc
+            'content'               =>  $desc
         ];
         return UserNotification::create($arrData);
     }
