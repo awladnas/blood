@@ -128,7 +128,7 @@ class NotifyUser {
 //            ->to($requester->device_token)
 //            ->send($this->_blood_accept_message. ' Contact: '. $acceptor->mobile_no);
 //
-        $this->add_notification($requester->id, $acceptor->id, 'accept_request');
+        $this->add_notification($acceptor->id, $requester->id, 'accept_request');
 //        $response = $push->getAdapter()->getResponse();
 //        return $response;
     }
@@ -142,7 +142,7 @@ class NotifyUser {
 //            ->to($requester->device_token)
 //            ->send($this->_blood_accept_message. ' Contact: '. $acceptor->mobile_no);
 //
-        $this->add_notification($requester->id, $user->id, 'decline_request');
+        $this->add_notification($user->id, $requester->id,  'decline_request');
 //        $response = $push->getAdapter()->getResponse();
 //        return $response;
     }

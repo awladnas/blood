@@ -361,6 +361,11 @@ class RequestsController extends BaseController {
 
     }
 
+    /**
+     *update request status
+     * @param $id
+     * @return array
+     */
     public function update_status($id) {
         $user_request = Request_user::find($id);
         $req_status = \Input::get('action');

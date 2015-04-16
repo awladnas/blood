@@ -44,6 +44,7 @@ class OffersController extends BaseController {
     }
 
     /**
+     * create a offer by user_id
      * @param $id
      * @return array
      */
@@ -57,7 +58,7 @@ class OffersController extends BaseController {
 
         $request = new Offer();
 
-        //check if user already request today
+        //check if user already offered today
         if(!$request->eligible_for_requests($id, 'OFFER')) {
             return $this->set_status(405, 'already offer today');
         }
@@ -75,13 +76,13 @@ class OffersController extends BaseController {
             $arr_request['request_type'] = 'OFFER';
 
             $request = Offer::create($arr_request);
-            //save contact for request
+            //save contact for offer
             foreach($contacts as $contact) {
                 $request->contacts()->create([
                     'contact' => $contact
                 ]);
             }
-            //get all requested users
+            //get all offered users
             $users =  User::whereIn('id', $arr_user_data)->get();
             if($request) {
                 $objNotification = new NotifyUser();
@@ -108,7 +109,7 @@ class OffersController extends BaseController {
     {
         /** @var Request $request */
         $request = Offer::find($id);
-        //request not found
+        //offer not found
         if(!$request) {
             return $this->set_status(404, 'offer not found');
         }
@@ -130,7 +131,7 @@ class OffersController extends BaseController {
 
     /**
      * Update the specified resource in storage.
-     * PUT /requests/{id}
+     * PUT /offers/{id}
      *
      * @param  int  $id
      * @return Response
@@ -153,7 +154,7 @@ class OffersController extends BaseController {
     }
 
     /**
-     * list of requests created by an user
+     * list of offers created by an user
      * @param $user_id
      * @return array
      */
@@ -176,6 +177,7 @@ class OffersController extends BaseController {
     }
 
     /**
+     * get the list of offer user sent
      * @param $user_id
      * @return array
      */
@@ -198,6 +200,7 @@ class OffersController extends BaseController {
     }
 
     /**
+     * get the list of received offer
      * @param $user_id
      * @return array
      */
@@ -220,7 +223,7 @@ class OffersController extends BaseController {
     }
 
     /**
-     * accept a request by request_user id
+     * accept a offer by offer_id
      * @param $request_user_id
      * @return array
      */
@@ -242,13 +245,13 @@ class OffersController extends BaseController {
         //add contract
         $arr_inputs = \Input::json();
         $contacts = $arr_inputs->get('contacts');
-        //save contact for request
+        //save contact for offer
         foreach($contacts as $contact) {
             $user_offer->contacts()->create([
                 'contact' => $contact
             ]);
         }
-        //update request a
+        //update offer status
         $user_offer->offer->status = 1;
         $user_offer->offer->save();
         $acceptor = User::find($user_offer->receiver);
@@ -269,14 +272,14 @@ class OffersController extends BaseController {
     }
 
     /**
-     * decline a request by request_user id
+     * decline a offer by user offer_id
      * @param $request_user_id
      * @return array
      */
     public function decline_offer($offer_id){
 
         $user_offer = OfferUser::find($offer_id);
-        //user request not found
+        //user offer not found
         if(!$user_offer){
             return $this->set_status(404, 'offer not found');
         }
@@ -313,7 +316,7 @@ class OffersController extends BaseController {
     }
 
     /**
-     * block user by user_request id
+     * block user by user_offer id
      * @param $id
      * @return array
      */
@@ -340,7 +343,7 @@ class OffersController extends BaseController {
     }
 
     /**
-     * ignore a user request
+     * ignore a user offer
      * @param $id
      * @return array
      */
@@ -359,6 +362,12 @@ class OffersController extends BaseController {
         return $this->set_status(403, array('offer can not be ignore'));
 
     }
+
+    /**
+     * update status of the user offer
+     * @param $id
+     * @return array
+     */
 
     public function update_status($id) {
         $user_request = OfferUser::find($id);
@@ -379,7 +388,7 @@ class OffersController extends BaseController {
 
 
     /**
-     * get list of all user requests made by an user
+     * get list of all user offer made by an user
      * @param $user_id
      * @return array
      */
@@ -401,6 +410,7 @@ class OffersController extends BaseController {
     }
 
     /**
+     * filter the offer based on status
      * @param $request_id
      * @return array
      */
@@ -419,7 +429,7 @@ class OffersController extends BaseController {
     }
 
     /**
-     * @desc delete user request by id
+     * @desc delete user offer by id
      * @since 2015-03-31
      * @version 2015-03-31
      * @author awlad < awlad@nascenia.com >
