@@ -6,9 +6,9 @@
 
 return array(
 
-    'title' => 'Requests',
-    'single' => 'request',
-    'model' => 'LifeLi\models\Requests\Request',
+    'title' => 'Offers',
+    'single' => 'Offer',
+    'model' => 'LifeLi\models\Offers\Offer',
 
     'columns' => array(
         'id' => array(
@@ -42,6 +42,10 @@ return array(
         'status' => array(
             'title' => 'Status',
             'type' => 'bool',
+        ),
+        'content' => array(
+            'title' => 'Content',
+            'type' => 'text',
         ),
     ),
     'filters' => array(
