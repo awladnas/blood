@@ -362,7 +362,7 @@ class RequestsController extends BaseController {
     }
 
     /**
-     *update request status
+     * update request status
      * @param $id
      * @return array
      */
@@ -418,6 +418,9 @@ class RequestsController extends BaseController {
         }
         $type = \Input::get('status');
 
+        if( !isset(Request_user::$request_status[$type])){
+            return $this->set_status(404, 'request status type not found');
+        }
         $status = RequestStatus::where('status', '=', $type)->first();
 
         $response = $request->Request_users()->where('status_id', '=', $status->id)->get();

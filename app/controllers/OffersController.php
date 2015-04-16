@@ -163,7 +163,6 @@ class OffersController extends BaseController {
         $user = User::find($user_id);
         if($user){
             $requests = $user->offers;
-            return $requests;
             if($requests->count()) {
                 return $this->set_status(200, $this->fractal->collection($requests, new OfferTransformer()));
             }
@@ -420,8 +419,12 @@ class OffersController extends BaseController {
         if(!$offer){
             return $this->set_status(404, 'offer not found');
         }
+
         $type = \Input::get('status');
 
+        if( !isset(OfferUser::$request_status[$type])){
+            return $this->set_status(404, 'offer status type not found');
+        }
         $status = RequestStatus::where('status', '=', $type)->first();
 
         $response = $offer->offer_users()->where('status_id', '=', $status->id)->get();
