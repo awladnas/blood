@@ -1,11 +1,10 @@
 <?php
 namespace LifeLi\controllers;
 
+use LifeLi\models\Offers\OfferTransformer;
 use LifeLi\models\Block_users\BlockUser;
 use LifeLi\models\Notification\NotifyUser;
-use LifeLi\models\Offer\OfferTransformer;
 use LifeLi\models\Offers\Offer;
-use LifeLi\models\Offers\OfferResponse;
 use LifeLi\models\Offers\OfferResponseTransformer;
 use LifeLi\models\Offers\OfferUser;
 use LifeLi\models\RequestStatus\RequestStatus;
@@ -64,7 +63,7 @@ class OffersController extends BaseController {
         }
         //get all input
         $arr_inputs = \Input::json();
-        $arr_request_data = $arr_inputs->get('request');
+        $arr_request_data = $arr_inputs->get('offer');
         $arr_user_data = $arr_inputs->get('users');
         $arr_request = $request->get_array_to_db($arr_request_data);
         $contacts = $arr_request['contacts'];
@@ -75,7 +74,7 @@ class OffersController extends BaseController {
             $arr_request['user_id'] = $user->id;
             $arr_request['request_type'] = 'OFFER';
 
-            $request = Request::create($arr_request);
+            $request = Offer::create($arr_request);
             //save contact for request
             foreach($contacts as $contact) {
                 $request->contacts()->create([
@@ -88,9 +87,7 @@ class OffersController extends BaseController {
                 $objNotification = new NotifyUser();
                 $objNotification->blood_donor_mail_request($users, $user, $request);
                 $objNotification->blood_donate_requests($users, $user,$request );
-                /* todo cron for checking after 24 hours and send expired to not response users */
-
-                return $this->set_status(201, $this->fractal->item(Request::find($request->id), new RequestTransformer()));
+                return $this->set_status(201, $this->fractal->item(Offer::find($request->id), new OfferTransformer()));
             }
         }
         else {
@@ -160,11 +157,12 @@ class OffersController extends BaseController {
      * @param $user_id
      * @return array
      */
-    public function user_receive_offers($user_id){
+    public function offer_lists($user_id){
 
         $user = User::find($user_id);
         if($user){
             $requests = $user->offers;
+            return $requests;
             if($requests->count()) {
                 return $this->set_status(200, $this->fractal->collection($requests, new OfferTransformer()));
             }
@@ -185,10 +183,10 @@ class OffersController extends BaseController {
 
         $user = User::find($user_id);
         if($user){
-            $offers = $user->offers()->order_by('id', 'desc')->first();
+            $offers = $user->offers()->orderBy('id', 'desc')->first();
             if($offers) {
                 $this->fractal->parseIncludes('Response');
-                return $this->set_status(200, $this->fractal->collection($offers, new OfferTransformer()));
+                return $this->set_status(200, $this->fractal->item($offers, new OfferTransformer()));
             }
             else {
                 return $this->set_status(404, 'no requests of this user');
@@ -207,9 +205,10 @@ class OffersController extends BaseController {
 
         $user = User::find($user_id);
         if($user){
-            $requests = $user->offer_users()->whereIn('status_id',[1,2,3]);
+            $requests = $user->offer_users()->whereIn('status_id',[1,2,3,5])->orderBy('status_id')->get();
+
             if($requests->count()) {
-                return $this->set_status(200, $this->fractal->collection($requests, new OfferTransformer()));
+                return $this->set_status(200, $this->fractal->collection($requests, new OfferResponseTransformer()));
             }
             else {
                 return $this->set_status(404, 'no requests of this user');
@@ -274,7 +273,7 @@ class OffersController extends BaseController {
      * @param $request_user_id
      * @return array
      */
-    public function decline_request($request_user_id){
+    public function decline_offer($request_user_id){
 
         $user_request = OfferUser::find($request_user_id);
         //user request not found
@@ -345,7 +344,7 @@ class OffersController extends BaseController {
      * @param $id
      * @return array
      */
-    public function ignore_request($id) {
+    public function ignore_offer($id) {
 
         $user_request = OfferUser::find($id);
         if(!$user_request){
@@ -405,7 +404,7 @@ class OffersController extends BaseController {
      * @param $request_id
      * @return array
      */
-    public function filter_request($request_id){
+    public function filter_offer($request_id){
 
         $request = Offer::find($request_id);
         if(!$request){

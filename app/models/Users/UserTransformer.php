@@ -1,7 +1,6 @@
 <?php namespace LifeLi\models\Users;
 
 use League\Fractal\TransformerAbstract;
-use LifeLi\models\Profiles\ProfileTransformer;
 
 class UserTransformer extends TransformerAbstract {
 

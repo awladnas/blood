@@ -38,7 +38,7 @@ class Offer extends \Eloquent {
      */
     public function offer_users()
     {
-        return $this->hasMany('LifeLi\models\OfferUser\OfferUser');
+        return $this->hasMany('LifeLi\models\Offers\OfferUser');
     }
 
     /**

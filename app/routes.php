@@ -32,7 +32,7 @@ Route::group(array('prefix' => 'api/v1'),function(){
         Route::group(['prefix' => 'users'], function(){
             Route::get('{user_id}/requests', 'LifeLi\controllers\RequestsController@user_requests');
             Route::post('{user_id}/requests', 'LifeLi\controllers\RequestsController@request_blood');
-            Route::post('{user_id}/offers', 'LifeLi\controllers\RequestsController@offer_blood');
+
             Route::get('{request_id}/filter_request', 'LifeLi\controllers\RequestsController@filter_request');
             Route::post('requests/{request_id}/accept', 'LifeLi\controllers\RequestsController@accept_request');
             Route::get('{user_id}/requests/sent_list', 'LifeLi\controllers\RequestsController@all_requested_users');
@@ -44,6 +44,16 @@ Route::group(array('prefix' => 'api/v1'),function(){
             Route::get('{user_id}/notifications/sent', 'LifeLi\controllers\RequestsController@users_sent_requests');
             Route::get('{user_id}/notifications/receive', 'LifeLi\controllers\RequestsController@users_receive_requests');
             Route::resource('requests', 'LifeLi\controllers\RequestsController');
+
+            Route::post('{user_id}/offers', 'LifeLi\controllers\OffersController@store');
+            Route::get('{user_id}/offers/lists', 'LifeLi\controllers\OffersController@offer_lists');
+            Route::get('{user_id}/offers/receive', 'LifeLi\controllers\OffersController@users_receive_offers');
+            Route::get('{user_id}/offers/sent', 'LifeLi\controllers\OffersController@users_sent_offers');
+            Route::get('{offer_id}/filter_offer', 'LifeLi\controllers\OffersController@filter_offer');
+            Route::post('offers/{offer_id}/accept', 'LifeLi\controllers\OffersController@accept_offer');
+            Route::post('offers/{offer_id}/reject', 'LifeLi\controllers\OffersController@decline_offer');
+            Route::resource('offers', 'LifeLi\controllers\OffersController');
+
             Route::get('{user_id}/notifications', 'LifeLi\controllers\NotificationController@show');
         });
 

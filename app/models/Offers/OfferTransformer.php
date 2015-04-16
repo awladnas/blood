@@ -1,12 +1,13 @@
 <?php
 
 
-namespace LifeLi\models\Offer;
+namespace LifeLi\models\Offers;
 
 
 use League\Fractal\TransformerAbstract;
 use LifeLi\models\Offers\Offer;
 use LifeLi\models\Offers\OfferUser;
+use LifeLi\models\Requests\ContactTransformer;
 
 class OfferTransformer extends TransformerAbstract {
 
@@ -38,10 +39,10 @@ class OfferTransformer extends TransformerAbstract {
      * @param Request $request
      * @return \League\Fractal\Resource\Collection
      */
-    public function includeResponse(Request $request)
+    public function includeResponse(Offer $request)
     {
-        if($request->Request_users()) {
-            $type = Input::get('type');
+        if($request->offer_users()) {
+            $type = \Input::get('type');
             if(isset($type, OfferUser::$request_status[$type]) ) {
                 $users_offers = $request->offer_users()->where('status_id', '=',OfferUser::$request_status[$type] )->get();
             }
@@ -49,7 +50,7 @@ class OfferTransformer extends TransformerAbstract {
                 $users_offers = $request->offer_users()->get();
             }
 
-            return $this->collection($users_offers, new ResponseTransformer());
+            return $this->collection($users_offers, new OfferResponseTransformer());
         }
     }
 
@@ -57,7 +58,7 @@ class OfferTransformer extends TransformerAbstract {
      * @param Request $request
      * @return \League\Fractal\Resource\Collection
      */
-    public function includeContacts(Request $request){
-        return $this->collection($request->contacts, new ContactTransformer());
+    public function includeContacts(Offer $request){
+        return $this->collection($request->contacts, new OfferContactTransformer());
     }
 } 
