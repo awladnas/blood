@@ -6,7 +6,7 @@ class Request extends \Eloquent {
     /**
      * @var array
      */
-    protected $fillable = ['id', 'user_id', 'blood_group', 'created_at', 'updated_at', 'area', 'content', 'request_type'];
+    protected $fillable = ['id', 'user_id', 'blood_group', 'created_at', 'updated_at', 'area', 'content'];
     /**
      * @var string
      */
@@ -86,8 +86,8 @@ class Request extends \Eloquent {
         return $arrOutput;
     }
 
-    public function eligible_for_requests($user_id, $type= 'REQUEST'){
-        $requests = $this->where('user_id', $user_id)->where('request_type', '=', $type)->where('created_at', '>=',  date('Y-m-d H:i:s',time()-86400))->get();
+    public function eligible_for_requests($user_id){
+        $requests = $this->where('user_id', $user_id)->where('created_at', '>=',  date('Y-m-d H:i:s',time()-86400))->get();
         return count($requests) > 0 ? false : true;
     }
 

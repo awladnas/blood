@@ -31,7 +31,7 @@ Route::group(array('prefix' => 'api/v1'),function(){
     Route::group(['before' => 'auth.validate_token'], function(){
         Route::group(['prefix' => 'users'], function(){
             Route::get('{user_id}/requests', 'LifeLi\controllers\RequestsController@user_requests');
-            Route::post('{user_id}/requests', 'LifeLi\controllers\RequestsController@request_blood');
+            Route::post('{user_id}/requests', 'LifeLi\controllers\RequestsController@store');
 
             Route::get('{request_id}/filter_request', 'LifeLi\controllers\RequestsController@filter_request');
             Route::post('requests/{request_id}/accept', 'LifeLi\controllers\RequestsController@accept_request');
