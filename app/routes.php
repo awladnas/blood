@@ -40,18 +40,22 @@ Route::group(array('prefix' => 'api/v1'),function(){
             Route::post('requests/{request_id}/block', 'LifeLi\controllers\RequestsController@block_user');
             Route::post('requests/{request_id}/reject', 'LifeLi\controllers\RequestsController@decline_request');
             Route::post('requests/{request_id}/update_status', 'LifeLi\controllers\RequestsController@update_status');
-            Route::post('requests/{request_id}/update_status', 'LifeLi\controllers\RequestsController@update_status');
             Route::get('{user_id}/notifications/sent', 'LifeLi\controllers\RequestsController@users_sent_requests');
             Route::get('{user_id}/notifications/receive', 'LifeLi\controllers\RequestsController@users_receive_requests');
             Route::resource('requests', 'LifeLi\controllers\RequestsController');
 
+            Route::get('{user_id}/offers', 'LifeLi\controllers\OffersController@user_offers');
             Route::post('{user_id}/offers', 'LifeLi\controllers\OffersController@store');
-            Route::get('{user_id}/offers/lists', 'LifeLi\controllers\OffersController@offer_lists');
             Route::get('{user_id}/offers/receive', 'LifeLi\controllers\OffersController@users_receive_offers');
-            Route::get('{user_id}/offers/sent', 'LifeLi\controllers\OffersController@users_sent_offers');
-            Route::get('{offer_id}/filter_offer', 'LifeLi\controllers\OffersController@filter_offer');
+            Route::get('{user_id}/offers/sent_users', 'LifeLi\controllers\OffersController@users_sent_offers');
             Route::post('offers/{offer_id}/accept', 'LifeLi\controllers\OffersController@accept_offer');
             Route::post('offers/{offer_id}/reject', 'LifeLi\controllers\OffersController@decline_offer');
+            Route::post('offers/{offer_id}/block', 'LifeLi\controllers\OffersController@block_user');
+            Route::get('offers/{offer_id}/ignore', 'LifeLi\controllers\OffersController@ignore_offer');
+            Route::post('offers/{offer_id}/update_status', 'LifeLi\controllers\OffersController@update_status');
+
+            Route::get('{user_id}/offers/sent_list', 'LifeLi\controllers\OffersController@all_offered_users');
+            Route::get('{offer_id}/filter_offer', 'LifeLi\controllers\OffersController@filter_offer');
             Route::resource('offers', 'LifeLi\controllers\OffersController');
 
             Route::get('{user_id}/notifications', 'LifeLi\controllers\NotificationController@show');

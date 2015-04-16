@@ -110,7 +110,7 @@ class OffersController extends BaseController {
         $request = Offer::find($id);
         //request not found
         if(!$request) {
-            return $this->set_status(404, 'request not found');
+            return $this->set_status(404, 'offer not found');
         }
         $this->fractal->parseIncludes('Response');
         return $this->set_status(200, $this->fractal->item($request, new OfferTransformer()));
@@ -157,7 +157,7 @@ class OffersController extends BaseController {
      * @param $user_id
      * @return array
      */
-    public function offer_lists($user_id){
+    public function user_offers($user_id){
 
         $user = User::find($user_id);
         if($user){
@@ -167,7 +167,7 @@ class OffersController extends BaseController {
                 return $this->set_status(200, $this->fractal->collection($requests, new OfferTransformer()));
             }
             else {
-                return $this->set_status(404, 'no requests of this user');
+                return $this->set_status(404, 'no offer of this user');
             }
         }
         else {
@@ -189,7 +189,7 @@ class OffersController extends BaseController {
                 return $this->set_status(200, $this->fractal->item($offers, new OfferTransformer()));
             }
             else {
-                return $this->set_status(404, 'no requests of this user');
+                return $this->set_status(404, 'no offer of this user');
             }
         }
         else {
@@ -211,7 +211,7 @@ class OffersController extends BaseController {
                 return $this->set_status(200, $this->fractal->collection($requests, new OfferResponseTransformer()));
             }
             else {
-                return $this->set_status(404, 'no requests of this user');
+                return $this->set_status(404, 'no offer of this user');
             }
         }
         else {
@@ -224,38 +224,38 @@ class OffersController extends BaseController {
      * @param $request_user_id
      * @return array
      */
-    public function accept_offer($request_user_id) {
+    public function accept_offer($offer_id) {
 
-        $user_request = OfferUser::find($request_user_id);
+        $user_offer = OfferUser::find($offer_id);
         //request not found
-        if(!$user_request){
-            return $this->set_status(404, 'request not found');
+        if(!$user_offer){
+            return $this->set_status(404, 'offer not found');
         }
         //check already accepted by someone
-        if($user_request->offer->status == 1) {
-            return $this->set_status(404, 'Request already accepted');
+        if($user_offer->offer->status == 1) {
+            return $this->set_status(404, 'Offer already accepted');
         }
         //update user request to set it replied
-        $user_request->status_id = OfferUser::$request_status['replied'];
-        $user_request->save();
+        $user_offer->status_id = OfferUser::$request_status['replied'];
+        $user_offer->save();
 
         //add contract
         $arr_inputs = \Input::json();
         $contacts = $arr_inputs->get('contacts');
         //save contact for request
         foreach($contacts as $contact) {
-            $user_request->contacts()->create([
+            $user_offer->contacts()->create([
                 'contact' => $contact
             ]);
         }
         //update request a
-        $user_request->offer->status = 1;
-        $user_request->offer->save();
-        $acceptor = User::find($user_request->receiver);
+        $user_offer->offer->status = 1;
+        $user_offer->offer->save();
+        $acceptor = User::find($user_offer->receiver);
         if($acceptor) {
             $notify = new NotifyUser();
-            $request = Offer::find($user_request->request_id);
-            $requester = User::find($request->user_id);
+            $offer = Offer::find($user_offer->offer_id);
+            $requester = User::find($offer->user_id);
             //send accept request notification
             $notify->ack_accept($acceptor, $requester);
             $arrUser = $this->fractal->item($acceptor,new UserTransformer());
@@ -264,7 +264,7 @@ class OffersController extends BaseController {
             return $this->set_status(200, $arrUser);
         }
         else {
-            return $this->set_status(200, array('request user not found'));
+            return $this->set_status(200, array('offer user not found'));
         }
     }
 
@@ -273,42 +273,42 @@ class OffersController extends BaseController {
      * @param $request_user_id
      * @return array
      */
-    public function decline_offer($request_user_id){
+    public function decline_offer($offer_id){
 
-        $user_request = OfferUser::find($request_user_id);
+        $user_offer = OfferUser::find($offer_id);
         //user request not found
-        if(!$user_request){
-            return $this->set_status(404, 'request not found');
+        if(!$user_offer){
+            return $this->set_status(404, 'offer not found');
         }
         //get all input
         $input = \Input::json();
         $content = $input->get('message');
         if($content){
-            $user_request->content = $content;
+            $user_offer->content = $content;
         }
-        $request = Offer::find($user_request->request_id);
+        $offer = Offer::find($user_offer->offer_id);
         //check request exists or not
-        if(!$request){
-            return $this->set_status(404, 'request not found');
+        if(!$offer){
+            return $this->set_status(404, 'offer not found');
         }
         //check request is finished or not
-        if($request->status){
-            return $this->set_status(405, 'request finished');
+        if($offer->status){
+            return $this->set_status(405, 'offer finished');
         }
 
         //check all ready declined or not
-        if($user_request->status_id != OfferUser::$request_status['declined']){
-            $user_request->status_id = OfferUser::$request_status['declined'];
-            $user_request->save();
+        if($user_offer->status_id != OfferUser::$request_status['declined']){
+            $user_offer->status_id = OfferUser::$request_status['declined'];
+            $user_offer->save();
 
             $notify = new NotifyUser();
-            $decliner = User::find($user_request->receiver);
-            $requester = User::find($request->user_id);
+            $decliner = User::find($user_offer->receiver);
+            $requester = User::find($offer->user_id);
             $notify->decline_request($decliner, $requester);
-            return $this->set_status(200,'request declined successfully');
+            return $this->set_status(200,'offer declined successfully');
         }
         else {
-            return $this->set_status(405,'request already declined');
+            return $this->set_status(405,'offer already declined');
         }
     }
 
@@ -319,21 +319,21 @@ class OffersController extends BaseController {
      */
     public function block_user($id){
 
-        $user_request = OfferUser::find($id);
+        $user_offer = OfferUser::find($id);
         //user request not found
-        if(!$user_request){
-            return $this->set_status(404, array('request not found'));
+        if(!$user_offer){
+            return $this->set_status(404, array('offer not found'));
         }
-        $user_request->status_id = OfferUser::$request_status['blocked'];
-        $user_request->save();
-        $request = Offer::find($user_request->request_id);
+        $user_offer->status_id = OfferUser::$request_status['blocked'];
+        $user_offer->save();
+        $offer = Offer::find($user_offer->offer_id);
         //check already block
-        $alreadyBlocked = BlockUser::where(function ($query) use ($user_request,$request) {
-            $query->where('blocked_by', '=', $user_request->receiver)
-                ->Where('blocked_user', '=',  $request->user_id);
+        $alreadyBlocked = BlockUser::where(function ($query) use ($user_offer, $offer) {
+            $query->where('blocked_by', '=', $user_offer->receiver)
+                ->Where('blocked_user', '=',  $offer->user_id);
         })->get();
         if(!count($alreadyBlocked)) {
-            $blnBlock = BlockUser::create(['blocked_by' => $user_request->receiver, 'blocked_user' => $request->user_id ]);
+            $blnBlock = BlockUser::create(['blocked_by' => $user_offer->receiver, 'blocked_user' => $offer->user_id ]);
             return $blnBlock?  $this->set_status(200, array('user blocked successfully')) : $this->set_status(500, array('something wrong'));
         }
         return $this->set_status(200, array('already blocked'));
@@ -346,17 +346,17 @@ class OffersController extends BaseController {
      */
     public function ignore_offer($id) {
 
-        $user_request = OfferUser::find($id);
-        if(!$user_request){
-            return $this->set_status(404, array('request not found'));
+        $user_offer = OfferUser::find($id);
+        if(!$user_offer){
+            return $this->set_status(404, array('offer not found'));
         }
-        if($user_request->status_id != OfferUser::$request_status['ignored']) {
+        if($user_offer->status_id != OfferUser::$request_status['ignored']) {
             //ignore request
-            $user_request->status_id = OfferUser::$request_status['ignored'];
-            $user_request->save();
-            return $this->set_status(200, array('request ignored successfully'));
+            $user_offer->status_id = OfferUser::$request_status['ignored'];
+            $user_offer->save();
+            return $this->set_status(200, array('offer ignored successfully'));
         }
-        return $this->set_status(403, array('request can not be ignore'));
+        return $this->set_status(403, array('offer can not be ignore'));
 
     }
 
@@ -364,7 +364,7 @@ class OffersController extends BaseController {
         $user_request = OfferUser::find($id);
         $req_status = \Input::get('action');
         if(!$user_request){
-            return $this->set_status(404, array('request not found'));
+            return $this->set_status(404, array('offer not found'));
         }
 
         $status = RequestStatus::where('status', '=', $req_status)->first();
@@ -372,9 +372,9 @@ class OffersController extends BaseController {
         $blnUpdate = $user_request->save();
 
         if($blnUpdate){
-            return $this->set_status(200, array('request status is updated successfully'));
+            return $this->set_status(200, array('offer status is updated successfully'));
         }
-        return $this->set_status(403, array('request is read already'));
+        return $this->set_status(403, array('offer is read already'));
     }
 
 
@@ -383,19 +383,19 @@ class OffersController extends BaseController {
      * @param $user_id
      * @return array
      */
-    public function all_requested_users($user_id){
+    public function all_offered_users($user_id){
 
         $user = User::find($user_id);
         if(!$user){
             return $this->set_status(404, array('user not found'));
         }
         $arrUsers = \DB::table('users')
-            ->join('requested_users', 'users.id', '=', 'requested_users.receiver')
-            ->join('requests', 'requested_users.request_id', '=', 'requests.id')
-            ->join('request_status', 'requested_users.status_id', '=', 'request_status.id')
-            ->where('requests.user_id', '=',$user_id )
-            ->select('users.email','users.mobile_no AS mobile', 'request_status.status', 'requests.request_type', 'requests.created_at' )
-            ->orderBy('requested_users.status_id')
+            ->join('offers_users', 'users.id', '=', 'offers_users.receiver')
+            ->join('offers', 'offers_users.offer_id', '=', 'offers.id')
+            ->join('request_status', 'offers_users.status_id', '=', 'request_status.id')
+            ->where('offers.user_id', '=',$user_id )
+            ->select('users.email','users.mobile_no AS mobile', 'request_status.status', 'offers.created_at' )
+            ->orderBy('offers_users.status_id')
             ->get();
         return $this->set_status(200, $arrUsers);
     }
@@ -404,17 +404,17 @@ class OffersController extends BaseController {
      * @param $request_id
      * @return array
      */
-    public function filter_offer($request_id){
+    public function filter_offer($offer_id){
 
-        $request = Offer::find($request_id);
-        if(!$request){
-            return $this->set_status(404, 'request not found');
+        $offer = Offer::find($offer_id);
+        if(!$offer){
+            return $this->set_status(404, 'offer not found');
         }
         $type = \Input::get('status');
 
         $status = RequestStatus::where('status', '=', $type)->first();
 
-        $response = $request->offer_users()->where('status_id', '=', $status->id)->get();
+        $response = $offer->offer_users()->where('status_id', '=', $status->id)->get();
         return $this->set_status(200, $this->fractal->collection($response, new OfferResponseTransformer()));
     }
 
