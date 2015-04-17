@@ -48,6 +48,7 @@ class RequestsController extends BaseController {
 
 
     /**
+     * create a request for blood request
      * @param $id
      * @return array
      */
@@ -178,6 +179,7 @@ class RequestsController extends BaseController {
     }
 
     /**
+     * get the list of request with the requested user list to whom request is sent
      * @param $user_id
      * @return array
      */
@@ -200,6 +202,7 @@ class RequestsController extends BaseController {
     }
 
     /**
+     * get the list of received request list
      * @param $user_id
      * @return array
      */
@@ -385,7 +388,7 @@ class RequestsController extends BaseController {
 
 
     /**
-     * get list of all user requests made by an user
+     * get list of all requests made by an user(sent_list)
      * @param $user_id
      * @return array
      */

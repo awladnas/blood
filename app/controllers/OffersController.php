@@ -44,7 +44,7 @@ class OffersController extends BaseController {
     }
 
     /**
-     * create a offer by user_id
+     * create a offer by user_id for blood offer
      * @param $id
      * @return array
      */
@@ -176,7 +176,7 @@ class OffersController extends BaseController {
     }
 
     /**
-     * get the list of offer user sent
+     * get the list of offer with the offered user list to whom offer is sent
      * @param $user_id
      * @return array
      */
@@ -199,7 +199,7 @@ class OffersController extends BaseController {
     }
 
     /**
-     * get the list of received offer
+     * get the list of received offer list
      * @param $user_id
      * @return array
      */
@@ -387,7 +387,7 @@ class OffersController extends BaseController {
 
 
     /**
-     * get list of all user offer made by an user
+     * get list of all user offer made by an user(sent_list)
      * @param $user_id
      * @return array
      */
